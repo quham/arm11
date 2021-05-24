@@ -1,16 +1,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
-
-uint32_t checkBit(uint32_t, int);
-void data_processing(uint32_t);
-uint32_t checkImmediate(uint32_t);
-uint32_t checkSet(uint32_t);
-uint32_t getOpcode(uint32_t);
-uint32_t getRn(uint32_t);
-uint32_t getRd(uint32_t);
-uint32_t getBits(uint32_t, uint32_t, int);
-void printBits(uint32_t);
+#include "data_processing.h"
 
 void data_processing(uint32_t instruction) {
  uint32_t s = checkSet(instruction);
@@ -73,6 +64,27 @@ uint32_t getRd(uint32_t instruction) {
   return getBits(instruction, mask, 12);
 }
 
+uint32_t operandRotate(uint32_t instruction) {
+  uint32_t mask = 0xf00;
+  return getBits(instruction, mask, 8);
+}
+
+uint32_t operandImmediate(uint32_t instruction) {
+  uint32_t mask = 0xff;
+  return getBits(instruction, mask, 0);
+}
+
+uint32_t operandShift(uint32_t instruction) {
+  uint32_t mask = 0xff0;
+  return getBits(instruction, mask, 4);
+}
+
+uint32_t operandRm(uint32_t instruction) {
+  uint32_t mask = 0xf;
+  return getBits(instruction, mask, 0);
+}
+
+  
 void printBits(uint32_t x) {
   int i;
   uint32_t mask = 1 << 31;
