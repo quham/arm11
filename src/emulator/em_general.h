@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 typedef uint32_t instr;
+typedef uint32_t word32;
 #define MEMORY_SIZE 65536
 #define ADDRESS_SIZE 2
 #define INSTR_SIZE 4
@@ -13,39 +14,50 @@ typedef uint32_t instr;
 
 struct State
 {
-  uint32_t r0;
-  uint32_t r1;
-  uint32_t r2;
-  uint32_t r3;
-  uint32_t r4;
-  uint32_t r5;
-  uint32_t r6;
-  uint32_t r7;
-  uint32_t r8;
-  uint32_t r9;
-  uint32_t r10;
-  uint32_t r11;
-  uint32_t r12;
-  uint32_t sp;
-  uint32_t lp;
-  uint32_t pc;
-  uint32_t cpsr;
+  word32 r0;
+  word32 r1;
+  word32 r2;
+  word32 r3;
+  word32 r4;
+  word32 r5;
+  word32 r6;
+  word32 r7;
+  word32 r8;
+  word32 r9;
+  word32 r10;
+  word32 r11;
+  word32 r12;
+  word32 sp;
+  word32 lp;
+  word32 pc;
+  word32 cpsr;
 };
 
-void data_processing(uint32_t instruction);
-uint32_t checkImmediate(void);
-uint32_t checkSet(instr instruction);
-uint32_t getOpcode(void);
-uint32_t getRn(instr instruction);
-uint32_t getRd(instr instruction);
-uint32_t getBits(uint32_t instruction, uint32_t mask, int shiftNo);
-uint32_t operandRotate(void);
-uint32_t operandImmediate(void);
-uint32_t oprandShift(void);
-uint32_t operandRm(void);
-void rotateRight(uint32_t* operand, int amount);
+// data processing
+void data_processing(instr, struct State*);
+void printBits(instr);
+word32 getRn(instr);
+word32 getRd(instr);
+word32 getOpcode(void);
+word32 operandRotate(void);
+word32 operandImmediate(void);
+word32 oprandShift(void);
+word32 operandRm(void);
 
-void printBits(uint32_t instruction);
+// Single data transfer
+void single_data_transfer(instr, struct State*);
 
+// Branch
+void branch(instr, struct State*);
+
+// Multiply
+void multiply(instr, struct State*);
+
+// decomposition
+word32 getBits(instr, word32 mask, int shiftNo);
+word32 condCode(instr);
+word32 checkImmediate(instr);
+word32 checkSet(instr);
+void rotateRight(word32* operand, int amount);
 
 #endif //EMULATOR_CONSTS

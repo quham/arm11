@@ -1,3 +1,3 @@
 #include <stdint.h>
 
-void pipeline(uint8_t *);
+void pipeline(word32 *);
