@@ -2,44 +2,63 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "data_processing.h"
+#define ROTATION_MULTIPLIER
+
+uint32_t* instruction;
 
 void data_processing(uint32_t instruction) {
- uint32_t s = checkSet(instruction);
- uint32_t i = checkImmediate(instruction);
- uint32_t opcode = getOpcode(instruction);
- uint32_t rn = getRn(instruction);
- uint32_t rd = getRd(instruction);
-
- printf("Instruction is: ");
- printBits(instruction);
- printf("Immediate value is: ");
- printBits(i);
- printf("S value is: ");
- printBits(s);
- printf("Opcode is: ");
- printBits(opcode);
- printf("Rn is: ");
- printBits(rn);
- printf("Rd is: ");
- printBits(rd);
- 
+  uint32_t opcode = getOpcode(instruction);
+  /*  uint32_t operdan2;
+  if (checkImmediate(instruction)) {
+    operand2 = operandImmediate(instruction);
+    }*/
 }
 
 int main(void) {
-  uint32_t x = 0b00000010101101010101000000000000;
-  data_processing(x);
- 
+  uint32_t instruction = 0b00000010101101010101000000000000;
+  uint32_t s = checkSet(instruction);
+  uint32_t i = checkImmediate(instruction);
+  uint32_t opcode = getOpcode(instruction);
+  uint32_t rn = getRn(instruction);
+  uint32_t rd = getRd(instruction);
+  
+  printf("Instruction is: ");
+  printBits(instruction);
+  printf("Immediate value is: ");
+  printBits(i);
+  printf("S value is: ");
+  printBits(s);
+  printf("Opcode is: ");
+  printBits(opcode);
+  printf("Rn is: ");
+  printBits(rn);
+  printf("Rd is: ");
+  printBits(rd);
+  rotateRight(&rd, 4);
+  printf("Rd rotated is: ");
+  printBits(rd);
   return 0;
 }
 
-//Returns specific bits of the instruction. Mask selects the
-//ending and shiftNo the beginning of the required bits.
-uint32_t getBits(uint32_t instruction, uint32_t mask, int shiftNo) {
-  uint32_t bits = instruction & mask;
-  return bits >> shiftNo;
+void rotateRight(uint32_t* operand, int amount) {
+  int i;
+  uint32_t msb = 0b0;
+  uint32_t mask = 1;
+  printBits(*operand);
+  printBits(mask);
+  for (i = 0; i < amount; i++) {
+    msb = mask & *operand;
+    printf("MSB is %d \n ", msb);
+    *operand = (msb << 31) | (*operand >> 1);
+  }
 }
 
-uint32_t checkImmediate(uint32_t instruction) {
+ uint32_t getBits(uint32_t instruction, uint32_t mask, int shiftNo) {
+   uint32_t bits = instruction & mask;
+   return bits >> shiftNo;
+ }
+
+ uint32_t checkImmediate(uint32_t instruction) {
   uint32_t mask = 0x2000000;
   return getBits(instruction, mask, 25);
 }
@@ -84,7 +103,19 @@ uint32_t operandRm(uint32_t instruction) {
   return getBits(instruction, mask, 0);
 }
 
-  
+uint32_t getOperand(uint32_t instruction) {
+  uint32_t operand;
+  int rotation;
+  if (checkImmediate(instruction)) {
+    // operand = operandImmediate(instruction);
+    // rotation =  operandRotate(instruction);
+    // rotateRight(&operand, ROTATION_MULTIPLIER * rotation);
+  } else {
+    //uint32_t rm = getRegister(operandRm)
+  }
+  return operand;
+}
+
 void printBits(uint32_t x) {
   int i;
   uint32_t mask = 1 << 31;

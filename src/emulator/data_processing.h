@@ -9,4 +9,6 @@ uint32_t operandRotate(uint32_t instruction);
 uint32_t operandImmediate(uint32_t insruction);
 uint32_t oprandShift(uint32_t instruction);
 uint32_t operandRm(uint32_t instruction);
+void rotateRight(uint32_t* operand, int amount);
+
 void printBits(uint32_t instruction);
