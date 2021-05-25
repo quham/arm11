@@ -13,6 +13,14 @@ word32 checkPrePost(instr instruction) {
   return getBits(instruction, CHECK_PRE_POST_MASK, CHECK_PRE_POST_INDEX);
 }
 
-void single_data_transfer(instr instruction, struct State *state)
-{
+word32 getRnSDT(instr instruction, struct State *state) {
+  return getReg(state, getBits(instruction, SDT_RN_MASK, SDT_RN_INDEX));
+}
+
+word32 getRdSDT(instr instruction, struct State *state) {
+  return getReg(state, getBits(instruction, SDT_RD_MASK, SDT_RD_INDEX));
+}
+
+void single_data_transfer(instr instruction, struct State *state) {
+  
 }
