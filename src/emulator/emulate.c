@@ -1,6 +1,7 @@
 #include <stdlib.h>
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
+
 #include "em_general.h"
 
 // print for debugging
@@ -18,11 +19,9 @@ void printMemory(word32 *a)
   printf("\n");
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 
-  if (argc != 2)
-  {
+  if (argc != 2) {
     perror("Invalid arguments! \n");
     exit(EXIT_FAILURE);
   }
