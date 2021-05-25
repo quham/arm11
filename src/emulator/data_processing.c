@@ -20,11 +20,11 @@ void data_processing(uint32_t new_instruction) {
 int main(void) {
   uint32_t instruction = 0b00000010101101010101000000000000;
   data_processing(instruction);
-  uint32_t s = checkSet();
+  uint32_t s = checkSet(instruction);
   uint32_t i = checkImmediate();
   uint32_t opcode = getOpcode();
-  uint32_t rn = getRn();
-  uint32_t rd = getRd();
+  uint32_t rn = getRn(instruction);
+  uint32_t rd = getRd(instruction);
   
   printf("Instruction is: ");
   printBits(instruction);

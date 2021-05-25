@@ -34,10 +34,10 @@ struct State
 
 void data_processing(uint32_t instruction);
 uint32_t checkImmediate(void);
-uint32_t checkSet(void);
+uint32_t checkSet(instr instruction);
 uint32_t getOpcode(void);
-uint32_t getRn(void);
-uint32_t getRd(void);
+uint32_t getRn(instr instruction);
+uint32_t getRd(instr instruction);
 uint32_t getBits(uint32_t instruction, uint32_t mask, int shiftNo);
 uint32_t operandRotate(void);
 uint32_t operandImmediate(void);
