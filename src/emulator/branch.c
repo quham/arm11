@@ -4,11 +4,6 @@
 #include <stdio.h>
 #include "em_general.h"
 
-uint32_t signExtend(u_int32_t number , int noofbits){
-    uint32_t mask = ((uint32_t) pow( 2, noofbits + 1) - 0.5) ;//0.5 accounts for double inconsistency of rounding across different architectures
-    mask = mask << (32 - noofbits - 1);
-    return number | (number & (1 << (noofbits-1)) ? mask : 0);
-}
 
 void branch(instr instruction, struct State *state){
     u_int32_t cpsrMask = 0xF0000000;
