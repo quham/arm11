@@ -1,8 +1,6 @@
 #ifndef EMULATOR_CONSTS
 #define EMULATOR_CONSTS
 
-#include <stdio.h>
-
 typedef uint32_t instr;
 typedef uint32_t word32;
 #define MEMORY_SIZE 65536

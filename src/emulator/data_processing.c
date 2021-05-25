@@ -19,7 +19,7 @@ void data_processing(word32 new_instruction, struct State *state) {
 
 int main(void) {
   instr instruction = 0b00000010101101010101000000000000;
-  data_processing(instruction);
+  // data_processing(instruction);
   word32 s = checkSet(instruction);
   word32 i = checkImmediate(instruction);
   word32 opcode = getOpcode();
