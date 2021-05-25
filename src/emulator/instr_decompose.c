@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <math.h>
 #include "em_general.h"
 
 word32 getBits(instr instruction, word32 mask, int shiftNo) {
