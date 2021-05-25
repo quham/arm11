@@ -2,18 +2,15 @@
 #include "em_general.h"
 
 word32 checkLoadStore(instr instruction, struct State *state) {
-  word32 mask = 0x100000;
-  return getBits(instruction, mask, 20);
+  return getBits(instruction, LOAD_STORE_MASK, LOAD_STORE_INDEX);
 }
 
 word32 checkUp(instr instruction) {
-  word32 mask = 0x800000;
-  return getBits(instruction, mask, 23);
+  return getBits(instruction, CHECK_UP_MASK, CHECK_UP_INDEX);
 }
 
 word32 checkPrePost(instr instruction) {
-  word32 mask = 0x1000000;
-  return getBits(instruction, mask, 24);
+  return getBits(instruction, CHECK_PRE_POST_MASK, CHECK_PRE_POST_INDEX);
 }
 
 void single_data_transfer(instr instruction, struct State *state)

@@ -45,38 +45,31 @@ int main(void) {
 }
 
 word32 getOpcode(void) {
-  word32 mask = 0x1e00000;
-  return getBits(instruction, mask, 21);
+  return getBits(instruction, OPCODE_MASK, OPCODE_INDEX);
 }
 
 word32 operandRotate(void) {
-  word32 mask = 0xf00;
-  return getBits(instruction, mask, 8);
+  return getBits(instruction, OPERAND_ROTATE_MASK, OPERAND_ROTATE_INDEX);
 }
 
 word32 operandImmediate(void) {
-  word32 mask = 0xff;
-  return getBits(instruction, mask, 0);
+  return getBits(instruction, OPERAND_IMM_MASK, OPERAND_ROTATE_INDEX);
 }
 
 word32 operandShift(void) {
-  word32 mask = 0xff0;
-  return getBits(instruction, mask, 4);
+  return getBits(instruction, OPERAND_SHIFT_MASK, OPERAND_SHIFT_INDEX);
 }
 
 word32 operandRm(void) {
-  word32 mask = 0xf;
-  return getBits(instruction, mask, 0);
+  return getBits(instruction, OPERAND_RM_MASK, OPERAND_RN_INDEX);
 }
 
 word32 getRn(instr instruction) {
-  word32 mask = 0xf0000;
-  return getBits(instruction, mask, 16);
+  return getBits(instruction, OPERAND_RN_MASK, OPERAND_RN_INDEX);
 }
 
 word32 getRd(instr instruction) {
-  word32 mask = 0xf000;
-  return getBits(instruction, mask, 12);
+  return getBits(instruction, OPERAND_RD_MASK, OPERAND_RD_INDEX);
 }
 
 /*

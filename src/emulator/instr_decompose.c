@@ -9,18 +9,15 @@ word32 getBits(instr instruction, word32 mask, int shiftNo) {
 }
 
 word32 condCode(instr instruction) {
-  word32 mask = 0xF0000000;
-  return getBits(instruction, mask, 25);
+  return getBits(instruction, COND_CODE_MASK, COND_CODE_INDEX);
 }
 
 word32 checkImmediate(instr instruction) {
-  word32 mask = 0x2000000;
-  return getBits(instruction, mask, 25);
+  return getBits(instruction, CHECK_IMM_MASK, CHECK_IMM_INDEX);
 }
 
 word32 checkSet(instr instruction) {
-  word32 mask = 0x100000;
-  return getBits(instruction, mask, 20);
+  return getBits(instruction, CHECK_SET_MASK, CHECK_SET_INDEX);
 }
 
 void rotateRight(word32* operand, int amount) {
