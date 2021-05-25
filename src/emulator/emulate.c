@@ -1,39 +1,46 @@
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "em_general.h"
 
-void pipeline(uint8_t*);
-//instr is 4 byte long 
-typedef uint32_t instr;
+// print for debugging
+void printMemory(uint8_t *a)
+{
+  printf("Hex representation:");
+  for (int i = 0; a[i] != 0; i++)
+  {
+    if (i % 8 == 0)
+    {
+      printf(" ");
+    }
+    printf("%x ", a[i]);
+  }
+  printf("\n");
+}
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
 
-  //need to check if its a binary file! 
-  if (argc != 2) {
+  if (argc != 2)
+  {
     perror("Invalid arguments! \n");
     exit(EXIT_FAILURE);
-  } 
+  }
 
   FILE *file;
   file = fopen(argv[1], "rb");
-  
-  if (file == NULL) {
+
+  if (file == NULL)
+  {
     perror("File is null! \n");
     exit(EXIT_FAILURE);
   }
 
-  //byte addressable memory using uint8_t type 
+  //byte addressable memory using uint8_t type
   uint8_t memory[MEMORY_SIZE] = {0};
   fread(memory, sizeof(uint8_t), MEMORY_SIZE, file);
   fclose(file);
 
-  
-  pipeline(memory); 
+  printMemory(memory);
   return EXIT_SUCCESS;
-}
-
-void pipeline(uint8_t *a) {
-    for (int i = 0; i < MEMORY_SIZE; i++) {
-        printf("%u\n", a[i]);
-    }
 }
