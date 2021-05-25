@@ -105,19 +105,19 @@ uint32_t operandRm(void) {
   uint32_t mask = 0xf;
   return getBits(instruction, mask, 0);
 }
-
+/*
 uint32_t getOperand(void) {
   uint32_t operand;
   int rotation;
   if (checkImmediate()) {
-    // operand = operandImmediate(instruction);
-    // rotation =  operandRotate(instruction);
-    // rotateRight(&operand, ROTATION_MULTIPLIER * rotation);
+    operand = operandImmediate();
+    rotateRight(&operand, ROTATION_MULTIPLIER * operandRotate());
   } else {
-    //uint32_t rm = getRegister(operandRm)
+    //operand = 
   }
   return operand;
 }
+*/
 
 void printBits(uint32_t x) {
   int i;
