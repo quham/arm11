@@ -4,7 +4,7 @@
 #include "em_general.h"
 
 // print for debugging
-void printMemory(uint8_t *a)
+void printMemory(word32 *a)
 {
   printf("Hex representation:");
   for (int i = 0; a[i] != 0; i++)
@@ -36,9 +36,9 @@ int main(int argc, char **argv)
     exit(EXIT_FAILURE);
   }
 
-  //byte addressable memory using uint8_t type
-  uint8_t memory[MEMORY_SIZE] = {0};
-  fread(memory, sizeof(uint8_t), MEMORY_SIZE, file);
+  //byte addressable memory
+  word32 memory[MEMORY_SIZE] = {0};
+  fread(memory, sizeof(word32), MEMORY_SIZE, file);
   fclose(file);
 
   printMemory(memory);

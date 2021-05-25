@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 typedef uint32_t instr;
+typedef uint32_t word32;
 #define MEMORY_SIZE 65536
 #define ADDRESS_SIZE 2
 #define INSTR_SIZE 4
@@ -13,39 +14,76 @@ typedef uint32_t instr;
 
 struct State
 {
-  uint32_t r0;
-  uint32_t r1;
-  uint32_t r2;
-  uint32_t r3;
-  uint32_t r4;
-  uint32_t r5;
-  uint32_t r6;
-  uint32_t r7;
-  uint32_t r8;
-  uint32_t r9;
-  uint32_t r10;
-  uint32_t r11;
-  uint32_t r12;
-  uint32_t sp;
-  uint32_t lp;
-  uint32_t pc;
-  uint32_t cpsr;
+  word32 r0;
+  word32 r1;
+  word32 r2;
+  word32 r3;
+  word32 r4;
+  word32 r5;
+  word32 r6;
+  word32 r7;
+  word32 r8;
+  word32 r9;
+  word32 r10;
+  word32 r11;
+  word32 r12;
+  word32 sp;
+  word32 lp;
+  word32 pc;
+  word32 cpsr;
 };
 
-void data_processing(uint32_t instruction);
-uint32_t checkImmediate(void);
-uint32_t checkSet(instr instruction);
-uint32_t getOpcode(void);
-uint32_t getRn(instr instruction);
-uint32_t getRd(instr instruction);
-uint32_t getBits(uint32_t instruction, uint32_t mask, int shiftNo);
-uint32_t operandRotate(void);
-uint32_t operandImmediate(void);
-uint32_t oprandShift(void);
-uint32_t operandRm(void);
-void rotateRight(uint32_t* operand, int amount);
+// data processing
+void data_processing(instr, struct State*);
+void printBits(instr);
+word32 getOpcode(void);
+#define OPCODE_MASK 0x1e00000
+#define OPCODE_INDEX 21
+word32 operandRotate(void);
+#define OPERAND_ROTATE_MASK 0xf00
+#define OPERAND_ROTATE_INDEX 8
+word32 operandImmediate(void);
+#define OPERAND_IMM_MASK 0xff
+#define OPERAND_IMM_INDEX 0
+word32 oprandShift(void);
+#define OPERAND_SHIFT_MASK 0xff0
+#define OPERAND_SHIFT_INDEX 4
+word32 operandRm(void);
+#define OPERAND_RM_MASK 0xf
+#define OPERAND_RM_INDEX 0
+word32 getRn(instr);
+#define OPERAND_RN_MASK 0xf0000
+#define OPERAND_RN_INDEX 16
+word32 getRd(instr);
+#define OPERAND_RD_MASK 0xf000
+#define OPERAND_RD_INDEX 12
 
-void printBits(uint32_t instruction);
+// Single data transfer
+void single_data_transfer(instr, struct State*);
+#define LOAD_STORE_MASK 0x100000
+#define LOAD_STORE_INDEX 20
+#define CHECK_UP_MASK 0x800000
+#define CHECK_UP_INDEX 23
+#define CHECK_PRE_POST_MASK 0x1000000
+#define CHECK_PRE_POST_INDEX 24
 
+// Branch
+void branch(instr, struct State*);
+
+// Multiply
+void multiply(instr, struct State*);
+
+// decomposition
+word32 getBits(instr, word32 mask, int shiftNo);
+void rotateRight(word32* operand, int amount);
+word32 condCode(instr);
+#define COND_CODE_MASK 0xF0000000
+#define COND_CODE_INDEX 25
+word32 checkImmediate(instr);
+#define CHECK_IMM_MASK 0x2000000
+#define CHECK_IMM_INDEX 25
+word32 checkSet(instr);
+#define CHECK_SET_MASK 0x100000
+#define CHECK_SET_INDEX 20
 
 #endif //EMULATOR_CONSTS

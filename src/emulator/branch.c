@@ -1,5 +1,6 @@
 #include <stdint.h>
+#include "em_general.h"
 
-void branch(uint32_t instruction, struct State *state)
+void branch(instr instruction, struct State *state)
 {
 }
