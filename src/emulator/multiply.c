@@ -6,27 +6,27 @@
 
 void multiply(instr instruction, struct State *state) {
 
-  if (!checkCond(instruction, state) {
+  if (!checkCond(instruction, state)) {
     return;
   }
 
-  word32 acc = getBit(instruction, 21);
-  word32 rd  = getBits(instruction, 0xf0000, 16); //extracting bits 16 to 20
-  word32 rn  = getBits(instruction, 0xf000, 12);  //extracting bits 12 to 16
-  word32 rm  = getBits(instruction, 0xf0000, 0);  //extracting bits 0 to 3
-  word32 rs  = getBits(instruction, 0xf00, 8);    //extracting bits 8 to 12 
+  word32 acc   = getBit(instruction, 21);
+  word32 rd    = getBits(instruction, 0xf0000, 16); //extracting bits 16 to 20
+  word32 rn    = getBits(instruction, 0xf000, 12);  //extracting bits 12 to 16
+  word32 rm    = getBits(instruction, 0xf0000, 0);  //extracting bits 0 to 3
+  word32 rs    = getBits(instruction, 0xf00, 8);    //extracting bits 8 to 12 
+  word32 *regs = state->regs;
 
   if (acc) {
-    state->regs[rd] = state->regs[rm] * state->regs[rs] + state->regs[rn];
+    regs[rd] = regs[rm] * regs[rs] + regs[rn];
   } else {
-    state->regs[rd] = state->regs[rm] * state->regs[rs];
+    regs[rd] = regs[rm] * regs[rs];
   }
 
   if (checkSet(instruction)) {
-    state->regs[CPSR_INDEX] = state->regs[CPSR_INDEX] | 0x100000000; // sets Nflag to 1  
+    regs[CPSR_INDEX] = regs[CPSR_INDEX] | 0x100000000; // sets Nflag to 1  
     if (!(state->regs[rd])) {
-      state->regs[CPSR_INDEX] = state->regs[CPSR_INDEX] | 0x80000000; // sets Zflag to 1 if rd is 0
+      regs[CPSR_INDEX] = regs[CPSR_INDEX] | 0x80000000; // sets Zflag to 1 if rd is 0
     }
   }
-
 }
