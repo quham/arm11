@@ -6,8 +6,8 @@
 enum itype{PROCESSING,MULTIPLY, TRANSFER , BRANCH, TERMINATE};
 
 void pipeline(struct State* state){
-    word32 decoded = NOTINIT;
-    word32 fetched = NOTINIT;
+    word32 decoded = NOT_INIT;
+    word32 fetched = NOT_INIT;
     enum itype type;
     while(1){
         if (decoded != NOTINIT ){
@@ -19,10 +19,6 @@ void pipeline(struct State* state){
         fetched = fetch(state->registers[PC]);
         state->registers[PC] += 4;
     }
-    // while not end - 0 instruction
-    //executes decoded instruction if not null;
-    //decodes fetched instruction if not null;
-    //fetch next instruction incrementing pc
 
 
 
@@ -76,7 +72,4 @@ word32 execute(word32 instruction, enum itype type , struct State* state , word3
             
     }
 
-    //stores next decoded inatruction also executes last decode instruction based on itype case switch
-    //case where instruction all 0 needs to set end to true. Take end as parameter?
-    //executing branch requires current fetch and decode to be cleared
 }
