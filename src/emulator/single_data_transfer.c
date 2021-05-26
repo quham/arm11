@@ -52,3 +52,4 @@ void transfer_data(struct State *state, instr instruction, word32 rd,
 // Make memory access correct
 // implement check cond
 // compute offset correctly
+// correct style (snake case etc)
