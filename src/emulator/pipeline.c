@@ -68,6 +68,7 @@ word32 execute(word32 instruction, enum itype type , struct State* state , word3
             *fetched = NOT_INIT;
             break;
         default:
+            printRegisters(state);
             exit(EXIT_SUCCESS);//exits function? should i print here?
 
 
