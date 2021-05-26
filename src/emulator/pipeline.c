@@ -5,24 +5,17 @@
 
 enum itype{PROCESSING,MULTIPLY, TRANSFER , BRANCH, TERMINATE};
 
-void pipeline(struct State* state){
-    word32 decoded = NOT_INIT;
-    word32 fetched = NOT_INIT;
-    enum itype type;
-    while(1){
-        if (decoded != NOT_INIT ){
-            execute(decoded, type, state , &decoded, &fetched);
-        }if (fetched != NOT_INIT){
-            decoded = fetched;
-            type = decode(fetched);
-        }
-        fetched = fetch(state->registers[PC_INDEX]);
-        state->registers[PC_INDEX] += 4;
+void printMemory(word32 *a) {
+  printf("Hex representation:");
+  for (int i = 0; a[i] != 0; i++) {
+    if (i % 8 == 0) {
+      printf(" ");
     }
-
-
-
+    printf("%x ", a[i]);
+  }
+  printf("\n");
 }
+
 word32 fetch ( word32 pc, struct State* state ){ //returns instruction
     return state->memory[pc];
 }
@@ -73,3 +66,23 @@ word32 execute(word32 instruction, enum itype type , struct State* state , word3
     }
 
 }
+
+void pipeline(struct State* state){
+    word32 decoded = NOT_INIT;
+    word32 fetched = NOT_INIT;
+    enum itype type;
+    while(1){
+        if (decoded != NOT_INIT ){
+            execute(decoded, type, state , &decoded, &fetched);
+        }if (fetched != NOT_INIT){
+            decoded = fetched;
+            type = decode(fetched);
+        }
+        fetched = fetch(state->regs[PC_INDEX]);
+        state->regs[PC_INDEX] += 4;
+    }
+
+
+
+}
+
