@@ -1,8 +1,8 @@
 #include <stdint.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include "em_general.h"
+#include <stdlib.h>
 
+#include "em_general.h"
 
 void branch(instr instruction, struct State *state){
     if (checkCond(instruction , state)){

@@ -3,6 +3,7 @@
 
 typedef uint32_t instr;
 typedef uint32_t word32;
+#define WORD_SIZE 32
 #define MEMORY_SIZE 65536
 #define ADDRESS_SIZE 2
 #define INSTR_SIZE 4
@@ -10,31 +11,31 @@ typedef uint32_t word32;
 #define PC 15
 #define CPSR 16
 
-struct State
-{
-  word32 r0;
-  word32 r1;
-  word32 r2;
-  word32 r3;
-  word32 r4;
-  word32 r5;
-  word32 r6;
-  word32 r7;
-  word32 r8;
-  word32 r9;
-  word32 r10;
-  word32 r11;
-  word32 r12;
-  word32 sp;
-  word32 lp;
-  word32 pc;
-  word32 cpsr;
+struct State {
+  word32 regs[NUMBER_OF_REGISTERS];
+  word32 memory[MEMORY_SIZE];
 };
 
-//pipeline
-#define NOTINIT 0xFFFFFFFF
+// Reg Indexs
+#define R0_INDEX 0
+#define R1_INDEX 1
+#define R2_INDEX 2
+#define R3_INDEX 3
+#define R4_INDEX 4
+#define R5_INDEX 5
+#define R6_INDEX 6
+#define R7_INDEX 7
+#define R8_INDEX 8
+#define R9_INDEX 9
+#define R10_INDEX 10
+#define R11_INDEX 11
+#define R12_INDEX 12
+#define SP_INDEX 13
+#define LP_INDEX 14
+#define PC_INDEX 15
+#define CPSR_INDEX 16
 
-// data processing
+// Data processing
 void data_processing(instr, struct State*);
 void printBits(instr);
 word32 getOpcode(void);
@@ -58,15 +59,24 @@ word32 getRn(instr);
 word32 getRd(instr);
 #define OPERAND_RD_MASK 0xf000
 #define OPERAND_RD_INDEX 12
+word32 getRs(instr);
+#define RS_MASK 0xf00
+#define RS_INDEX 8
+word32 getRm(instr);
+#define RM_MASK 0xf
+#define RM_INDEX 0
+
+#define ROUNDING_ERROR 0.5
 
 // Single data transfer
 void single_data_transfer(instr, struct State*);
-#define LOAD_STORE_MASK 0x100000
 #define LOAD_STORE_INDEX 20
-#define CHECK_UP_MASK 0x800000
 #define CHECK_UP_INDEX 23
-#define CHECK_PRE_POST_MASK 0x1000000
 #define CHECK_PRE_POST_INDEX 24
+#define SDT_RN_MASK 0xf0000
+#define SDT_RN_INDEX 16
+#define SDT_RD_MASK 0xf000
+#define SDT_RD_INDEX 12
 
 // Branch
 void branch(instr, struct State*);
@@ -74,17 +84,17 @@ void branch(instr, struct State*);
 // Multiply
 void multiply(instr, struct State*);
 
-// decomposition
+// Decomposition
+word32 signExtend(word32 number, int noofbits);
 word32 getBits(instr, word32 mask, int shiftNo);
+word32 getBit(instr instruction, int bitNo);
+void makeShift(word32* instruction, word32 shift_value, word32 shift_type);
 void rotateRight(word32* operand, int amount);
 word32 condCode(instr);
-#define COND_CODE_MASK 0xF0000000
-#define COND_CODE_INDEX 25
+#define COND_CODE_INDEX 28
 word32 checkImmediate(instr);
-#define CHECK_IMM_MASK 0x2000000
 #define CHECK_IMM_INDEX 25
 word32 checkSet(instr);
-#define CHECK_SET_MASK 0x100000
 #define CHECK_SET_INDEX 20
 
-#endif //EMULATOR_CONSTS
+#endif  // EMULATOR_CONSTS
