@@ -76,7 +76,7 @@ word32 getBits(instr, word32 mask, int shiftNo);
 void rotateRight(word32* operand, int amount);
 word32 condCode(instr);
 #define COND_CODE_MASK 0xF0000000
-#define COND_CODE_INDEX 25
+#define COND_CODE_INDEX 28
 word32 checkImmediate(instr);
 #define CHECK_IMM_MASK 0x2000000
 #define CHECK_IMM_INDEX 25
