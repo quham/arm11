@@ -28,14 +28,14 @@ word32 fetch(word32 pc, State* state) {  // returns instruction
 }
 
 enum itype decode(word32 instruction) {  // return type?
-  switch (getBits(instruction, 26, 27)) {
+  switch (getBits(instruction, 27, 26)) {
     case 2:
       return BRANCH;
     case 1:
       return TRANSFER;
     case 0:
       // extract bits 4-7 xor with 1001 to check for multiply format
-      if (!getBits(instruction, 22, 25) & !(getBits(instruction, 4, 7) ^ 1001)) {
+      if (!getBits(instruction, 25, 22) & !(getBits(instruction, 7, 4) ^ 1001)) {
         return MULTIPLY;
       } else if (!instruction) {
         return TERMINATE;
