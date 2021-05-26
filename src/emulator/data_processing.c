@@ -4,7 +4,7 @@
 #include "em_general.h"
 #include "instr_decompose.c"
 
-#define ROTATION_MULTIPLIER
+#define ROTATION_MULTIPLIER 2
 
 instr instruction = 0;
 
@@ -72,20 +72,56 @@ word32 getRd(instr instruction) {
   return getBits(instruction, OPERAND_RD_MASK, OPERAND_RD_INDEX);
 }
 
-/*
+//Calculates the value of the operand2.
 word32 getOperand(void) {
   word32 operand;
-  int rotation;
-  if (checkImmediate()) {
+  if (checkImmediate(instruction)) {
     operand = operandImmediate();
     rotateRight(&operand, ROTATION_MULTIPLIER * operandRotate());
   } else {
-    //operand = 
+    operand = getRm(instruction); // Should get the register instead. Left for now.
+    word32 shift = operandShift();
+    //bit4 gets the value of the 4th bit in the operand2. It is LSB of shift
+    word32 bit4 = getSpecificBit(shift, 0);
+    //0x6 is the mask to get bits 5-6 of operand2, they are 1-2 of shift 
+    word32 shift_type = getBits(shift, 0x6, 1);
+    word32 shift_value;
+    if (bit4) {
+      shift_value = getRs(instruction); // should get the register instead. Left for now
+    } else {
+      shift_value = getBits(instruction, 0xf80, 7);
+    }
+    makeShift(&operand, shift_value, shift_type);
   }
   return operand;
 }
-*/
 
+// makes a shift of the operand2 depending on its shift_type
+void makeShift(word32 *operand, word32 shift_value, word32 shift_type) {
+  //In case of register provided, select first byte of the shift_value
+  shift_value = shift_value & 0xff;
+  word32 carry_out = getSpecificBit(*operand, shift_value); // consider some edge cases here (eg shift_value > 32)
+ 
+  switch(shift_type) {
+  case 0 :// logic shift left
+    *operand <<= shift_value;
+    carry_out = 31 - shift_value;
+    break;
+  case 1 :// logic shift right
+    *operand >>= shift_value;
+    break;
+  case 2 :// arithmetic shift right
+   *operand = signExtend(*operand, shift_value);
+    break;
+  case 3 :// rotate right
+    rotateRight(operand, shift_value);
+    break;
+  }
+  // assign here carry_out bit
+  return;
+}
+
+  
 void printBits(word32 x) {
   int i;
   word32 mask = 1 << 31;

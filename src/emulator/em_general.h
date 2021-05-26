@@ -54,6 +54,12 @@ word32 getRn(instr);
 word32 getRd(instr);
 #define OPERAND_RD_MASK 0xf000
 #define OPERAND_RD_INDEX 12
+word32 getRs(instr);
+#define RS_MASK 0xf00
+#define RS_INDEX 8
+word32 getRm(instr);
+#define RM_MASK 0xf
+#define RM_INDEX 0
 
 // Single data transfer
 void single_data_transfer(instr, struct State*);
@@ -75,11 +81,14 @@ void branch(instr, struct State*);
 void multiply(instr, struct State*);
 
 // Decomposition
+word32 signExtend(word32 number , int noofbits);
 word32 getBits(instr, word32 mask, int shiftNo);
+word32 getSpecificBit(instr instruction, int bitNo);
+void makeShift(word32* instruction, word32 shift_value, word32 shift_type);
 void rotateRight(word32* operand, int amount);
 word32 condCode(instr);
 #define COND_CODE_MASK 0xF0000000
-#define COND_CODE_INDEX 25
+#define COND_CODE_INDEX 28
 word32 checkImmediate(instr);
 #define CHECK_IMM_MASK 0x2000000
 #define CHECK_IMM_INDEX 25
