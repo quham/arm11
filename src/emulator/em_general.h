@@ -70,6 +70,10 @@ void branch(instr, struct State*);
 
 // Multiply
 void multiply(instr, struct State*);
+#define ACC_MASK 200000
+#define ACC_INDEX 21
+#define RS_MASK 0xf00
+#define RS_INDEX 8
 
 // decomposition
 word32 getBits(instr, word32 mask, int shiftNo);
