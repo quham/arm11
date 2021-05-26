@@ -11,10 +11,10 @@ void multiply(instr instruction, State *state) {
   }
 
   word32 acc = checkBit(instruction, 21);
-  word32 rd = getBits(instruction, 0xf0000, 16);  // extracting bits 16 to 20
-  word32 rn = getBits(instruction, 0xf000, 12);   // extracting bits 12 to 16
-  word32 rm = getBits(instruction, 0xf0000, 0);   // extracting bits 0 to 3
-  word32 rs = getBits(instruction, 0xf00, 8);     // extracting bits 8 to 12
+  word32 rd = getBits(instruction, 20, 16);  // extracting bits 16 to 20
+  word32 rn = getBits(instruction, 16, 12);  // extracting bits 12 to 16
+  word32 rm = getBits(instruction, 4, 0);    // extracting bits 0 to 3
+  word32 rs = getBits(instruction, 12, 8);   // extracting bits 8 to 12
   word32 *regs = state->regs;
 
   if (acc) {
