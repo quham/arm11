@@ -35,6 +35,9 @@ struct State {
 #define PC_INDEX 15
 #define CPSR_INDEX 16
 
+//Pipeline
+#define NOT_INIT 0xFFFFFFFF
+
 // Data processing
 void data_processing(instr, struct State*);
 void printBits(instr);
