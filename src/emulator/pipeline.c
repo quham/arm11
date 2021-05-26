@@ -68,23 +68,3 @@ word32 execute(word32 instruction, enum itype type, State* state, word32* decode
       exit(EXIT_SUCCESS);  // exits function? should i print here?
   }
 }
-
-void pipeline(struct State* state){
-    word32 decoded = NOT_INIT;
-    word32 fetched = NOT_INIT;
-    enum itype type;
-    while(1){
-        if (decoded != NOT_INIT ){
-            execute(decoded, type, state , &decoded, &fetched);
-        }if (fetched != NOT_INIT){
-            decoded = fetched;
-            type = decode(fetched);
-        }
-        fetched = fetch(state->regs[PC_INDEX]);
-        state->regs[PC_INDEX] += 4;
-    }
-
-
-
-}
-
