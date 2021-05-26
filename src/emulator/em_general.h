@@ -10,8 +10,7 @@ typedef uint32_t word32;
 #define PC 15
 #define CPSR 16
 
-struct State
-{
+struct State {
   word32 r0;
   word32 r1;
   word32 r2;
@@ -31,7 +30,7 @@ struct State
   word32 cpsr;
 };
 
-// data processing
+// Data processing
 void data_processing(instr, struct State*);
 void printBits(instr);
 word32 getOpcode(void);
@@ -70,6 +69,10 @@ void single_data_transfer(instr, struct State*);
 #define CHECK_UP_INDEX 23
 #define CHECK_PRE_POST_MASK 0x1000000
 #define CHECK_PRE_POST_INDEX 24
+#define SDT_RN_MASK 0xf0000
+#define SDT_RN_INDEX 16
+#define SDT_RD_MASK 0xf000
+#define SDT_RD_INDEX 12
 
 // Branch
 void branch(instr, struct State*);
@@ -77,7 +80,7 @@ void branch(instr, struct State*);
 // Multiply
 void multiply(instr, struct State*);
 
-// decomposition
+// Decomposition
 word32 signExtend(word32 number , int noofbits);
 word32 getBits(instr, word32 mask, int shiftNo);
 word32 getSpecificBit(instr instruction, int bitNo);
@@ -93,4 +96,4 @@ word32 checkSet(instr);
 #define CHECK_SET_MASK 0x100000
 #define CHECK_SET_INDEX 20
 
-#endif //EMULATOR_CONSTS
+#endif  // EMULATOR_CONSTS

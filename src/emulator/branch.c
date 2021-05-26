@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include "em_general.h"
 
-
 void branch(instr instruction, struct State *state){
     word32 cpsrMask = 0xF0000000;
     word32 offsetMask = 0x00FFFFFF;

@@ -1,17 +1,14 @@
-#include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "em_general.h"
 
 // print for debugging
-void printMemory(word32 *a)
-{
+void printMemory(word32 *a) {
   printf("Hex representation:");
-  for (int i = 0; a[i] != 0; i++)
-  {
-    if (i % 8 == 0)
-    {
+  for (int i = 0; a[i] != 0; i++) {
+    if (i % 8 == 0) {
       printf(" ");
     }
     printf("%x ", a[i]);
@@ -20,7 +17,6 @@ void printMemory(word32 *a)
 }
 
 int main(int argc, char **argv) {
-
   if (argc != 2) {
     perror("Invalid arguments! \n");
     exit(EXIT_FAILURE);
@@ -29,13 +25,12 @@ int main(int argc, char **argv) {
   FILE *file;
   file = fopen(argv[1], "rb");
 
-  if (file == NULL)
-  {
+  if (file == NULL) {
     perror("File is null! \n");
     exit(EXIT_FAILURE);
   }
 
-  //byte addressable memory
+  // byte addressable memory
   word32 memory[MEMORY_SIZE] = {0};
   fread(memory, sizeof(word32), MEMORY_SIZE, file);
   fclose(file);
