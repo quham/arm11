@@ -15,6 +15,15 @@ void printMemory(word32 *a) {
   }
   printf("\n");
 }
+void printRegisters(struct State* state ){
+    for (int i = 0; i <= 12; i++){//amount of numbered registers
+        printf("R%d: %d\n", i , state->regs[i]);
+    }
+    printf("SP: %d\n", state->regs[SP_INDEX]);
+    printf("LP: %d\n", state->regs[LP_INDEX]);
+    printf("PC: %d\n", state->regs[PC_INDEX]);
+    printf("CSPR: %d\n", state->regs[CSPR_INDEX);
+}
 
 word32 fetch ( word32 pc, struct State* state ){ //returns instruction
     return state->memory[pc];
