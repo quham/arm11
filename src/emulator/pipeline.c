@@ -10,14 +10,14 @@ void pipeline(struct State* state){
     word32 fetched = NOT_INIT;
     enum itype type;
     while(1){
-        if (decoded != NOTINIT ){
+        if (decoded != NOT_INIT ){
             execute(decoded, type, state , &decoded, &fetched);
-        }if (fetched != NOTINIT){
+        }if (fetched != NOT_INIT){
             decoded = fetched;
             type = decode(fetched);
         }
-        fetched = fetch(state->registers[PC]);
-        state->registers[PC] += 4;
+        fetched = fetch(state->registers[PC_INDEX]);
+        state->registers[PC_INDEX] += 4;
     }
 
 
@@ -62,8 +62,8 @@ word32 execute(word32 instruction, enum itype type , struct State* state , word3
             break;
         case BRANCH:
             branch(instruction, state);
-            *decoded = NOTINIT;
-            *fetched = NOTINIT;
+            *decoded = NOT_INIT;
+            *fetched = NOT_INIT;
             break;
         default:
             exit(EXIT_SUCCESS);//exits function? should i print here?
