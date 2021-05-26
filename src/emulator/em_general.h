@@ -10,8 +10,7 @@ typedef uint32_t word32;
 #define PC 15
 #define CPSR 16
 
-struct State
-{
+struct State {
   word32 r0;
   word32 r1;
   word32 r2;
@@ -88,4 +87,4 @@ word32 checkSet(instr);
 #define CHECK_SET_MASK 0x100000
 #define CHECK_SET_INDEX 20
 
-#endif //EMULATOR_CONSTS
+#endif  // EMULATOR_CONSTS
