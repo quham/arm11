@@ -46,9 +46,8 @@ void rotateRight(word32* operand, int amount) {
     *operand = (msb << 31) | (*operand >> 1);
   }
 }
-
-word32 signExtend(word32 number, int noofbits) {
-  word32 mask = ((word32)pow(2, noofbits + 1) - ROUNDING_ERROR);
-  mask = mask << (WORD_SIZE - noofbits - 1);
-  return number | (number & (1 << (noofbits - 1)) ? mask : 0);
+word32 signExtend(word32 number , int noOfBits){
+    word32 mask = ((word32) pow( 2, noOfBits + 1) - 0.5) ;//0.5 accounts for double inconsistency of rounding across different architectures
+    mask = mask << (32 - noOfBits - 1);
+    return number | (number & (1 << (noOfBits-1)) ? mask : 0);
 }
