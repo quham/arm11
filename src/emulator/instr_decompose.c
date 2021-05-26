@@ -5,36 +5,37 @@
 
 #include "em_general.h"
 
-word32 getBits(instr instruction, word32 mask, int shiftNo) {
+word32 getBits(instr instruction, word32 mask, int shift_no) {
   word32 bits = instruction & mask;
-  return bits >> shiftNo;
+  return bits >> shift_no;
 }
 
-word32 getBit(instr instruction, int bitNo) {
-  return (instruction & (word32)pow(2, bitNo)) >> bitNo;
+word32 getBits(instr instruction, int start_index, int end_index) {
+  word32 mask = 0xffffffff >> (WORD_SIZE - (end_index - start_index));
+  return (instruction >> start_index) & mask;
 }
 
 word32 condCode(instr instruction) {
-  return getBit(instruction, COND_CODE_INDEX);
+  return checkBit(instruction, 28);
 }
 
 word32 checkImmediate(instr instruction) {
-  return getBit(instruction, CHECK_IMM_INDEX);
+  return checkBit(instruction, 25);
 }
 
 word32 checkSet(instr instruction) {
-  return getBit(instruction, CHECK_SET_INDEX);
+  return checkBit(instruction, 20);
 }
 
 word32 getRs(instr instruction) {
-  return getBits(instruction, RS_MASK, RS_INDEX);
+  return getBits(instruction, 12, 8);
 }
 
 word32 getRm(instr instruction) {
-  return getBits(instruction, RM_MASK, RM_INDEX);
+  return getBits(instruction, 4, 0);
 }
 
-void rotateRight(word32* operand, int amount) {
+void rotateRight(word32 *operand, int amount) {
   int i;
   word32 msb = 0b0;
   word32 mask = 1;
@@ -43,11 +44,11 @@ void rotateRight(word32* operand, int amount) {
   for (i = 0; i < amount; i++) {
     msb = mask & *operand;
     printf("MSB is %d \n ", msb);
-    *operand = (msb << 31) | (*operand >> 1);
+    *operand = (msb << (WORD_SIZE - 1)) | (*operand >> 1);
   }
 }
-word32 signExtend(word32 number , int noOfBits){
-    word32 mask = ((word32) pow( 2, noOfBits + 1) - 0.5) ;//0.5 accounts for double inconsistency of rounding across different architectures
-    mask = mask << (32 - noOfBits - 1);
-    return number | (number & (1 << (noOfBits-1)) ? mask : 0);
+word32 signExtend(word32 number, int no_of_bits) {
+  word32 mask = ((word32)pow(2, no_of_bits + 1) - ROUNDING_ERROR);
+  mask = mask << (WORD_SIZE - no_of_bits - 1);
+  return number | (number & (1 << (no_of_bits - 1)) ? mask : 0);
 }

@@ -9,7 +9,7 @@
 
 instr instruction = 0;
 
-void data_processing(word32 new_instruction, struct State *state) {
+void data_processing(word32 new_instruction, State *state) {
   instruction = new_instruction;
   //  word32 opcode = getOpcode(instruction);
   /*  word32 operdan2;
@@ -80,17 +80,15 @@ word32 getOperand(void) {
     operand = operandImmediate();
     rotateRight(&operand, ROTATION_MULTIPLIER * operandRotate());
   } else {
-    operand =
-        getRm(instruction);  // Should get the register instead. Left for now.
+    operand = getRm(instruction);  // Should get the register instead. Left for now.
     word32 shift = operandShift();
     // bit4 gets the value of the 4th bit in the operand2. It is LSB of shift
-    word32 bit4 = getBit(shift, 0);
+    word32 bit4 = checkBit(shift, 0);
     // 0x6 is the mask to get bits 5-6 of operand2, they are 1-2 of shift
     word32 shift_type = getBits(shift, 0x6, 1);
     word32 shift_value;
     if (bit4) {
-      shift_value =
-          getRs(instruction);  // should get the register instead. Left for now
+      shift_value = getRs(instruction);  // should get the register instead. Left for now
     } else {
       shift_value = getBits(instruction, 0xf80, 7);
     }
@@ -103,9 +101,8 @@ word32 getOperand(void) {
 void makeShift(word32 *operand, word32 shift_value, word32 shift_type) {
   // In case of register provided, select first byte of the shift_value
   shift_value = shift_value & 0xff;
-  word32 carry_out = getBit(
-      *operand,
-      shift_value);  // consider some edge cases here (eg shift_value > 32)
+  word32 carry_out = checkBit(*operand,
+                              shift_value);  // consider some edge cases here (eg shift_value > 32)
 
   switch (shift_type) {
     case 0:  // logic shift left
@@ -130,7 +127,8 @@ void printBits(word32 x) {
   int i;
   word32 mask = 1 << 31;
   for (i = 0; i < 32; ++i) {
-    if (i % 4 == 0) printf(" ");
+    if (i % 4 == 0)
+      printf(" ");
     printf("%i", (x & mask) != 0);
     x <<= 1;
   }
