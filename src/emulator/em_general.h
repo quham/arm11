@@ -31,6 +31,9 @@ struct State
   word32 cpsr;
 };
 
+//pipeline
+#define NOTINIT 0xFFFFFFFF
+
 // data processing
 void data_processing(instr, struct State*);
 void printBits(instr);

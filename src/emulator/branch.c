@@ -5,12 +5,11 @@
 
 
 void branch(instr instruction, struct State *state){
-    word32 cpsrMask = 0xF0000000;
-    word32 offsetMask = 0x00FFFFFF;
-    word32 flags = getBits(instruction, cpsrMask , 0);
-    if (flags == state->cpsr){
-        word32 offset = getBits(instruction , offsetMask, 0) << 2;
+    if (checkCond(instruction , state)){
+        word32 offset = getBits(instruction , 0, 23) << 2;//extracts bits 0-23 and shifts by 2
         offset = signExtend(offset, 26);
-        // offset = offset | ((offset & (1<<25)) ? 0xFC000000 : 0); //specific case of sign extend
+        // offset = offset | ((offset & (1<<25)) ? 0xFC000000 : 0); //specific case of signExtend
         state->pc += offset - 8;
+    }
 }
+
