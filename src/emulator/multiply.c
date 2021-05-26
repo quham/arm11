@@ -7,10 +7,6 @@
 
 void multiply(instr instruction, struct State *state) {
 
-  if (!checkCond(instruction, state)) {
-    return;
-  }
-
   word32 acc   = getBit(instruction, 21);
   word32 rd    = getBits(instruction, 0xf0000, 16); //extracting bits 16 to 20
   word32 rn    = getBits(instruction, 0xf000, 12);  //extracting bits 12 to 16
