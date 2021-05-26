@@ -5,9 +5,8 @@
 
 #include "em_general.h"
 
-word32 getBits(instr instruction, word32 mask, int shift_no) {
-  word32 bits = instruction & mask;
-  return bits >> shift_no;
+word32 checkBit(instr instruction, int bit_no) {
+  return (instruction & (word32)pow(2, bit_no)) >> bit_no;
 }
 
 word32 getBits(instr instruction, int start_index, int end_index) {

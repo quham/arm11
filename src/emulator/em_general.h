@@ -64,7 +64,7 @@ void multiply(instr, State*);
 
 // Decomposition
 word32 signExtend(word32 number, int no_of_bits);
-word32 getBits(instr, word32 start_index, int end_index);
+word32 getBits(instr, int start_index, int end_index);
 word32 checkBit(instr, int bitNo);
 void makeShift(word32* instruction, word32 shift_value, word32 shift_type);
 void rotateRight(word32* operand, int amount);
