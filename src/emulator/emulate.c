@@ -5,16 +5,6 @@
 #include "em_general.h"
 
 // print for debugging
-void printMemory(word32 *a) {
-  printf("Hex representation:");
-  for (int i = 0; a[i] != 0; i++) {
-    if (i % 8 == 0) {
-      printf(" ");
-    }
-    printf("%x ", a[i]);
-  }
-  printf("\n");
-}
 
 int main(int argc, char **argv) {
   if (argc != 2) {
@@ -34,7 +24,9 @@ int main(int argc, char **argv) {
   word32 memory[MEMORY_SIZE] = {0};
   fread(memory, sizeof(word32), MEMORY_SIZE, file);
   fclose(file);
-
-  printMemory(memory);
+  word32 regs[NUMBER_OF_REGISTERS];
+  word32 memory[MEMORY_SIZE];
+  struct State state = {regs, memory};
+  pipeline(state);
   return EXIT_SUCCESS;
 }
