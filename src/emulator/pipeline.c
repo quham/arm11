@@ -33,7 +33,7 @@ enum itype decode(word32 instruction){//return type?
         case 1:
             return TRANSFER;
         case 0:
-            if(!getBits(instruction, 22 , 25) & !(getBits(instruction, 4,7) ^ 1001)){
+            if(!getBits(instruction, 22 , 25) && !(getBits(instruction, 4,7) ^ 1001)){
                 // extracts bits 4-7 xor with 1001 to check for multiply format
                 return MULTIPLY
             }else if (!instruction) {
