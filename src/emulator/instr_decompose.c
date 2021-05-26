@@ -46,7 +46,8 @@ void rotateRight(word32* operand, int amount) {
   }
 }
 word32 signExtend(word32 number , int noofbits){
-    word32 mask = ((word32) pow( 2, noofbits + 1) - 0.5) ;//0.5 accounts for double inconsistency of rounding across different architectures
+    word32 mask = ((word32) pow( 2, noofbits + 1) - 0.5) ;
+//0.5 accounts for double inconsistency of rounding across different architectures
     mask = mask << (32 - noofbits - 1);
     return number | (number & (1 << (noofbits-1)) ? mask : 0);
 }
