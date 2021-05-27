@@ -4,11 +4,6 @@
 
 #include "em_general.h"
 
-
-instr fetch(word32 pc, State* state) {
-  return state->memory[pc];
-}
-
 void printRegisters(struct State* state) {
   for (int i = 0; i <= 12; i++) {  // amount of numbered registers
     printf("R%d: %d\n", i, state->regs[i]);
@@ -18,6 +13,11 @@ void printRegisters(struct State* state) {
   printf("PC: %d\n", state->regs[PC_INDEX]);
   printf("CSPR: %d\n", state->regs[CPSR_INDEX]);
 }
+
+instr fetch(word32 pc, State* state) {
+  return state->memory[pc];
+}
+
 
 enum itype decode(instr instruction) {  // return type?
   switch (getBits(instruction, 26, 27)) {
