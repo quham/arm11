@@ -3,9 +3,6 @@
 #include "em_general.h"
 
 void multiply(instr instruction, State *state) {
-  if (!checkCond(instruction, state)) {
-    return;
-  }
 
   word32 acc = checkBit(instruction, 21);
   word32 rd = getBits(instruction, 16, 20);
@@ -21,9 +18,9 @@ void multiply(instr instruction, State *state) {
   }
 
   if (checkSet(instruction)) {
-    regs[CPSR_INDEX] = regs[CPSR_INDEX] | 0x100000000;  // sets Nflag to 1
+    setBit(regs[CPSR_INDEX], 28, 1);
     if (!(regs[rd])) {
-      regs[CPSR_INDEX] = regs[CPSR_INDEX] | 0x80000000;  // sets Zflag to 1 if rd is 0
+      setBit(regs[CPSR_INDEX], 31, 1);
     }
   }
 }

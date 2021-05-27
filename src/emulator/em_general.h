@@ -72,6 +72,7 @@ word32 getRn(instr);
 word32 getRd(instr);
 word32 getRs(instr);
 word32 getRm(instr);
+word32 setBit(word32, int index, bool bit_value);
 bool checkBit(instr, int bit_no);
 bool checkSet(instr);
 bool checkImmediate(instr);
