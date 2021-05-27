@@ -5,92 +5,37 @@
 #include "em_general.h"
 #include "instr_decompose.c"
 
-#define ROTATION_MULTIPLIER 2
+#define ROTATION_MULTIPLIER 2 // define in em_general.h
 
 instr instruction = 0;
+State *state;
 
-void data_processing(word32 new_instruction, State *state) {
+void data_processing(word32 new_instruction, State *new_state) {
   instruction = new_instruction;
-  //  word32 opcode = getOpcode(instruction);
-  /*  word32 operdan2;
-  if (checkImmediate(instruction)) {
-    operand2 = operandImmediate(instruction);
-    }*/
+  state = new_state;
 }
 
 int main(void) {
-  instr instruction = 0b00000010101101010101000000000000;
-  // data_processing(instruction);
-  word32 s = checkSet(instruction);
-  word32 i = checkImmediate(instruction);
-  word32 opcode = getOpcode();
-  word32 rn = getRn(instruction);
-  word32 rd = getRd(instruction);
-
-  printf("Instruction is: ");
-  printBits(instruction);
-  printf("Immediate value is: ");
-  printBits(i);
-  printf("S value is: ");
-  printBits(s);
-  printf("Opcode is: ");
-  printBits(opcode);
-  printf("Rn is: ");
-  printBits(rn);
-  printf("Rd is: ");
-  printBits(rd);
-  rotateRight(&rd, 4);
-  printf("Rd rotated is: ");
-  printBits(rd);
   return 0;
-}
-
-word32 getOpcode(void) {
-  return getBits(instruction, OPCODE_MASK, OPCODE_INDEX);
-}
-
-word32 operandRotate(void) {
-  return getBits(instruction, OPERAND_ROTATE_MASK, OPERAND_ROTATE_INDEX);
-}
-
-word32 operandImmediate(void) {
-  return getBits(instruction, OPERAND_IMM_MASK, OPERAND_ROTATE_INDEX);
-}
-
-word32 operandShift(void) {
-  return getBits(instruction, OPERAND_SHIFT_MASK, OPERAND_SHIFT_INDEX);
-}
-
-word32 operandRm(void) {
-  return getBits(instruction, OPERAND_RM_MASK, OPERAND_RN_INDEX);
-}
-
-word32 getRn(instr instruction) {
-  return getBits(instruction, OPERAND_RN_MASK, OPERAND_RN_INDEX);
-}
-
-word32 getRd(instr instruction) {
-  return getBits(instruction, OPERAND_RD_MASK, OPERAND_RD_INDEX);
 }
 
 // Calculates the value of the operand2.
 word32 getOperand(void) {
   word32 operand;
+  
   if (checkImmediate(instruction)) {
     operand = operandImmediate();
     rotateRight(&operand, ROTATION_MULTIPLIER * operandRotate());
   } else {
-    operand = getRm(instruction);  // Should get the register instead. Left for now.
-    word32 shift = operandShift();
-    // bit4 gets the value of the 4th bit in the operand2. It is LSB of shift
+    operand = state->regs[getRm(instruction)];
+    word32 shift = getBits(instruction, 4, 11);
     word32 bit4 = checkBit(shift, 0);
-    // 0x6 is the mask to get bits 5-6 of operand2, they are 1-2 of shift
-    word32 shift_type = getBits(shift, 0x6, 1);
+    word32 shift_type = getBits(shift, 5, 6);
     word32 shift_value;
     if (bit4) {
-      shift_value = getRs(instruction);  // should get the register instead. Left for now
+      shift_value = state->regs[getRs(instruction)];
     } else {
-      shift_value = getBits(instruction, 0xf80, 7);
+      shift_value = getBits(instruction, 7, 11);
     }
     makeShift(&operand, shift_value, shift_type);
   }
@@ -99,15 +44,14 @@ word32 getOperand(void) {
 
 // makes a shift of the operand2 depending on its shift_type
 void makeShift(word32 *operand, word32 shift_value, word32 shift_type) {
-  // In case of register provided, select first byte of the shift_value
+  // In case of register provided, selects its first byte.
   shift_value = shift_value & 0xff;
-  word32 carry_out = checkBit(*operand,
-                              shift_value);  // consider some edge cases here (eg shift_value > 32)
-
+  //  char carry_out = checkBit(*operand, shift_value - 1);
+  
   switch (shift_type) {
     case 0:  // logic shift left
+      //      carry_out = checkBit(*operand, WORD_SIZE - (int) shift_value);
       *operand <<= shift_value;
-      carry_out = 31 - shift_value;
       break;
     case 1:  // logic shift right
       *operand >>= shift_value;
@@ -119,18 +63,71 @@ void makeShift(word32 *operand, word32 shift_value, word32 shift_type) {
       rotateRight(operand, shift_value);
       break;
   }
-  // assign here carry_out bit
+  
+  if (checkSet(instruction)) {
+    // *(state->regs + CPSR_INDEX) = setBitC(carry_out); 
+  }
+  
   return;
 }
 
-void printBits(word32 x) {
-  int i;
-  word32 mask = 1 << 31;
-  for (i = 0; i < 32; ++i) {
-    if (i % 4 == 0)
-      printf(" ");
-    printf("%i", (x & mask) != 0);
-    x <<= 1;
+void performOperation(void) {		     
+
+  word32 result;
+  word32 opcode = getBits(instruction, 21, 24);
+  word32 operand2 = getOperand();
+  word32 rn = state->regs[getBits(instruction, 15, 19)];
+  word32 *rd = state->regs + getBits(instruction, 16, 19);
+  //  word32 carry_out = checkBit(state->regs[CPSR_INDEX], 31);
+    
+  switch (opcode) {
+  case 0: // 0000 and
+    result = rn & operand2;
+    *rd = result;
+    break;
+  case 1: // 0001 eor
+    result = rn ^ operand2;
+    *rd = result;
+    break;
+  case 2: // 0010 sub
+    result = rn - operand2;
+    *rd = result;
+    break;
+  case 3: // 0011 rsb
+    result = operand2 - rn;
+    *rd = result;
+    break;
+  case 4: // 0100 add
+    result = rn + operand2;
+    *rd = result;
+    break;
+  case 8: // 1000 tst
+    result = rn & operand2;
+    break;
+  case 9: // 1001 teq
+    result = rn ^ operand2;
+    break;
+  case 10: // 1010 cmp
+    result = rn - operand2;
+    break;
+  case 12: // 1100 orr
+    result = rn | operand2;
+    *rd = result;
+    break;
+  case 13: // 1101 mov
+    result = operand2;
+    *rd = result;
+    break;
   }
-  printf("\n ");
+
+  /*
+  if (checkSet(instruction)) {
+    char Z = (result == 0) ? 1 : 0;
+    char N = checkBit(result, 31);
+    check for overflow here (or in the add related cases)
+    
+    May look up conditions in comp arch;
+  */
+  return;
 }
+ 

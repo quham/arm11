@@ -32,8 +32,8 @@ word32 getRs(instr instruction) {
 
 word32 getRm(instr instruction) {
   return getBits(instruction, 4, 0);
-}
-
+} 
+  
 void rotateRight(word32 *operand, int amount) {
   int i;
   word32 msb = 0b0;
