@@ -14,10 +14,6 @@ void data_processing(word32 new_instruction, State *new_state) {
   state = new_state;
 }
 
-// int main(void) {
-//   return 0;
-// }
-
 void performOperation(void) {
   int32_t result;
   word32 opcode = getBits(instruction, 21, 25);
