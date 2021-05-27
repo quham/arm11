@@ -18,9 +18,9 @@ void multiply(instr instruction, State *state) {
   }
 
   if (checkSet(instruction)) {
-    setBit(regs[CPSR_INDEX], 28, 1);
+    setFlag(state, 28, 1);
     if (!(regs[rd])) {
-      setBit(regs[CPSR_INDEX], 31, 1);
+      setFlag(state, 31, 1);
     }
   }
 }
