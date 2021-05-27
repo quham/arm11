@@ -15,7 +15,11 @@ void printRegisters(State* state) {
 }
 
 instr fetch(word32 pc, State* state) {
-  return state->memory[pc];
+  instr instruction = state->memory[pc];
+  for (int i = 1; i<4 ; i++){
+    instruction = instruction | (state->memory[pc + i]) << 8;//shift by 8bits to place next byte
+  }
+  return instruction;
 }
 
 enum itype decode(instr instruction) {  // return type?

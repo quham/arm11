@@ -27,12 +27,10 @@ int main(int argc, char **argv) {
   }
 
   // byte addressable memory
-  word32 memory[MEMORY_SIZE] = {0};
-  fread(memory, sizeof(word32), MEMORY_SIZE, file);
+  byte memory[MEMORY_SIZE] = {0};
+  fread(memory, sizeof(byte), MEMORY_SIZE, file);
   fclose(file);
-  // word32 regs[NUMBER_OF_REGISTERS] = {0};
-
-  // struct State state = {regs, memory};
-  // pipeline(&state);
+  State state = {memory, {0}};
+  pipeline(&state);
   return EXIT_SUCCESS;
 }
