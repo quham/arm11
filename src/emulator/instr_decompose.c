@@ -5,9 +5,8 @@
 
 #include "em_general.h"
 
-word32 getBits(instr instruction, word32 mask, int shift_no) {
-  word32 bits = instruction & mask;
-  return bits >> shift_no;
+word32 checkBit(instr instruction, int bit_no) {
+  return (instruction & (word32)pow(2, bit_no)) >> bit_no;
 }
 
 word32 getBits(instr instruction, int start_index, int end_index) {
@@ -33,8 +32,8 @@ word32 getRs(instr instruction) {
 
 word32 getRm(instr instruction) {
   return getBits(instruction, 4, 0);
-}
-
+} 
+  
 void rotateRight(word32 *operand, int amount) {
   int i;
   word32 msb = 0b0;

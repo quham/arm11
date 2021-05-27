@@ -39,6 +39,9 @@ typedef struct State State;
 #define NOT_INIT 0xFFFFFFFF
 
 // Data processing
+void performOperation(void);
+void makeShift(word32 *operand, word32 shift_value, word32 shift_type);
+word32 getOperand(void);
 void data_processing(instr, State*);
 void printBits(instr);
 word32 getOpcode(void);
@@ -64,7 +67,7 @@ void multiply(instr, State*);
 
 // Decomposition
 word32 signExtend(word32 number, int no_of_bits);
-word32 getBits(instr, word32 start_index, int end_index);
+word32 getBits(instr instruction, int start_index, int end_index);
 word32 checkBit(instr, int bitNo);
 void makeShift(word32* instruction, word32 shift_value, word32 shift_type);
 void rotateRight(word32* operand, int amount);
