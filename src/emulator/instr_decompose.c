@@ -61,11 +61,68 @@ word32 signExtend(word32 number, int no_of_bits) {
   return number | (number & (1 << (no_of_bits - 1)) ? mask : 0);
 }
 
+// Calculates the value of the operand2.
+word32 getOperand(word32 instruction, bool is_immediate, State* state) {
+  word32 operand;
+
+  if (is_immediate) {
+    operand = getBits(instruction, 0, 7);
+    // rotateRight(&operand, ROTATION_MULTIPLIER * operandRotate());
+  } else {
+    operand = state->regs[getRm(instruction)];
+    word32 shift = getBits(instruction, 4, 11);
+    word32 bit4 = checkBit(shift, 0);
+    word32 shift_type = getBits(shift, 5, 6);
+    word32 shift_value;
+    if (bit4) {
+      shift_value = state->regs[getRs(instruction)];
+    } else {
+      shift_value = getBits(instruction, 7, 11);
+    }
+    makeShift(&operand, shift_value, shift_type);
+  }
+  return operand;
+}
+
+// makes a shift of the operand2 depending on its shift_type
+void makeShift(word32* operand, word32 shift_value, word32 shift_type) {
+  // In case of register provided, selects its first byte.
+  shift_value = shift_value & 0xff;
+  bool carry_out = checkBit(*operand, shift_value - 1);
+
+  switch (shift_type) {
+    case 0:  // logic shift left
+      carry_out = checkBit(*operand, WORD_SIZE - (int)shift_value);
+      *operand <<= shift_value;
+      break;
+    case 1:  // logic shift right
+      *operand >>= shift_value;
+      break;
+    case 2:  // arithmetic shift right
+      *operand = signExtend(*operand, shift_value);
+      break;
+    case 3:  // rotate right
+      rotateRight(operand, shift_value);
+      break;
+  }
+
+  if (checkSet(instruction)) {
+    word32* regs = state->regs;
+    if (carry_out) {
+      regs[CPSR_INDEX] = regs[CPSR_INDEX] | 0x20000000;  // sets C flag to 1
+    } else {
+      regs[CPSR_INDEX] = regs[CPSR_INDEX] & 0xd0000000;  // sets C flag to 0
+    }
+  }
+
+  return;
+}
+
 // test functions
 void decomp_tests() {
   instr test_instruction = 0b10101111000011000011001001001110;
 
-  instr bits_12_to_20 = 0b00000000000000000000000011000011;  // includsive
+  instr bits_12_to_20 = 0b00000000000000000000000011000011;  // inclusive
   if (getBits(test_instruction, 12, 20) == bits_12_to_20) {
     printf("getBits - pass\n");
   } else {

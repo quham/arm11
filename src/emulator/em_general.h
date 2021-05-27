@@ -44,8 +44,6 @@ enum itype decode(instr);
 
 // Data processing
 void performOperation(void);
-void makeShift(word32* operand, word32 shift_value, word32 shift_type);
-word32 getOperand(void);
 void data_processing(instr, State*);
 void printBits(instr);
 word32 getOpcode(void);
@@ -67,6 +65,7 @@ void multiply(instr, State*);
 
 // Decomposition
 #define ROTATION_MULTIPLIER 2
+word32 getOperand(instr, bool is_immediate, State*);
 word32 condCode(instr);
 word32 getBits(instr, int start_index, int end_index);
 word32 getRn(instr);
@@ -77,6 +76,7 @@ bool checkBit(instr, int bit_no);
 bool checkSet(instr);
 bool checkImmediate(instr);
 void rotateRight(word32* operand, int amount);
+void makeShift(word32* operand, word32 shift_value, word32 shift_type);
 word32 getOperandRefactor(instr, bool cond, State*);
 word32 signExtend(word32 number, int no_of_bits);
 

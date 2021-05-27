@@ -18,67 +18,10 @@ void data_processing(word32 new_instruction, State *new_state) {
 //   return 0;
 // }
 
-// Calculates the value of the operand2.
-word32 getOperand(word32 instruction, State state) {
-  word32 operand;
-
-  if (checkImmediate(instruction)) {
-    operand = getBits(instruction, 0, 7);
-    rotateRight(&operand, ROTATION_MULTIPLIER * operandRotate());
-  } else {
-    operand = state->regs[getRm(instruction)];
-    word32 shift = getBits(instruction, 4, 11);
-    word32 bit4 = checkBit(shift, 0);
-    word32 shift_type = getBits(shift, 5, 6);
-    word32 shift_value;
-    if (bit4) {
-      shift_value = state->regs[getRs(instruction)];
-    } else {
-      shift_value = getBits(instruction, 7, 11);
-    }
-    makeShift(&operand, shift_value, shift_type);
-  }
-  return operand;
-}
-
-// makes a shift of the operand2 depending on its shift_type
-void makeShift(word32 *operand, word32 shift_value, word32 shift_type) {
-  // In case of register provided, selects its first byte.
-  shift_value = shift_value & 0xff;
-  bool carry_out = checkBit(*operand, shift_value - 1);
-
-  switch (shift_type) {
-    case 0:  // logic shift left
-      carry_out = checkBit(*operand, WORD_SIZE - (int) shift_value);
-      *operand <<= shift_value;
-      break;
-    case 1:  // logic shift right
-      *operand >>= shift_value;
-      break;
-    case 2:  // arithmetic shift right
-      *operand = signExtend(*operand, shift_value);
-      break;
-    case 3:  // rotate right
-      rotateRight(operand, shift_value);
-      break;
-  }
-
-  if (checkSet(instruction)) {
-    word32 *regs = state->regs;
-    if (carry_out) {
-      regs[CPSR_INDEX] = regs[CPSR_INDEX] | 0x20000000; // sets C flag to 1
-    } else {
-      regs[CPSR_INDEX] = regs[CPSR_INDEX] & 0xd0000000; // sets C flag to 0
-    }
-  }
-
-  return;
-}
-
 void performOperation(void) {
   word32 result;
   word32 opcode = getBits(instruction, 21, 24);
-  word32 operand2 = getOperand();
+  word32 operand2 = getOperand(instruction, checkImmediate(instruction), state);
   word32 rn = state->regs[getBits(instruction, 15, 19)];  // can we use getRn here?
   word32 *rd = state->regs + getBits(instruction, 16, 19);
   //  word32 carry_out = checkBit(state->regs[CPSR_INDEX], 31);

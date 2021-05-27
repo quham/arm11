@@ -6,7 +6,7 @@
 
 enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE };
 
-word32 fetch(word32 pc, State* state) {  // returns instruction
+instr fetch(word32 pc, State* state) {
   return state->memory[pc];
 }
 
@@ -41,7 +41,7 @@ enum itype decode(instr instruction) {  // return type?
   }
 }
 
-void execute(word32 instruction, enum itype type, struct State* state, word32* decoded,
+void execute(instr instruction, enum itype type, struct State* state, word32* decoded,
                word32* fetched) {
   if (checkCond(instruction, state)) {
     switch (type) {
@@ -67,8 +67,8 @@ void execute(word32 instruction, enum itype type, struct State* state, word32* d
 }
 
 void pipeline(State* state) {
-  word32 decoded = NOT_INIT;
-  word32 fetched = NOT_INIT;
+  instr decoded = NOT_INIT;
+  instr fetched = NOT_INIT;
   enum itype type;
   while (1) {
     if (decoded != NOT_INIT) {
