@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
   byte memory[MEMORY_SIZE] = {0};
   fread(memory, sizeof(byte), MEMORY_SIZE, file);
   fclose(file);
-  State state = {memory, {0}};
+  State state = {memory, {}};
   pipeline(&state);
   return EXIT_SUCCESS;
 }
