@@ -38,9 +38,12 @@ typedef struct State State;
 #define CPSR_INDEX 16
 
 // Pipeline
-void pipeline(State*);
 typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
+void pipeline(State*);
+instr fetch(word32 pc, State*);
 itype decode(instr);
+void execute(instr, enum itype type, State*, word32* decoded, word32* fetched);
+void printRegisters(State*);
 #define NOT_INIT 0xFFFFFFFF
 
 // Data processing
@@ -75,7 +78,7 @@ word32 getRn(instr);
 word32 getRd(instr);
 word32 getRs(instr);
 word32 getRm(instr);
-void setFlag(State *state, int index, bool bit_value);
+void setFlag(State* state, int index, bool bit_value);
 bool checkBit(instr, int bit_no);
 bool checkSet(instr);
 bool checkImmediate(instr);

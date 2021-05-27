@@ -4,7 +4,7 @@
 
 #include "em_general.h"
 
-void printRegisters(struct State* state) {
+void printRegisters(State* state) {
   for (int i = 0; i <= 12; i++) {  // amount of numbered registers
     printf("R%d: %d\n", i, state->regs[i]);
   }
@@ -17,7 +17,6 @@ void printRegisters(struct State* state) {
 instr fetch(word32 pc, State* state) {
   return state->memory[pc];
 }
-
 
 enum itype decode(instr instruction) {  // return type?
   switch (getBits(instruction, 26, 27)) {
@@ -35,13 +34,12 @@ enum itype decode(instr instruction) {  // return type?
         return PROCESSING;
       }
     default:
-      perror("Invalid instruction type"); 
+      perror("Invalid instruction type");
       exit(EXIT_FAILURE);
   }
 }
 
-void execute(instr instruction, enum itype type, struct State* state, word32* decoded,
-               word32* fetched) {
+void execute(instr instruction, enum itype type, State* state, word32* decoded, word32* fetched) {
   if (checkCond(instruction, state)) {
     switch (type) {
       case PROCESSING:

@@ -18,7 +18,8 @@ void transfer_data(State *state, instr instruction, word32 rd, word32 rdIndex, w
 }
 
 void single_data_transfer(instr instruction, State *state) {
-  word32 offset = 0; getOperand(instruction, !checkImmediate(instruction), state);
+  word32 offset = 0;
+  getOperand(instruction, !checkImmediate(instruction), state);
   word32 rdIndex = getRd(instruction);
   word32 rnIndex = getRn(instruction);
   word32 rd = state->regs[rdIndex];
