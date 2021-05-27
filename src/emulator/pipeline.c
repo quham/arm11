@@ -54,28 +54,28 @@ enum itype decode(word32 instruction){//return type?
 
 }
 word32 execute(word32 instruction, enum itype type , struct State* state , word32* decoded , word32* fetched){
-    switch(type){
-        case PROCESSING:
-            data_processing(instruction,state);
-            break;
-        case MULTIPLY:
-            multiply(instruction,state);
-            break;
-        case TRANSFER:
-            single_data_transfer(instruction, state);
-            break;
-        case BRANCH:
-            branch(instruction, state);
-            *decoded = NOT_INIT;
-            *fetched = NOT_INIT;
-            break;
-        default:
-            printRegisters(state);
-            exit(EXIT_SUCCESS);//exits function? should i print here?
-
-
-            
+    if (checkCond(instruction,state)){
+        switch(type){
+            case PROCESSING:
+                data_processing(instruction,state);
+                break;
+            case MULTIPLY:
+                multiply(instruction,state);
+                break;
+            case TRANSFER:
+                single_data_transfer(instruction, state);
+                break;
+            case BRANCH:
+                branch(instruction, state);
+                *decoded = NOT_INIT;
+                *fetched = NOT_INIT;
+                break;
+            default:
+                printRegisters(state);
+                exit(EXIT_SUCCESS);//exits function? should i print here?  
+        }
     }
+
 
 }
 
