@@ -1,11 +1,17 @@
-CC      =       gcc
-CFLAGS  =       -Wall
-BUILD   =       data_processing
+CC = gcc 
+CFLAGS = -Wall -g -D_DEFAULT_SOURCE -std=c99 -Werror -pedantic
+PROGS = emulate
 
-all: 	$(BUILD)
+.PHONY: all
+
+all: emulate
+
+emulate: pipeline.o emulate.o
+
+emulate.o: em_general.h #pipeline.h 
+
+pipeline.o: em_general.h #pipeline.h + all the other headers
 
 clean:
-	/bin/rm -f $(BUILD) *.o core
-data_processing: 	data_processing.o
-data_processing.o: 	em_general.h instr_decompose.c
+    rm -f *.o emulate $(PROGS) *~
 

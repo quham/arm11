@@ -11,8 +11,6 @@
 #include "pipeline.c"
 #include "single_data_transfer.c"
 
-// print for debugging
-
 int main(int argc, char **argv) {
     decomp_tests();  // temp test code
   if (argc != 2) {
