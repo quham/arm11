@@ -41,7 +41,7 @@ typedef struct State State;
 // Pipeline
 typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
 void pipeline(State*);
-instr fetch(word32 pc, State*);
+instr fetch(word32 index, State*);
 itype decode(instr);
 void execute(instr, enum itype type, State*, word32* decoded, word32* fetched);
 void printRegisters(State*);
