@@ -36,11 +36,12 @@ enum itype decode(instr instruction) {  // return type?
         return PROCESSING;
       }
     default:
-      perror("Invalid instruction type");  // needs to terminate here
+      perror("Invalid instruction type"); 
+      exit(EXIT_FAILURE);
   }
 }
 
-word32 execute(word32 instruction, enum itype type, struct State* state, word32* decoded,
+void execute(word32 instruction, enum itype type, struct State* state, word32* decoded,
                word32* fetched) {
   if (checkCond(instruction, state)) {
     switch (type) {
