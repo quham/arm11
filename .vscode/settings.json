@@ -1,4 +1,0 @@
-{
-  "C_Cpp.clang_format_style": "{ BasedOnStyle: Google, ColumnLimit: 100, AllowShortIfStatementsOnASingleLine: false, AllowShortFunctionsOnASingleLine: Empty}",
-  "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, ColumnLimit: 100, AllowShortIfStatementsOnASingleLine: false, AllowShortFunctionsOnASingleLine: Empty}"
-}
