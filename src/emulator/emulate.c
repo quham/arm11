@@ -27,10 +27,9 @@ int main(int argc, char **argv) {
   }
 
   // byte addressable memory
-  byte memory[MEMORY_SIZE] = {0};
-  fread(memory, sizeof(byte), MEMORY_SIZE, file);
+  State state = {{0}, {0}};
+  fread(state.memory, sizeof(byte), MEMORY_SIZE, file);
   fclose(file);
-  State state = {{0}, memory};
   pipeline(&state);
   return EXIT_SUCCESS;
 }
