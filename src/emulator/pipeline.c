@@ -4,7 +4,6 @@
 
 #include "em_general.h"
 
-enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE };
 
 instr fetch(word32 pc, State* state) {
   return state->memory[pc];

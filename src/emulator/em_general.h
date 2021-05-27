@@ -39,7 +39,8 @@ typedef struct State State;
 
 // Pipeline
 void pipeline(State*);
-enum itype decode(instr);
+typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
+itype decode(instr);
 #define NOT_INIT 0xFFFFFFFF
 
 // Data processing
@@ -72,6 +73,7 @@ word32 getRn(instr);
 word32 getRd(instr);
 word32 getRs(instr);
 word32 getRm(instr);
+void setFlag(State *state, int index, bool bit_value);
 bool checkBit(instr, int bit_no);
 bool checkSet(instr);
 bool checkImmediate(instr);

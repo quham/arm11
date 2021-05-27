@@ -10,6 +10,11 @@ bool checkBit(instr instruction, int bit_no) {
   return 1 & (instruction >> bit_no);
 }
 
+void setFlag(State *state, int index, bool bit) {
+  word32 cpsr = state->regs[CPSR_INDEX]; 
+  state->regs[CPSR_INDEX] = bit ? (cpsr | (1 << index)) : (cpsr & ~(1 << index));
+}
+
 bool checkImmediate(instr instruction) {
   return checkBit(instruction, 25);
 }
@@ -56,8 +61,7 @@ void rotateRight(word32* operand, int amount) {
 }
 
 word32 signExtend(word32 number, int no_of_bits) {
-  word32 mask = ((word32)pow(2, no_of_bits + 1) - ROUNDING_ERROR);
-  mask = mask << (WORD_SIZE - no_of_bits - 1);
+  word32 mask = ((1 << (WORD_SIZE - no_of_bits)) - 1) << no_of_bits ;
   return number | (number & (1 << (no_of_bits - 1)) ? mask : 0);
 }
 
@@ -108,12 +112,7 @@ void makeShift(word32* operand, word32 shift_value, word32 shift_type, instr ins
   }
 
   if (checkSet(instruction)) {
-    word32* regs = state->regs;
-    if (carry_out) {
-      regs[CPSR_INDEX] = regs[CPSR_INDEX] | 0x20000000;  // sets C flag to 1
-    } else {
-      regs[CPSR_INDEX] = regs[CPSR_INDEX] & 0xd0000000;  // sets C flag to 0
-    }
+      setFlag(state, 29, carry_out);
   }
 
   return;

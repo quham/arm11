@@ -13,5 +13,5 @@ emulate.o: em_general.h #pipeline.h
 pipeline.o: em_general.h #pipeline.h + all the other headers
 
 clean:
-    rm -f *.o emulate $(PROGS) *~
+	rm -f *.o emulate $(PROGS) *~
 
