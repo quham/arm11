@@ -52,6 +52,8 @@ word32 operandRotate(void);
 word32 operandImmediate(void);
 word32 oprandShift(void);
 word32 operandRm(void);
+int checkSub(word32 a, word32 b);
+int checkAdd(word32 a, word32 b);
 
 #define ROUNDING_ERROR 0.5
 
