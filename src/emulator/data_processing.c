@@ -19,12 +19,12 @@ void data_processing(word32 new_instruction, State *new_state) {
 // }
 
 // Calculates the value of the operand2.
-word32 getOperand(void) {
+word32 getOperand(word32 instruction, State state) {
   word32 operand;
 
   if (checkImmediate(instruction)) {
-    // operand = operandImmediate();
-    // rotateRight(&operand, ROTATION_MULTIPLIER * operandRotate());
+    operand = getBits(instruction, 0, 7);
+    rotateRight(&operand, ROTATION_MULTIPLIER * operandRotate());
   } else {
     operand = state->regs[getRm(instruction)];
     word32 shift = getBits(instruction, 4, 11);
@@ -45,11 +45,11 @@ word32 getOperand(void) {
 void makeShift(word32 *operand, word32 shift_value, word32 shift_type) {
   // In case of register provided, selects its first byte.
   shift_value = shift_value & 0xff;
-  //  char carry_out = checkBit(*operand, shift_value - 1);
+  bool carry_out = checkBit(*operand, shift_value - 1);
 
   switch (shift_type) {
     case 0:  // logic shift left
-      //      carry_out = checkBit(*operand, WORD_SIZE - (int) shift_value);
+      carry_out = checkBit(*operand, WORD_SIZE - (int) shift_value);
       *operand <<= shift_value;
       break;
     case 1:  // logic shift right
@@ -64,7 +64,12 @@ void makeShift(word32 *operand, word32 shift_value, word32 shift_type) {
   }
 
   if (checkSet(instruction)) {
-    // *(state->regs + CPSR_INDEX) = setBitC(carry_out);
+    word32 *regs = state->regs;
+    if (carry_out) {
+      regs[CPSR_INDEX] = regs[CPSR_INDEX] | 0x20000000; // sets C flag to 1
+    } else {
+      regs[CPSR_INDEX] = regs[CPSR_INDEX] & 0xd0000000; // sets C flag to 0
+    }
   }
 
   return;
