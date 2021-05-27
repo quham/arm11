@@ -1,6 +1,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "em_general.h"
+
 // returns true if the condition code matches the CPSR flags
 
 bool checkCond(instr instruction, State *state) {
@@ -11,13 +13,13 @@ bool checkCond(instr instruction, State *state) {
   word32 v_flag = checkBit(cpsr, 28);
 
   // check each code and respective cpsr flags
-  bool eq = (code == 0b0000) && z_flag;
-  bool ne = (code == 0b0001) && !z_flag;
-  bool ge = (code == 0b1010) && (n_flag == v_flag);
-  bool lt = (code == 0b1011) && (n_flag != v_flag);
-  bool gt = (code == 0b1100) && !z_flag && (n_flag == v_flag);
-  bool le = (code == 0b1101) && (z_flag || (n_flag != v_flag));
-  bool al = (code == 0b1110);
+  bool eq = (code == 0x0) && z_flag;
+  bool ne = (code == 0x1) && !z_flag;
+  bool ge = (code == 0xa) && (n_flag == v_flag);
+  bool lt = (code == 0xb) && (n_flag != v_flag);
+  bool gt = (code == 0xc) && !z_flag && (n_flag == v_flag);
+  bool le = (code == 0xd) && (z_flag || (n_flag != v_flag));
+  bool al = (code == 0xe);
 
   return eq || ne || ge || lt || gt || le || al;
 }

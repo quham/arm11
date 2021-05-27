@@ -76,7 +76,7 @@ bool checkBit(instr, int bit_no);
 bool checkSet(instr);
 bool checkImmediate(instr);
 void rotateRight(word32* operand, int amount);
-void makeShift(word32* operand, word32 shift_value, word32 shift_type);
+void makeShift(word32* operand, word32 shift_value, word32 shift_type, instr, State*);
 word32 getOperandRefactor(instr, bool cond, State*);
 word32 signExtend(word32 number, int no_of_bits);
 
