@@ -39,6 +39,7 @@ typedef struct State State;
 
 // Pipeline
 void pipeline(State*);
+enum itype decode(instr);
 #define NOT_INIT 0xFFFFFFFF
 
 // Data processing
