@@ -1,5 +1,7 @@
 #include <stdint.h>
 
+#include "em_general.h"
+
 void multiply(instr instruction, State *state) {
   if (!checkCond(instruction, state)) {
     return;

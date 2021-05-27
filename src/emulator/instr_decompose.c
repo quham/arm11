@@ -79,13 +79,14 @@ word32 getOperand(word32 instruction, bool is_immediate, State* state) {
     } else {
       shift_value = getBits(instruction, 7, 11);
     }
-    makeShift(&operand, shift_value, shift_type);
+    makeShift(&operand, shift_value, shift_type, instruction, state);
   }
   return operand;
 }
 
 // makes a shift of the operand2 depending on its shift_type
-void makeShift(word32* operand, word32 shift_value, word32 shift_type) {
+void makeShift(word32* operand, word32 shift_value, word32 shift_type, instr instruction,
+               State* state) {
   // In case of register provided, selects its first byte.
   shift_value = shift_value & 0xff;
   bool carry_out = checkBit(*operand, shift_value - 1);
@@ -120,23 +121,23 @@ void makeShift(word32* operand, word32 shift_value, word32 shift_type) {
 
 // test functions
 void decomp_tests() {
-  instr test_instruction = 0b10101111000011000011001001001110;
+  instr test_instruction = 0xaf0c324e;
 
-  instr bits_12_to_20 = 0b00000000000000000000000011000011;  // inclusive
+  instr bits_12_to_20 = 0xc3;  // inclusive
   if (getBits(test_instruction, 12, 20) == bits_12_to_20) {
     printf("getBits - pass\n");
   } else {
     printf("getBits - fail\n");
   }
 
-  instr rd_bits = 0b0000000000000000000000000000011;
+  instr rd_bits = 0x3;
   if (getRd(test_instruction) == rd_bits) {
     printf("getRd - pass\n");
   } else {
     printf("getRd - fail\n");
   }
 
-  instr cond_bits = 0b0000000000000000000000000001010;
+  instr cond_bits = 0xa;
   if (condCode(test_instruction) == cond_bits) {
     printf("condCode - pass\n");
   } else {
