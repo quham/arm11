@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #ifndef EMULATOR_CONSTS
 #define EMULATOR_CONSTS
 
@@ -36,11 +38,12 @@ typedef struct State State;
 #define CPSR_INDEX 16
 
 // Pipeline
+void pipeline(State*);
 #define NOT_INIT 0xFFFFFFFF
 
 // Data processing
 void performOperation(void);
-void makeShift(word32 *operand, word32 shift_value, word32 shift_type);
+void makeShift(word32* operand, word32 shift_value, word32 shift_type);
 word32 getOperand(void);
 void data_processing(instr, State*);
 void printBits(instr);
@@ -49,10 +52,6 @@ word32 operandRotate(void);
 word32 operandImmediate(void);
 word32 oprandShift(void);
 word32 operandRm(void);
-word32 getRn(instr);
-word32 getRd(instr);
-word32 getRs(instr);
-word32 getRm(instr);
 
 #define ROUNDING_ERROR 0.5
 
@@ -66,13 +65,21 @@ void branch(instr, State*);
 void multiply(instr, State*);
 
 // Decomposition
-word32 signExtend(word32 number, int no_of_bits);
-word32 getBits(instr instruction, int start_index, int end_index);
-word32 checkBit(instr, int bitNo);
-void makeShift(word32* instruction, word32 shift_value, word32 shift_type);
-void rotateRight(word32* operand, int amount);
+#define ROTATION_MULTIPLIER 2
 word32 condCode(instr);
-word32 checkImmediate(instr);
-word32 checkSet(instr);
+word32 getBits(instr, int start_index, int end_index);
+word32 getRn(instr);
+word32 getRd(instr);
+word32 getRs(instr);
+word32 getRm(instr);
+bool checkBit(instr, int bit_no);
+bool checkSet(instr);
+bool checkImmediate(instr);
+void rotateRight(word32* operand, int amount);
+word32 getOperandRefactor(instr, bool cond, State*);
+word32 signExtend(word32 number, int no_of_bits);
+
+// Check condition
+bool checkCond(instr, State*);
 
 #endif  // EMULATOR_CONSTS

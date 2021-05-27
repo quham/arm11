@@ -1,8 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "em_general.h"
-
 // returns true if the condition code matches the CPSR flags
 
 bool checkCond(instr instruction, State *state) {

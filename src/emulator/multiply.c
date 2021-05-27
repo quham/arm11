@@ -1,20 +1,15 @@
 #include <stdint.h>
 
-#include "check_condition.c"
-#include "data_processing.c"
-#include "em_general.h"
-#include "instr_decompose.c"
-
 void multiply(instr instruction, State *state) {
   if (!checkCond(instruction, state)) {
     return;
   }
 
   word32 acc = checkBit(instruction, 21);
-  word32 rd = getBits(instruction, 20, 16); 
-  word32 rn = getBits(instruction, 16, 12); 
-  word32 rm = getBits(instruction, 4, 0);   
-  word32 rs = getBits(instruction, 12, 8); 
+  word32 rd = getBits(instruction, 16, 20);
+  word32 rn = getBits(instruction, 12, 16);
+  word32 rm = getBits(instruction, 0, 4);
+  word32 rs = getBits(instruction, 8, 12);
   word32 *regs = state->regs;
 
   if (acc) {
