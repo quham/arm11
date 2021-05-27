@@ -5,6 +5,7 @@
 
 typedef uint32_t instr;
 typedef uint32_t word32;
+typedef uint8_t byte;
 #define WORD_SIZE 32
 #define MEMORY_SIZE 65536
 #define ADDRESS_SIZE 2
@@ -13,7 +14,7 @@ typedef uint32_t word32;
 
 struct State {
   word32 regs[NUMBER_OF_REGISTERS];
-  word32 memory[MEMORY_SIZE];
+  byte memory[MEMORY_SIZE];
 };
 
 typedef struct State State;
