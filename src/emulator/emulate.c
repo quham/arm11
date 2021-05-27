@@ -2,11 +2,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "branch.c"
+#include "check_condition.c"
+#include "data_processing.c"
 #include "em_general.h"
+#include "instr_decompose.c"
+#include "multiply.c"
+#include "pipeline.c"
+#include "single_data_transfer.c"
 
 // print for debugging
 
 int main(int argc, char **argv) {
+    decomp_tests();  // temp test code
   if (argc != 2) {
     perror("Invalid arguments! \n");
     exit(EXIT_FAILURE);
@@ -24,9 +32,9 @@ int main(int argc, char **argv) {
   word32 memory[MEMORY_SIZE] = {0};
   fread(memory, sizeof(word32), MEMORY_SIZE, file);
   fclose(file);
-  word32 regs[NUMBER_OF_REGISTERS];
-  word32 memory[MEMORY_SIZE];
+  word32 regs[NUMBER_OF_REGISTERS] = {0};
+
   struct State state = {regs, memory};
-  pipeline(state);
+  pipeline(&state);
   return EXIT_SUCCESS;
 }
