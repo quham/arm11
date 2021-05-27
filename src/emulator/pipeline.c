@@ -14,10 +14,10 @@ void printRegisters(State* state) {
   printf("CSPR: %d\n", state->regs[CPSR_INDEX]);
 }
 
-instr fetch(word32 pc, State* state) {
-  instr instruction = state->memory[pc];
+instr fetch(word32 index, State* state) {
+  instr instruction = state->memory[index];
   for (int i = 1; i<4 ; i++){
-    instruction = instruction | (state->memory[pc + i]) << 8*i;//shift by 8bits to place next byte
+    instruction = instruction | (state->memory[index + i]) << 8*i;//shift by 8bits to place next byte
   }
   return instruction;
 }
