@@ -7,7 +7,7 @@
 #include "em_general.h"
 
 bool checkBit(instr instruction, int bit_no) {
-  return (instruction & (word32)pow(2, bit_no)) >> bit_no;
+  return 1 & (instruction >> bit_no);
 }
 
 bool checkImmediate(instr instruction) {
@@ -46,7 +46,7 @@ word32 getRn(instr instruction) {
 
 void rotateRight(word32* operand, int amount) {
   int i;
-  word32 msb = 0b0;
+  word32 msb = 0;
   word32 mask = 1;
   for (i = 0; i < amount; i++) {
     msb = mask & *operand;
