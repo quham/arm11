@@ -7,7 +7,7 @@
 
 bool checkCond(instr instruction, State *state) {
   word32 code = condCode(instruction);
-  word32 cpsr = condCode(state->regs[CPSR_INDEX]);
+  word32 cpsr = state->regs[CPSR_INDEX];//removed cond code function
   word32 n_flag = checkBit(cpsr, 31);
   word32 z_flag = checkBit(cpsr, 30);
   word32 v_flag = checkBit(cpsr, 28);
