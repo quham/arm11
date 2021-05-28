@@ -20,8 +20,8 @@ void performOperation(void) {
   int32_t result;
   word32 opcode = getBits(instruction, 21, 25);
   word32 operand2 = getOperand(instruction, checkImmediate(instruction), state);
-  word32 rn = state->regs[getRn(instruction)];    // should be changed to int32_t
-  word32 *rd = state->regs + getRd(instruction);  // should be changed to int32_t
+  int32_t rn = (int32_t) state->regs[getRn(instruction)];    // should be changed to int32_t
+  int32_t *rd = (int32_t*) state->regs + getRd(instruction);  // should be changed to int32_t
   int carry_out = checkBit(state->regs[CPSR_INDEX], 31);
 
   switch (opcode) {
