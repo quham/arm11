@@ -28,16 +28,20 @@ void transfer_data(State *state, instr instruction, word32 rd, word32 rdIndex, a
 void single_data_transfer(instr instruction, State *state) {
   word32 offset = 0;
   getOperand(instruction, !checkImmediate(instruction), state);
-  word32 rdIndex = getRd(instruction);
-  word32 rnIndex = getRn(instruction);
-  word32 rd = state->regs[rdIndex];
-  word32 rn = state->regs[rnIndex];
+  word32 rd_index = getRd(instruction);
+  word32 rn_index = getRn(instruction);
+  word32 rd = state->regs[rd_index];
+  word32 rn = state->regs[rn_index];
   address addr = combine_offset(rn, offset, instruction);
 
+  if (rn_index == PC_INDEX) {
+    rd += PC_PIPELINE_OFFSET;
+  }
+
   if (checkBit(instruction, 24)) {  // check pre/post bit
-    transfer_data(state, instruction, rd, rdIndex, addr);
+    transfer_data(state, instruction, rd, rd_index, addr);
   } else {
-    transfer_data(state, instruction, rd, rdIndex, rn);
-    state->regs[rnIndex] = addr;
+    transfer_data(state, instruction, rd, rd_index, rn);
+    state->regs[rn_index] = addr;
   }
 }
