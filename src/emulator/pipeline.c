@@ -82,5 +82,6 @@ void pipeline(State* state) {
     }
     fetched = fetch(state->regs[PC_INDEX], state);
     state->regs[PC_INDEX] += 4;
+    printRegisters(state);
   }
 }
