@@ -7,7 +7,7 @@
 #include "instr_decompose.h"
 
 int main(int argc, char **argv) {
-  if (argc != 2) {
+  if (argc != 2) {  // number of arguments main takes
     perror("Invalid arguments! \n");
     exit(EXIT_FAILURE);
   }
@@ -19,6 +19,7 @@ int main(int argc, char **argv) {
     perror("File is null! \n");
     exit(EXIT_FAILURE);
   }
+
   // byte addressable memory
   State state = {{0}, {0}};
   fread(state.memory, sizeof(byte), MEMORY_SIZE, file);

@@ -5,7 +5,7 @@
 #include "em_general.h"
 
 void printState(State* state) {
-  word32* regs = state->regs;
+  int32_t* regs = state->regs;
 
   printf("Registers:\n");
   for (int i = 0; i <= 12; i++) {  // iterate numbered registers

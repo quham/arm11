@@ -14,7 +14,7 @@ typedef uint8_t byte;
 #define NUMBER_OF_REGISTERS 17
 
 struct State {
-  word32 regs[NUMBER_OF_REGISTERS];
+  int32_t regs[NUMBER_OF_REGISTERS];
   byte memory[MEMORY_SIZE];
 };
 
@@ -52,8 +52,11 @@ void printRegisters(State*);
 
 // Data processing
 #define ROTATION_MULTIPLIER 2
-void data_processing(instr, State*);
 #define ROUNDING_ERROR 0.5
+void data_processing(instr, State*);
+void performOperation(void);
+bool checkSub(word32, word32);
+bool checkAdd(word32, word32);
 
 // Single data transfer
 void single_data_transfer(instr, State*);

@@ -6,9 +6,6 @@
 
 instr instruction = 0;
 State *state;
-void performOperation(void);
-int checkSub(word32, word32);
-int checkAdd(word32, word32);
 
 void data_processing(instr new_instruction, State *new_state) {
   instruction = new_instruction;
@@ -20,9 +17,9 @@ void performOperation(void) {
   int32_t result;
   word32 opcode = getBits(instruction, 21, 25);
   word32 operand2 = getOperand(instruction, checkImmediate(instruction), state);
-  int32_t rn = (int32_t)state->regs[getRn(instruction)];      // should be changed to int32_t
-  int32_t *rd = (int32_t *)state->regs + getRd(instruction);  // should be changed to int32_t
-  int carry_out = checkBit(state->regs[CPSR_INDEX], 31);
+  int32_t rn = state->regs[getRn(instruction)];
+  int32_t *rd = state->regs + getRd(instruction);
+  bool carry_out = checkBit(state->regs[CPSR_INDEX], 31);
 
   switch (opcode) {
     case 0:  // 0000 and
@@ -69,28 +66,18 @@ void performOperation(void) {
   }
 
   if (checkSet(instruction)) {
-    int Z = (result == 0) ? 1 : 0;
-    int N = checkBit(result, 31);
+    bool Z = result == 0;
+    bool N = checkBit(result, 31);
     setFlag(state, 31, N);
     setFlag(state, 30, Z);
     setFlag(state, 29, carry_out);
   }
-
-  return;
 }
 
-int checkAdd(word32 a, word32 b) {
-  if (a > UINT32_MAX - b) {
-    return 1;
-  } else {
-    return 0;
-  }
+bool checkAdd(word32 a, word32 b) {
+  return (a > UINT32_MAX - b);
 }
 
-int checkSub(word32 a, word32 b) {
-  if (a < b) {
-    return 0;
-  } else {
-    return 1;
-  }
+bool checkSub(word32 a, word32 b) {
+  return a < b;
 }
