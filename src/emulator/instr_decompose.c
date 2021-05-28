@@ -91,8 +91,7 @@ word32 getOperand(word32 instruction, bool is_immediate, State* state) {
 // makes a shift of the operand2 depending on its shift_type
 void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr instruction,
                State* state) {
-  
-  bool carry_out = checkBit(*operand, shift_value - 1);
+    bool carry_out = checkBit(*operand, shift_value - 1);
 
   switch (shift_type) {
     case 0:  // logic shift left

@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "em_general.h"
 #include "check_condition.h"
+#include "em_general.h"
 #include "instr_decompose.h"
 
 int main(int argc, char **argv) {

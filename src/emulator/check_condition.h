@@ -5,5 +5,4 @@
 
 bool checkCond(instr, State* state);
 
-#endif 
-
+#endif
