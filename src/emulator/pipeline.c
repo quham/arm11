@@ -4,21 +4,22 @@
 
 #include "em_general.h"
 
-void printRegisters(State* state) {
+void printState(State* state) {
+  word32 *regs = state->regs;
+
   printf("Registers:\n");
   for (int i = 0; i <= 12; i++) {  // iterate numbered registers
-    if (i == 10 || i == 11 || i == 12) {
-    printf("$%d :         %d (0x%08x) \n", i, state->regs[i], state->regs[i]);  
-    } else {
-    printf("$%d  :         %d (0x%08x) \n", i, state->regs[i], state->regs[i]);
-    }
+   printf("$%3d:%10d (0x%08x) \n", i, regs[i], regs[i]);
   }
- // printf("SP  :         %d (0x%08x) \n", state->regs[SP_INDEX],  state->regs[SP_INDEX]);
- // printf("LP  :         %d (0x%08x) \n", state->regs[LP_INDEX], state->regs[LP_INDEX]);
-  printf("PC  :         %d (0x%08x) \n", state->regs[PC_INDEX],  state->regs[PC_INDEX]);
-  printf("CSPR:         %d (0x%08x) \n", state->regs[CPSR_INDEX], state->regs[CPSR_INDEX]);
+  printf("PC  :%10d (0x%08x) \n", regs[PC_INDEX], regs[PC_INDEX]);
+  printf("CSPR:%10d (0x%08x) \n", regs[CPSR_INDEX], regs[CPSR_INDEX]);
   printf("Non-zero memory:\n");
-  
+  for (int i = 0; i < MEMORY_SIZE / 4; i++) {
+    word32 chunk = fetch(4 * i, state);
+    if (chunk != 0) {
+     printf("%08lx: %x\n", sizeof(i) * i  , chunk);
+    } 
+  }
 }
 
 word32 fetch(address addr, State* state) {
@@ -69,7 +70,7 @@ void execute(instr instruction, itype type, State* state, word32* decoded, word3
         *fetched = NOT_INIT;
         break;
       default:
-        exit(EXIT_SUCCESS);  // exits function? should i print here?
+        exit(EXIT_SUCCESS);
     }
   }
 }
@@ -77,10 +78,10 @@ void execute(instr instruction, itype type, State* state, word32* decoded, word3
 void pipeline(State* state) {
   instr decoded = NOT_INIT;
   instr fetched = NOT_INIT;
-  itype type;
+  itype type = 0;
   while (1) {
     if (type == TERMINATE) {
-      printRegisters(state);
+      printState(state);
       return;
     }
     if (decoded != NOT_INIT) {
