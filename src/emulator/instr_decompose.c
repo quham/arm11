@@ -25,7 +25,7 @@ bool checkSet(instr instruction) {
 
 // inclusive start_index, exclusive end_index
 word32 getBits(instr instruction, int start_index, int end_index) {
-  word32 mask = 0xffffffff >> (WORD_SIZE - (end_index - start_index));
+  word32 mask = UINT32_MAX >> (WORD_SIZE - (end_index - start_index));
   return (instruction >> start_index) & mask;
 }
 
@@ -93,11 +93,12 @@ void makeShift(word32* operand, word32 shift_value, word32 shift_type, instr ins
                State* state) {
   // In case of register provided, selects its first byte.
   shift_value = shift_value & 0xff;
+  // ^ could change input type of shift_value to uint8_t (implicit downcast will select 1st byte)?
   bool carry_out = checkBit(*operand, shift_value - 1);
 
   switch (shift_type) {
     case 0:  // logic shift left
-      carry_out = checkBit(*operand, WORD_SIZE - (int)shift_value);
+      carry_out = checkBit(*operand, WORD_SIZE - shift_value);
       *operand <<= shift_value;
       break;
     case 1:  // logic shift right
