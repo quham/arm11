@@ -10,8 +10,8 @@ bool checkBit(instr instruction, int bit_no) {
   return 1 & (instruction >> bit_no);
 }
 
-void setFlag(State *state, int index, bool bit) {
-  word32 cpsr = state->regs[CPSR_INDEX]; 
+void setFlag(State* state, int index, bool bit) {
+  word32 cpsr = state->regs[CPSR_INDEX];
   state->regs[CPSR_INDEX] = bit ? (cpsr | (1 << index)) : (cpsr & ~(1 << index));
 }
 
@@ -25,7 +25,7 @@ bool checkSet(instr instruction) {
 
 // inclusive start_index, exclusive end_index
 word32 getBits(instr instruction, int start_index, int end_index) {
-  word32 mask = 0xffffffff >> (WORD_SIZE - (end_index - start_index));
+  word32 mask = UINT32_MAX >> (WORD_SIZE - (end_index - start_index));
   return (instruction >> start_index) & mask;
 }
 
@@ -61,7 +61,7 @@ void rotateRight(word32* operand, int amount) {
 }
 
 word32 signExtend(word32 number, int no_of_bits) {
-  word32 mask = ((1 << (WORD_SIZE - no_of_bits)) - 1) << no_of_bits ;
+  word32 mask = ((1 << (WORD_SIZE - no_of_bits)) - 1) << no_of_bits;
   return number | (number & (1 << (no_of_bits - 1)) ? mask : 0);
 }
 
@@ -93,11 +93,12 @@ void makeShift(word32* operand, word32 shift_value, word32 shift_type, instr ins
                State* state) {
   // In case of register provided, selects its first byte.
   shift_value = shift_value & 0xff;
+  // ^ could change input type of shift_value to uint8_t (implicit downcast will select 1st byte)?
   bool carry_out = checkBit(*operand, shift_value - 1);
 
   switch (shift_type) {
     case 0:  // logic shift left
-      carry_out = checkBit(*operand, WORD_SIZE - (int)shift_value);
+      carry_out = checkBit(*operand, WORD_SIZE - shift_value);
       *operand <<= shift_value;
       break;
     case 1:  // logic shift right
@@ -112,7 +113,7 @@ void makeShift(word32* operand, word32 shift_value, word32 shift_type, instr ins
   }
 
   if (checkSet(instruction)) {
-      setFlag(state, 29, carry_out);
+    setFlag(state, 29, carry_out);
   }
 
   return;

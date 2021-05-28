@@ -5,7 +5,7 @@
 #include "em_general.h"
 
 void printRegisters(State* state) {
-  for (int i = 0; i <= 12; i++) {  // amount of numbered registers
+  for (int i = 0; i <= 12; i++) {  // iterate numbered registers
     printf("R%d: %d\n", i, state->regs[i]);
   }
   printf("SP: %d\n", state->regs[SP_INDEX]);
@@ -14,23 +14,24 @@ void printRegisters(State* state) {
   printf("CSPR: %d\n", state->regs[CPSR_INDEX]);
 }
 
-instr fetch(word32 index, State* state) {
-  instr instruction = state->memory[index];
-  for (int i = 1; i<4 ; i++){
-    instruction = instruction | (state->memory[index + i]) << 8*i;//shift by 8bits to place next byte
+word32 fetch(address addr, State* state) {
+  word32 word = state->memory[addr];
+  for (int i = 1; i < BYTES_PER_WORD; i++) {
+    word |= (state->memory[addr + i]) << (BYTE_SIZE * i);
+    // shift to place next byte
   }
-  return instruction;
+  return word;
 }
 
-enum itype decode(instr instruction) {  // return type?
-  switch (getBits(instruction, 26, 27)) {
+itype decode(instr instruction) {
+  switch (getBits(instruction, 26, 28)) {
     case 2:
       return BRANCH;
     case 1:
       return TRANSFER;
     case 0:
-      if (!getBits(instruction, 22, 25) && !(getBits(instruction, 4, 7) ^ 1001)) {
-        // extracts bits 4-7 xor with 1001 to check for multiply format
+      if (!getBits(instruction, 22, 26) && !(getBits(instruction, 4, 8) ^ 0x9)) {
+        // bits 4 to 8 equal 0x9 in all multiply instructions
         return MULTIPLY;
       } else if (!instruction) {
         return TERMINATE;
@@ -43,7 +44,7 @@ enum itype decode(instr instruction) {  // return type?
   }
 }
 
-void execute(instr instruction, enum itype type, State* state, word32* decoded, word32* fetched) {
+void execute(instr instruction, itype type, State* state, word32* decoded, word32* fetched) {
   if (checkCond(instruction, state)) {
     switch (type) {
       case PROCESSING:
@@ -70,7 +71,7 @@ void execute(instr instruction, enum itype type, State* state, word32* decoded, 
 void pipeline(State* state) {
   instr decoded = NOT_INIT;
   instr fetched = NOT_INIT;
-  enum itype type;
+  itype type;
   while (1) {
     if (decoded != NOT_INIT) {
       execute(decoded, type, state, &decoded, &fetched);
