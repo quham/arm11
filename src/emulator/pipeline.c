@@ -5,13 +5,20 @@
 #include "em_general.h"
 
 void printRegisters(State* state) {
+  printf("Registers:\n");
   for (int i = 0; i <= 12; i++) {  // iterate numbered registers
-    printf("R%d: %d\n", i, state->regs[i]);
+    if (i == 10 || i == 11 || i == 12) {
+    printf("$%d :         %d (0x%08x) \n", i, state->regs[i], state->regs[i]);  
+    } else {
+    printf("$%d  :         %d (0x%08x) \n", i, state->regs[i], state->regs[i]);
+    }
   }
-  printf("SP: %d\n", state->regs[SP_INDEX]);
-  printf("LP: %d\n", state->regs[LP_INDEX]);
-  printf("PC: %d\n", state->regs[PC_INDEX]);
-  printf("CSPR: %d\n", state->regs[CPSR_INDEX]);
+ // printf("SP  :         %d (0x%08x) \n", state->regs[SP_INDEX],  state->regs[SP_INDEX]);
+ // printf("LP  :         %d (0x%08x) \n", state->regs[LP_INDEX], state->regs[LP_INDEX]);
+  printf("PC  :         %d (0x%08x) \n", state->regs[PC_INDEX],  state->regs[PC_INDEX]);
+  printf("CSPR:         %d (0x%08x) \n", state->regs[CPSR_INDEX], state->regs[CPSR_INDEX]);
+  printf("Non-zero memory:\n");
+  
 }
 
 word32 fetch(address addr, State* state) {
@@ -62,7 +69,6 @@ void execute(instr instruction, itype type, State* state, word32* decoded, word3
         *fetched = NOT_INIT;
         break;
       default:
-        printRegisters(state);
         exit(EXIT_SUCCESS);  // exits function? should i print here?
     }
   }
@@ -73,6 +79,10 @@ void pipeline(State* state) {
   instr fetched = NOT_INIT;
   itype type;
   while (1) {
+    if (type == TERMINATE) {
+      printRegisters(state);
+      return;
+    }
     if (decoded != NOT_INIT) {
       execute(decoded, type, state, &decoded, &fetched);
     }
@@ -82,6 +92,6 @@ void pipeline(State* state) {
     }
     fetched = fetch(state->regs[PC_INDEX], state);
     state->regs[PC_INDEX] += 4;
-    printRegisters(state);
+    }
   }
-}
+
