@@ -6,10 +6,14 @@
 
 instr instruction = 0;
 State *state;
+void performOperation(void);
+int checkSub(word32, word32);
+int checkAdd(word32, word32);
 
 void data_processing(instr new_instruction, State *new_state) {
   instruction = new_instruction;
   state = new_state;
+  performOperation();
 }
 
 void performOperation(void) {

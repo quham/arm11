@@ -6,7 +6,7 @@ PROGS = emulate
 
 all: emulate
 
-emulate: pipeline.o emulate.o
+emulate: pipeline.o emulate.o single_data_transfer.o multiply.o data_processing.o check_condition.o branch.o instr_decompose.o 
 
 emulate.o: em_general.h #pipeline.h 
 

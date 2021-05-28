@@ -1,7 +1,8 @@
-#include <stdbool.h>
-
 #ifndef EMULATOR_CONSTS
 #define EMULATOR_CONSTS
+
+#include <stdbool.h>
+#include <stdint.h>
 
 typedef uint32_t instr;
 typedef uint32_t word32;
@@ -51,17 +52,7 @@ void printRegisters(State*);
 
 // Data processing
 #define ROTATION_MULTIPLIER 2
-void performOperation(void);
 void data_processing(instr, State*);
-void printBits(instr);
-word32 getOpcode(void);
-word32 operandRotate(void);
-word32 operandImmediate(void);
-word32 oprandShift(void);
-word32 operandRm(void);
-int checkSub(word32 a, word32 b);
-int checkAdd(word32 a, word32 b);
-
 #define ROUNDING_ERROR 0.5
 
 // Single data transfer
@@ -91,7 +82,6 @@ bool checkSet(instr);
 bool checkImmediate(instr);
 void rotateRight(word32* operand, int amount);
 void makeShift(word32* operand, word32 shift_value, word32 shift_type, instr, State*);
-word32 getOperandRefactor(instr, bool cond, State*);
 word32 signExtend(word32 number, int no_of_bits);
 
 // Check condition
