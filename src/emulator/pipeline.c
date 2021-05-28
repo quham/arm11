@@ -17,15 +17,16 @@ void printState(State* state) {
   for (int i = 0; i < MEMORY_SIZE / 4; i++) {
     word32 chunk = fetch(4 * i, state);
     if (chunk != 0) {
-     printf("%08lx: %x\n", sizeof(i) * i  , chunk);
+     printf("0x%08lx: 0x%x\n", sizeof(i) * i  , chunk);
     } 
   }
 }
 
 word32 fetch(address addr, State* state) {
-  word32 word = state->memory[addr];
-  for (int i = 1; i < BYTES_PER_WORD; i++) {
-    word |= (state->memory[addr + i]) << (BYTE_SIZE * i);
+  //word32 word = state->memory[addr];
+  word32 word = 0;
+  for (int i = 0; i < BYTES_PER_WORD; i++) {
+    word |= (state->memory[addr + i]) << (BYTE_SIZE * (BYTES_PER_WORD - (i + 1)));
     // shift to place next byte
   }
   return word;

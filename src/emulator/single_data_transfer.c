@@ -26,12 +26,14 @@ void transfer_data(State *state, instr instruction, word32 rd, word32 rdIndex, a
 }
 
 void single_data_transfer(instr instruction, State *state) {
+  printf("TESTING");
+
   word32 offset = 0;
   getOperand(instruction, !checkImmediate(instruction), state);
   word32 rd_index = getRd(instruction);
   word32 rn_index = getRn(instruction);
-  word32 rd = state->regs[rd_index];
-  word32 rn = state->regs[rn_index];
+  int32_t rd = state->regs[rd_index];
+  int32_t rn = state->regs[rn_index];
   address addr = combine_offset(rn, offset, instruction);
 
   if (rn_index == PC_INDEX) {
