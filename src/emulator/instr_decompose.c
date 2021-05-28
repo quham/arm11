@@ -89,11 +89,9 @@ word32 getOperand(word32 instruction, bool is_immediate, State* state) {
 }
 
 // makes a shift of the operand2 depending on its shift_type
-void makeShift(word32* operand, word32 shift_value, word32 shift_type, instr instruction,
+void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr instruction,
                State* state) {
-  // In case of register provided, selects its first byte.
-  shift_value = shift_value & 0xff;
-  // ^ could change input type of shift_value to uint8_t (implicit downcast will select 1st byte)?
+  
   bool carry_out = checkBit(*operand, shift_value - 1);
 
   switch (shift_type) {
