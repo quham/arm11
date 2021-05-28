@@ -5,11 +5,11 @@
 
 typedef uint32_t instr;
 typedef uint32_t word32;
+typedef uint16_t address;
 typedef uint8_t byte;
 #define WORD_SIZE 32
+#define BYTES_PER_WORD 4
 #define MEMORY_SIZE 65536
-#define ADDRESS_SIZE 2
-#define INSTR_SIZE 4
 #define NUMBER_OF_REGISTERS 17
 
 struct State {
@@ -41,13 +41,15 @@ typedef struct State State;
 // Pipeline
 typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
 void pipeline(State*);
-instr fetch(word32 index, State*);
+word32 fetch(address index, State*);
 itype decode(instr);
 void execute(instr, enum itype type, State*, word32* decoded, word32* fetched);
 void printRegisters(State*);
 #define NOT_INIT 0xFFFFFFFF
+#define BYTE_SIZE 8
 
 // Data processing
+#define ROTATION_MULTIPLIER 2
 void performOperation(void);
 void data_processing(instr, State*);
 void printBits(instr);
@@ -63,6 +65,9 @@ int checkAdd(word32 a, word32 b);
 
 // Single data transfer
 void single_data_transfer(instr, State*);
+void store(word32, address, State*);
+word32 combine_offset(word32 reg, word32 offset, instr);
+void transfer_data(State*, instr, word32 rd, word32 rdIndex, address);
 
 // Branch
 void branch(instr, State*);
@@ -79,7 +84,7 @@ word32 getRn(instr);
 word32 getRd(instr);
 word32 getRs(instr);
 word32 getRm(instr);
-void setFlag(State* state, int index, bool bit_value);
+void setFlag(State*, int index, bool bit_value);
 bool checkBit(instr, int bit_no);
 bool checkSet(instr);
 bool checkImmediate(instr);

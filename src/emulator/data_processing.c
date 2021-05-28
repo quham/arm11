@@ -4,8 +4,6 @@
 
 #include "em_general.h"
 
-#define ROTATION_MULTIPLIER 2  // define in em_general.h
-
 instr instruction = 0;
 State *state;
 
@@ -18,8 +16,8 @@ void performOperation(void) {
   int32_t result;
   word32 opcode = getBits(instruction, 21, 25);
   word32 operand2 = getOperand(instruction, checkImmediate(instruction), state);
-  word32 rn = state->regs[getRn(instruction)];  // should be changed to int32_t
-  word32 *rd = state->regs + getRd(instruction); // should be changed to int32_t
+  word32 rn = state->regs[getRn(instruction)];    // should be changed to int32_t
+  word32 *rd = state->regs + getRd(instruction);  // should be changed to int32_t
   int carry_out = checkBit(state->regs[CPSR_INDEX], 31);
 
   switch (opcode) {
@@ -34,7 +32,7 @@ void performOperation(void) {
     case 2:  // 0010 sub
       result = rn - operand2;
       *rd = result;
-      carry_out = checkSub(rn, operand2); 
+      carry_out = checkSub(rn, operand2);
       break;
     case 3:  // 0011 rsb
       result = operand2 - rn;
@@ -73,7 +71,7 @@ void performOperation(void) {
     setFlag(state, 30, Z);
     setFlag(state, 29, carry_out);
   }
- 
+
   return;
 }
 
