@@ -89,12 +89,14 @@ word32 getOperand(word32 instruction, bool is_immediate, State* state) {
 // makes a shift of the operand2 depending on its shift_type
 void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr instruction,
                State* state) {
-  bool carry_out = checkBit(*operand, shift_value - 1);
-
+  //  bool carry_out = checkBit(*operand, shift_value - 1);
+  bool overflow = shift_value > 31;
+  bool carry_out = overflow ? checkBit(&operand, 31) : checkBit(&operand, shift_value - 1);
+    
   switch (shift_type) {
     case 0:  // logic shift left
-      carry_out = checkBit(*operand, WORD_SIZE - shift_value);
-      //shift_value > 31 ? checkBit(&operand, 0) : checkBit(&operand, WORD_SIZE - shift_value);
+      // carry_out = checkBit(*operand, WORD_SIZE - shift_value);
+      carry_out = overflow ? checkBit(&operand, 0) : checkBit(&operand, WORD_SIZE - shift_value);
       *operand <<= shift_value;
       break;
     case 1:  // logic shift right
@@ -105,6 +107,7 @@ void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr in
       break;
     case 3:  // rotate right
       rotateRight(operand, shift_value);
+      carry_out = overflow ? checkBit(&operand, 31) : carry_out;
       break;
   }
 
