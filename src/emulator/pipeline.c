@@ -9,9 +9,9 @@ void printState(State* state) {
 
   printf("Registers:\n");
   for (int i = 0; i <= 12; i++) {  // iterate numbered registers
-    printf("$%-3d:%11d (0x%08x)\n", i, regs[i], regs[i]);
+    printf("$%-3d: %10d (0x%08x)\n", i, regs[i], regs[i]);
   }
-  printf("PC  :%11d (0x%08x)\n", regs[PC_INDEX], regs[PC_INDEX]);
+  printf("PC  : %10d (0x%08x)\n", regs[PC_INDEX], regs[PC_INDEX]);
   printf("CPSR: %10d (0x%08x)\n", regs[CPSR_INDEX], regs[CPSR_INDEX]);
   printf("Non-zero memory:\n");
   for (int i = 0; i < MEMORY_SIZE / BYTES_PER_WORD; i += BYTES_PER_WORD) {
@@ -59,7 +59,6 @@ itype decode(instr instruction) {
 
 // remove unnecessary arguments? (instruction and pointer to instruction)
 void execute(itype type, State* state, word32* decoded, word32* fetched) {
-
   if (checkCond(*decoded, state)) {
     switch (type) {
       case PROCESSING:

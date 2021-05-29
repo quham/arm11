@@ -69,12 +69,12 @@ word32 getOperand(word32 instruction, bool is_immediate, State* state) {
 
   if (is_immediate) {
     operand = getBits(instruction, 0, 8);
-    rotateRight(&operand, ROTATION_MULTIPLIER * getBits(instruction, 8, 12)); 
+    rotateRight(&operand, ROTATION_MULTIPLIER * getBits(instruction, 8, 12));
   } else {
     operand = state->regs[getRm(instruction)];
     word32 shift = getBits(instruction, 4, 12);
     word32 bit4 = checkBit(shift, 0);
-    word32 shift_type = getBits(shift, 5, 7);
+    word32 shift_type = getBits(shift, 1, 3);
     word32 shift_value;
     if (bit4) {
       shift_value = state->regs[getRs(instruction)];
@@ -92,11 +92,9 @@ void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr in
   //  bool carry_out = checkBit(*operand, shift_value - 1);
   bool overflow = shift_value > 31;
   bool carry_out = overflow ? checkBit(*operand, 31) : checkBit(*operand, shift_value - 1);
-    
+
   switch (shift_type) {
     case 0:  // logic shift left
-      // carry_out = checkBit(*operand, WORD_SIZE - shift_value);
-      carry_out = overflow ? checkBit(*operand, 0) : checkBit(*operand, WORD_SIZE - shift_value);
       *operand <<= shift_value;
       break;
     case 1:  // logic shift right
@@ -147,5 +145,3 @@ void decomp_tests() {
     printf("checkImmediate - fail\n");
   }
 }
-
-
