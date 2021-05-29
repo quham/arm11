@@ -8,7 +8,7 @@ void multiply(instr instruction, State *state) {
   word32 rn = getBits(instruction, 12, 16);
   word32 rm = getBits(instruction, 0, 4);
   word32 rs = getBits(instruction, 8, 12);
-  int32_t *regs = state->regs;
+  word32 *regs = state->regs;
 
   if (acc) {
     regs[rd] = regs[rm] * regs[rs] + regs[rn];

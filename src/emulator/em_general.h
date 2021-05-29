@@ -14,7 +14,7 @@ typedef uint8_t byte;
 #define NUMBER_OF_REGISTERS 17
 
 struct State {
-  int32_t regs[NUMBER_OF_REGISTERS];
+  word32 regs[NUMBER_OF_REGISTERS];
   byte memory[MEMORY_SIZE];
 };
 
@@ -44,7 +44,6 @@ typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
 void pipeline(State*);
 word32 fetch(address index, State*);
 itype decode(instr);
-void execute(instr, enum itype type, State*, word32* decoded, word32* fetched);
 void printRegisters(State*);
 void printState(State*);
 #define NOT_INIT 0xFFFFFFFF
@@ -86,7 +85,7 @@ bool checkSet(instr);
 bool checkImmediate(instr);
 void rotateRight(word32* operand, int amount);
 void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr, State*);
-int32_t signExtend(int32_t number, int no_of_bits);
+word32 signExtend(word32 number, int no_of_bits);
 
 // Check condition
 bool checkCond(instr, State*);
