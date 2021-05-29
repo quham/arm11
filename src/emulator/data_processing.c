@@ -14,11 +14,11 @@ void data_processing(instr new_instruction, State *new_state) {
 }
 
 void performOperation(void) {
-  int32_t result;
+  word32 result;
   word32 opcode = getBits(instruction, 21, 25);
   word32 operand2 = getOperand(instruction, checkImmediate(instruction), state);
-  int32_t rn = state->regs[getRn(instruction)];
-  int32_t *rd = state->regs + getRd(instruction);
+  word32 rn = state->regs[getRn(instruction)];
+  word32 *rd = state->regs + getRd(instruction);
   bool carry_out = checkBit(state->regs[CPSR_INDEX], 31);
 
   switch (opcode) {
@@ -53,7 +53,7 @@ void performOperation(void) {
       break;
     case 10:  // 1010 cmp
       result = rn - operand2;
-      carry_out = checkSub(rn, operand2);
+     // carry_out = checkSub(rn, operand2);
       break;
     case 12:  // 1100 orr
       result = rn | operand2;
@@ -67,10 +67,10 @@ void performOperation(void) {
 
   if (checkSet(instruction)) {
     bool Z = result == 0;
-    bool N = checkBit(result, 31);
+    bool N = checkBit(result, 31); //result or instruction ? 
     setFlag(state, 31, N);
     setFlag(state, 30, Z);
-    setFlag(state, 29, carry_out);
+    setFlag(state, 29, carry_out); // issue with setting C flag 
   }
 }
 

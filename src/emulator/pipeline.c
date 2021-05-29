@@ -5,14 +5,14 @@
 #include "em_general.h"
 
 void printState(State* state) {
-  int32_t* regs = state->regs;
+  word32* regs = state->regs;
 
   printf("Registers:\n");
   for (int i = 0; i <= 12; i++) {  // iterate numbered registers
     printf("$%-3d:%11d (0x%08x)\n", i, regs[i], regs[i]);
   }
   printf("PC  :%11d (0x%08x)\n", regs[PC_INDEX], regs[PC_INDEX]);
-  printf("CPSR:%11d (0x%08x)\n", regs[CPSR_INDEX], regs[CPSR_INDEX]);
+  printf("CPSR: %10d (0x%08x)\n", regs[CPSR_INDEX], regs[CPSR_INDEX]);
   printf("Non-zero memory:\n");
   for (int i = 0; i < MEMORY_SIZE / BYTES_PER_WORD; i += BYTES_PER_WORD) {
     word32 chunk = fetch(i, state);
@@ -72,8 +72,9 @@ void execute(instr instruction, itype type, State* state, word32* decoded, word3
         break;
       case BRANCH:
         branch(instruction, state);
-        *decoded = NOT_INIT;
         *fetched = NOT_INIT;
+        *decoded = NOT_INIT;
+
         break;
       default:
         exit(EXIT_SUCCESS);
