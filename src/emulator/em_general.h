@@ -44,7 +44,6 @@ typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
 void pipeline(State*);
 word32 fetch(address index, State*);
 itype decode(instr);
-void execute(instr, enum itype type, State*, word32* decoded, word32* fetched);
 void printRegisters(State*);
 void printState(State*);
 #define NOT_INIT 0xFFFFFFFF

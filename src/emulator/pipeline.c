@@ -58,23 +58,23 @@ itype decode(instr instruction) {
 }
 
 // remove unnecessary arguments? (instruction and pointer to instruction)
-void execute(instr instruction, itype type, State* state, word32* decoded, word32* fetched) {
-  if (checkCond(instruction, state)) {
+void execute(itype type, State* state, word32* decoded, word32* fetched) {
+
+  if (checkCond(*decoded, state)) {
     switch (type) {
       case PROCESSING:
-        data_processing(instruction, state);
+        data_processing(*decoded, state);
         break;
       case MULTIPLY:
-        multiply(instruction, state);
+        multiply(*decoded, state);
         break;
       case TRANSFER:
-        single_data_transfer(instruction, state);
+        single_data_transfer(*decoded, state);
         break;
       case BRANCH:
-        branch(instruction, state);
+        branch(*decoded, state);
         *fetched = NOT_INIT;
         *decoded = NOT_INIT;
-
         break;
       default:
         exit(EXIT_SUCCESS);
@@ -88,7 +88,7 @@ void pipeline(State* state) {
   itype type = 0;
   while (type != TERMINATE) {
     if (decoded != NOT_INIT) {
-      execute(decoded, type, state, &decoded, &fetched);
+      execute(type, state, &decoded, &fetched);
     }
     if (fetched != NOT_INIT) {
       decoded = fetched;

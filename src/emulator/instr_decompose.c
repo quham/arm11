@@ -94,8 +94,8 @@ void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr in
   switch (shift_type) {
     case 0:  // logic shift left
       carry_out = checkBit(*operand, WORD_SIZE - shift_value);
+      //shift_value > 31 ? checkBit(&operand, 0) : checkBit(&operand, WORD_SIZE - shift_value);
       *operand <<= shift_value;
-      
       break;
     case 1:  // logic shift right
       *operand >>= shift_value;
@@ -144,3 +144,5 @@ void decomp_tests() {
     printf("checkImmediate - fail\n");
   }
 }
+
+

@@ -53,7 +53,7 @@ void performOperation(void) {
       break;
     case 10:  // 1010 cmp
       result = rn - operand2;
-     // carry_out = checkSub(rn, operand2);
+      carry_out = checkSub(rn, operand2);
       break;
     case 12:  // 1100 orr
       result = rn | operand2;
@@ -63,6 +63,8 @@ void performOperation(void) {
       result = operand2;
       *rd = result;
       break;
+    default:
+      perror("Error: Unsupported ALU operation\n");
   }
 
   if (checkSet(instruction)) {
@@ -79,5 +81,5 @@ bool checkAdd(word32 a, word32 b) {
 }
 
 bool checkSub(word32 a, word32 b) {
-  return a < b;
+  return a >= b;
 }
