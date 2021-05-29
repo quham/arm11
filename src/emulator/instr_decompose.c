@@ -24,9 +24,9 @@ bool checkSet(instr instruction) {
 }
 
 // inclusive start_index, exclusive end_index
-word32 getBits(instr instruction, int start_index, int end_index) {
+word32 getBits(word32 word, int start_index, int end_index) {
   word32 mask = UINT32_MAX >> (WORD_SIZE - (end_index - start_index));
-  return (instruction >> start_index) & mask;
+  return (word >> start_index) & mask;
 }
 
 word32 condCode(instr instruction) {
@@ -50,17 +50,15 @@ word32 getRn(instr instruction) {
 }
 
 void rotateRight(word32* operand, int amount) {
-  int i;
   word32 msb = 0;
   word32 mask = 1;
-  for (i = 0; i < amount; i++) {
+  for (int i = 0; i < amount; i++) {
     msb = mask & *operand;
-    printf("MSB is %d \n ", msb);
     *operand = (msb << (WORD_SIZE - 1)) | (*operand >> 1);
   }
 }
 
-word32 signExtend(word32 number, int no_of_bits) {
+int32_t signExtend(int32_t number, int no_of_bits) {
   word32 mask = ((1 << (WORD_SIZE - no_of_bits)) - 1) << no_of_bits;
   return number | (number & (1 << (no_of_bits - 1)) ? mask : 0);
 }

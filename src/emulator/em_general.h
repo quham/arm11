@@ -74,7 +74,7 @@ void multiply(instr, State*);
 #define ROTATION_MULTIPLIER 2
 word32 getOperand(instr, bool is_immediate, State*);
 word32 condCode(instr);
-word32 getBits(instr, int start_index, int end_index);
+word32 getBits(word32, int start_index, int end_index);
 word32 getRn(instr);
 word32 getRd(instr);
 word32 getRs(instr);
@@ -85,7 +85,7 @@ bool checkSet(instr);
 bool checkImmediate(instr);
 void rotateRight(word32* operand, int amount);
 void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr, State*);
-word32 signExtend(word32 number, int no_of_bits);
+int32_t signExtend(int32_t number, int no_of_bits);
 
 // Check condition
 bool checkCond(instr, State*);
