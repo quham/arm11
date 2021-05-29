@@ -3,6 +3,7 @@
 
 #include "em_general.h"
 
+// stores little endian byte ordered word in big-endian format
 void store(word32 word, address addr, State *state) {
   for (int i = 0; i < BYTES_PER_WORD; i++) {
     state->memory[addr + i] = getBits(word, i * BYTE_SIZE, (i + 1) * BYTE_SIZE);
