@@ -68,8 +68,8 @@ word32 getOperand(word32 instruction, bool is_immediate, State* state) {
   word32 operand;
 
   if (is_immediate) {
-    operand = getBits(instruction, 0, 7);
-    rotateRight(&operand, ROTATION_MULTIPLIER * getBits(instruction, 8, 12));
+    operand = getBits(instruction, 0, 8); //0 to 7
+    rotateRight(&operand, ROTATION_MULTIPLIER * getBits(instruction, 9, 12)); // 8 to 12
   } else {
     operand = state->regs[getRm(instruction)];
     word32 shift = getBits(instruction, 4, 11);
