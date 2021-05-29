@@ -57,7 +57,7 @@ itype decode(instr instruction) {
   }
 }
 
-// instr = decoded type = transfer, fetched = next instr
+// remove unnecessary arguments? (instruction and pointer to instruction)
 void execute(instr instruction, itype type, State* state, word32* decoded, word32* fetched) {
   if (checkCond(instruction, state)) {
     switch (type) {
