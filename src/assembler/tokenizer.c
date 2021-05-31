@@ -2,13 +2,12 @@
 
 tokenset tokenize(char line[]) {
   tokenset tokens  = {'\0', '\0', '\0'}; 
-  char *opcode = line;
+  char *instruction = line;
   if (strchr(line, ':')) {
-    tokens.label   = strtok_r(opcode, ": ", &opcode);
+    tokens.label   = strtok_r(instruction, ": ", &instruction);
   } else {
-    char *operand  = opcode;
-    tokens.opcode  = strtok_r(operand, " ", &operand);
-    tokens.operand = operand;
+    tokens.opcode  = strtok_r(instruction, " ", &instruction);
+    tokens.operand = instruction;
   }
   return tokens;
 }
