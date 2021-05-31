@@ -28,12 +28,16 @@ void printState(State* state) {
 
 // loads bytes (stored in little endian) into a word (big-endian)
 word32 fetch(address addr, State* state) {
-  word32 word = 0;
+  if (addr < MEMORY_SIZE){
+    word32 word = 0;
   for (int i = 0; i < BYTES_PER_WORD; i++) {
     word |= (state->memory[addr + i]) << (BYTE_SIZE * i);
     // shift to place next byte
   }
   return word;
+  }
+  fprintf(stderr, "Error: Out of bounds memory access at %u", addr);
+  exit(EXIT_FAILURE);
 }
 
 itype decode(instr instruction) {
@@ -88,6 +92,9 @@ void pipeline(State* state) {
   while (type != TERMINATE) {
     if (decoded != NOT_INIT) {
       execute(type, state, &decoded, &fetched);
+      if (type == TERMINATE){
+        break;
+      }
     }
     if (fetched != NOT_INIT) {
       decoded = fetched;
