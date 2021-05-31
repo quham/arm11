@@ -1,18 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "tokenizer.h"
 
 tokenset tokenize(char line[]) {
-  tokenset tokens = {'\0', '\0', '\0'}; 
-  char *label;
+  tokenset tokens  = {'\0', '\0', '\0'}; 
   char *opcode = line;
   if (strchr(line, ':')) {
-    label          = strtok_r(opcode, ": ", &opcode);
-    tokens.label   = label;
+    tokens.label   = strtok_r(opcode, ": ", &opcode);
   } else {
     char *operand  = opcode;
-    opcode         = strtok_r(operand, " ", &operand);
-    tokens.opcode  = opcode;
+    tokens.opcode  = strtok_r(operand, " ", &operand);
     tokens.operand = operand;
   }
   return tokens;
