@@ -81,14 +81,14 @@ word32 getOperand(word32 instruction, bool is_immediate, State* state) {
     } else {
       shift_value = getBits(instruction, 7, 12);
     }
-    makeShift(&operand, shift_value, shift_type, instruction, state);
+    makeShift(&operand, shift_value, shift_type, instruction, state, is_immediate);
   }
   return operand;
 }
 
 // makes a shift of the operand2 depending on its shift_type
 void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr instruction,
-               State* state) {
+               State* state, bool is_immediate) {
   //  bool carry_out = checkBit(*operand, shift_value - 1);
   bool overflow = shift_value > 31;
   bool carry_out = overflow ? checkBit(*operand, 31) : checkBit(*operand, shift_value - 1);
@@ -109,7 +109,7 @@ void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr in
       break;
   }
 
-  if (checkSet(instruction)) {
+  if (is_immediate) {
     setFlag(state, 29, carry_out);
   }
 }

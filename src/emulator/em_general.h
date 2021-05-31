@@ -3,10 +3,10 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 typedef uint32_t instr;
 typedef uint32_t word32;
-typedef uint16_t address;
 typedef uint8_t byte;
 #define WORD_SIZE 32
 #define BYTES_PER_WORD 4
@@ -42,7 +42,7 @@ typedef struct State State;
 // Pipeline
 typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
 void pipeline(State*);
-word32 fetch(address index, State*);
+word32 fetch(word32 index, State*);
 itype decode(instr);
 void printRegisters(State*);
 void printState(State*);
@@ -60,9 +60,9 @@ bool checkAdd(word32, word32);
 
 // Single data transfer
 void single_data_transfer(instr, State*);
-void store(word32, address, State*);
+void store(word32, word32, State*);
 word32 combine_offset(word32 reg, word32 offset, instr);
-void transfer_data(State*, instr, word32 rd, word32 rdIndex, address);
+void transfer_data(State*, instr, word32 rd, word32 rdIndex, word32);
 
 // Branch
 void branch(instr, State*);
@@ -84,7 +84,7 @@ bool checkBit(instr, int bit_no);
 bool checkSet(instr);
 bool checkImmediate(instr);
 void rotateRight(word32* operand, int amount);
-void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr, State*);
+void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr, State*, bool);
 word32 signExtend(word32 number, int no_of_bits);
 
 // Check condition
