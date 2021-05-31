@@ -92,6 +92,9 @@ void pipeline(State* state) {
   while (type != TERMINATE) {
     if (decoded != NOT_INIT) {
       execute(type, state, &decoded, &fetched);
+      if (type == TERMINATE){
+        break;
+      }
     }
     if (fetched != NOT_INIT) {
       decoded = fetched;
