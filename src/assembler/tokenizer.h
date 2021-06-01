@@ -3,16 +3,16 @@
 #include <string.h>
 #include <stdio.h>
 
-typedef struct ops ops;
+
 typedef union tokens {
   char *label;
-  ops { 
+  struct ops { 
     char *opcode;
     char *operands[4];
-  };
-} tokenset;
+  } ops;
+} tokens;
 
-tokenset tokenize(char line[]);
+tokens tokenize(char line[]);
 void print_tokens(tokenset);
 
 

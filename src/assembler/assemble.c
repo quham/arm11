@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 
   printf("Lines to convert:\n\n"); // prints tokenset of each assembly line
   for (int j = 0; j < i - 1; j++) {
-    tokenset tokens = tokenize(asm_lines[j]);
+    tokens tokens = tokenize(asm_lines[j]);
     print_tokens(tokens);
     printf("\n");
   }  
