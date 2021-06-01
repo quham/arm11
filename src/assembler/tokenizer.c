@@ -1,29 +1,31 @@
 #include "tokenizer.h"
 
+#define MAX_OPERANDS 4
 
-
-tokens tokenize(char line[]) {
-  tokens tokens;
+tokenset tokenize(char line[]) {
+  tokenset tokens = {NULL};
   char *instruction = line;
-  if (strchr(line, ':')) {
-    tokens.label    = strtok_r(instruction, ": ", &instruction);
-  } else {
-    tokens.ops.opcode  = strtok_r(instruction, " ", &instruction);
-
+  if (!strchr(line, ':')) {
+    tokens.opcode  = strtok_r(instruction, " ", &instruction);
     char *reg = strtok(instruction, ",");
     int i = 0;
     while (reg != NULL) {
-        tokens.ops.operands[i] = reg;
+        tokens.operands[i] = reg;
         reg = strtok(NULL, ",");
         i++;
     }
   }
-
   return tokens;
 }
 
-void print_tokens(tokens tokens) {
-  printf("label: \"%s\", opcode: \"%s\", operand: \"%s\"\n",
-   tokens.label, tokens.ops.opcode, tokens.ops.operands[0]);
+void print_tokens(tokenset tokens) {
+  printf("%s\n", "tokens: ");
+  printf("opcode: \"%s\"\n", tokens.opcode);
+  for (int i = 0; i < MAX_OPERANDS; i++) {
+    printf("operand %d: %s\n", i, tokens.operands[i]);
+  }
+
+
+
 }
 

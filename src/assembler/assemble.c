@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
   }
 
   fseek(assembly, 0, SEEK_END);
-  int32_t NUM_OF_LINES = ftell(assembly);
+  const int NUM_OF_LINES = ftell(assembly);
   char asm_lines[NUM_OF_LINES][LINE_LENGTH];
   fseek(assembly, 0, SEEK_SET);
 
@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 
   printf("Lines to convert:\n\n"); // prints tokenset of each assembly line
   for (int j = 0; j < i - 1; j++) {
-    tokens tokens = tokenize(asm_lines[j]);
+    tokenset tokens = tokenize(asm_lines[j]);
     print_tokens(tokens);
     printf("\n");
   }  
