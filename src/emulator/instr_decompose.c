@@ -84,6 +84,7 @@ word32 getOperand(word32 instruction, bool immediate_cond, State* state) {
     word32 bit4 = checkBit(shift, 0);
     word32 shift_value = bit4 ? state->regs[getRs(instruction)] : getBits(instruction, 7, 12);
     word32 shift_type = getBits(shift, 1, 3);
+    bool carry_out = checkBit(operand, (shift_value % WORD_SIZE) - 1);
 
     switch (shift_type) {
       case 0:  // logic shift left
@@ -99,7 +100,6 @@ word32 getOperand(word32 instruction, bool immediate_cond, State* state) {
         rotateRight(&operand, shift_value);
     }
 
-    bool carry_out = checkBit(operand, (shift_value % WORD_SIZE) - 1);
     if (immediate_cond) {
       setFlag(state, 29, carry_out);
     }
