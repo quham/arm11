@@ -2,18 +2,16 @@
 #define ASS_TOKENIZER_H
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
 
+#define MAX_OPERANDS 4
 
-typedef union tokens {
-  char *label;
-  struct ops { 
-    char *opcode;
-    char *operands[4];
-  } ops;
-} tokens;
+typedef struct tokens {
+  char *opcode;
+  char *operands[MAX_OPERANDS];
+} tokenset;
 
-tokens tokenize(char line[]);
+tokenset tokenize(char line[]);
 void print_tokens(tokenset);
-
 
 #endif
