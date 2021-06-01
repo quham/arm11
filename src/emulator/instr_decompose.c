@@ -65,7 +65,7 @@ word32 signExtend(word32 number, int no_of_bits) {
 
 bool addressValid(word32 addr) {
   if (addr > MEMORY_SIZE) {
-    fprintf(stdout, "Error: Out of bounds memory access at address at 0x%08x\n", addr);
+    fprintf(stdout, "Error: Out of bounds memory access at address 0x%08x\n", addr);
     return false;
   }
   return true;
