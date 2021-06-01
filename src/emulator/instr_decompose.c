@@ -63,56 +63,51 @@ word32 signExtend(word32 number, int no_of_bits) {
   return number | (number & (1 << (no_of_bits - 1)) ? mask : 0);
 }
 
+bool addressValid(word32 addr) {
+  if (addr > MEMORY_SIZE) {
+    fprintf(stdout, "Error: Out of bounds memory access at address 0x%08x\n", addr);
+    return false;
+  }
+  return true;
+}
+
 // Calculates the value of the operand2.
-word32 getOperand(word32 instruction, bool is_immediate, State* state) {
+word32 getOperand(word32 instruction, bool immediate_cond, State* state) {
   word32 operand;
 
-  if (is_immediate) {
+  if (immediate_cond) {
     operand = getBits(instruction, 0, 8);
     rotateRight(&operand, ROTATION_MULTIPLIER * getBits(instruction, 8, 12));
   } else {
     operand = state->regs[getRm(instruction)];
     word32 shift = getBits(instruction, 4, 12);
     word32 bit4 = checkBit(shift, 0);
+    word32 shift_value = bit4 ? state->regs[getRs(instruction)] : getBits(instruction, 7, 12);
     word32 shift_type = getBits(shift, 1, 3);
-    word32 shift_value;
-    if (bit4) {
-      shift_value = state->regs[getRs(instruction)];
-    } else {
-      shift_value = getBits(instruction, 7, 12);
+
+    switch (shift_type) {
+      case 0:  // logic shift left
+        operand <<= shift_value;
+        break;
+      case 1:  // logic shift right
+        operand >>= shift_value;
+        break;
+      case 2:  // arithmetic shift right
+        operand = signExtend(operand, shift_value);
+        break;
+      case 3:  // rotate right
+        rotateRight(&operand, shift_value);
     }
-    makeShift(&operand, shift_value, shift_type, instruction, state, is_immediate);
+
+    bool carry_out = checkBit(operand, (shift_value % WORD_SIZE) - 1);
+    if (immediate_cond) {
+      setFlag(state, 29, carry_out);
+    }
   }
   return operand;
 }
 
-// makes a shift of the operand2 depending on its shift_type
-void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr instruction,
-               State* state, bool is_immediate) {
-  //  bool carry_out = checkBit(*operand, shift_value - 1);
-  bool overflow = shift_value > 31;
-  bool carry_out = overflow ? checkBit(*operand, 31) : checkBit(*operand, shift_value - 1);
-
-  switch (shift_type) {
-    case 0:  // logic shift left
-      *operand <<= shift_value;
-      break;
-    case 1:  // logic shift right
-      *operand >>= shift_value;
-      break;
-    case 2:  // arithmetic shift right
-      *operand = signExtend(*operand, shift_value);
-      break;
-    case 3:  // rotate right
-      rotateRight(operand, shift_value);
-      carry_out = overflow ? checkBit(*operand, 31) : carry_out;
-      break;
-  }
-
-  if (is_immediate) {
-    setFlag(state, 29, carry_out);
-  }
-}
+/* ---------- Debugging ---------- */
 
 // test functions
 void decomp_tests() {
