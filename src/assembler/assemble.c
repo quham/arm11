@@ -47,7 +47,8 @@ int main(int argc, char **argv) {
   }
 
   Table sym_table = symbolise(asm_lines);  // TODO create a symbol_table (FIRST PASS)
-  assemble(asm_lines, bin, sym_table);  // TODO write to binary file using mapping from symbolise (SECOND PASS)
+  assemble(asm_lines, bin,
+           sym_table);  // TODO write to binary file using mapping from symbolise (SECOND PASS)
 
   fclose(assembly);
   fclose(bin);
