@@ -5,13 +5,11 @@
 
 // stores little endian byte ordered word in big-endian format
 void store(word32 word, word32 addr, State *state) {
-  if (addr < MEMORY_SIZE) {
-  for (int i = 0; i < BYTES_PER_WORD; i++) {
-    state->memory[addr + i] = getBits(word, i * BYTE_SIZE, (i + 1) * BYTE_SIZE);
+  if (addressValid(addr)) {
+    for (int i = 0; i < BYTES_PER_WORD; i++) {
+      state->memory[addr + i] = getBits(word, i * BYTE_SIZE, (i + 1) * BYTE_SIZE);
     }
-  } else {
-  fprintf(stdout, "Error: Out of bounds memory access at address at 0x%08x\n", addr);
-    }
+  }
 }
 
 word32 combine_offset(word32 reg, word32 offset, instr instruction) {

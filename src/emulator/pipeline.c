@@ -28,7 +28,7 @@ void printState(State* state) {
 
 // loads bytes (stored in little endian) into a word (big-endian)
 word32 fetch(word32 addr, State* state) {
-  if (addr < MEMORY_SIZE){
+  if (addressValid(addr)) {
     word32 word = 0;
     for (int i = 0; i < BYTES_PER_WORD; i++) {
       word |= (state->memory[addr + i]) << (BYTE_SIZE * i);
@@ -36,8 +36,7 @@ word32 fetch(word32 addr, State* state) {
     }
     return word;
   }
-  fprintf(stdout, "Error: Out of bounds memory access at address 0x%08x\n", addr);
-  return 0;
+  return 0;  // why is this here?
 }
 
 itype decode(instr instruction) {
@@ -53,15 +52,14 @@ itype decode(instr instruction) {
       } else if (!instruction) {
         return TERMINATE;
       } else {
-        return PROCESSING;
+        return PROCESSING;  // can reach with invalid function
       }
     default:
-      perror("Invalid instruction type");
+      perror("Error: Invalid instruction type\n");  // doesn't catch all invalid functions
       exit(EXIT_FAILURE);
   }
 }
 
-// remove unnecessary arguments? (instruction and pointer to instruction)
 void execute(itype type, State* state, word32* decoded, word32* fetched) {
   if (checkCond(*decoded, state)) {
     switch (type) {

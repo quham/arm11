@@ -8,7 +8,7 @@
 
 int main(int argc, char **argv) {
   if (argc != 2) {  // number of arguments main takes
-    perror("Invalid arguments! \n");
+    perror("Error: Invalid arguments\n");
     exit(EXIT_FAILURE);
   }
 

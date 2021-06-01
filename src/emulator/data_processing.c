@@ -69,10 +69,10 @@ void performOperation(void) {
 
   if (checkSet(instruction)) {
     bool Z = result == 0;
-    bool N = checkBit(result, 31); //result or instruction ? 
+    bool N = checkBit(result, 31);
     setFlag(state, 31, N);
     setFlag(state, 30, Z);
-    setFlag(state, 29, carry_out); // issue with setting C flag 
+    setFlag(state, 29, carry_out);
   }
 }
 

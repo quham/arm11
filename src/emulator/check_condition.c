@@ -3,7 +3,7 @@
 
 #include "em_general.h"
 
-// returns true if the condition code matches the CPSR flags
+// returns true if the condition code's respective CPSR flags match
 bool checkCond(instr instruction, State *state) {
   word32 code = condCode(instruction);
   word32 cpsr = state->regs[CPSR_INDEX];

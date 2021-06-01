@@ -40,15 +40,15 @@ typedef struct State State;
 #define CPSR_INDEX 16
 
 // Pipeline
-typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
-void pipeline(State*);
-word32 fetch(word32 index, State*);
-itype decode(instr);
-void printRegisters(State*);
-void printState(State*);
 #define NOT_INIT 0xFFFFFFFF
 #define BYTE_SIZE 8
 #define PC_PIPELINE_OFFSET 8
+typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
+word32 fetch(word32 index, State*);
+itype decode(instr);
+void pipeline(State*);
+void printRegisters(State*);
+void printState(State*);
 
 // Data processing
 #define ROTATION_MULTIPLIER 2
@@ -79,10 +79,11 @@ word32 getRn(instr);
 word32 getRd(instr);
 word32 getRs(instr);
 word32 getRm(instr);
-void setFlag(State*, int index, bool bit_value);
+bool addressValid(word32 addr);
 bool checkBit(instr, int bit_no);
 bool checkSet(instr);
 bool checkImmediate(instr);
+void setFlag(State*, int index, bool bit_value);
 void rotateRight(word32* operand, int amount);
 void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr, State*, bool);
 word32 signExtend(word32 number, int no_of_bits);
