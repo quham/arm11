@@ -12,6 +12,6 @@ typedef struct tokens {
 } tokenset;
 
 tokenset tokenize(char line[]);
-void print_tokens(tokenset);
+void printTokens(tokenset);
 
 #endif
