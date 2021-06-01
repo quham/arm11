@@ -20,22 +20,7 @@ struct State {
 
 typedef struct State State;
 
-// Reg Indexs
-#define R0_INDEX 0
-#define R1_INDEX 1
-#define R2_INDEX 2
-#define R3_INDEX 3
-#define R4_INDEX 4
-#define R5_INDEX 5
-#define R6_INDEX 6
-#define R7_INDEX 7
-#define R8_INDEX 8
-#define R9_INDEX 9
-#define R10_INDEX 10
-#define R11_INDEX 11
-#define R12_INDEX 12
-#define SP_INDEX 13
-#define LP_INDEX 14
+// Reg Indices
 #define PC_INDEX 15
 #define CPSR_INDEX 16
 

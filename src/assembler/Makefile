@@ -1,17 +1,22 @@
 CC      = gcc
-CFLAGS  = -Wall -g -D_POSIX_SOURCE -D_BSD_SOURCE -std=c99 -Werror -pedantic
+CFLAGS  = -Wall -g -D_POSIX_SOURCE -std=c99 -Werror -pedantic
+PROGS   = assemble
 
 .SUFFIXES: .c .o
 
+.PHONY: all 
+
 .PHONY: all clean
 
-all: assemble emulate
+all: assemble
 
-assemble: assemble.o
+assemble: assemble.o tokenizer.o
+	$(CC) -o $(PROGS) assemble.o tokenizer.o
 
-emulate: emulate.o
+assemble.o: ass_general.h tokenizer.h
+
+tokenizer.o: tokenizer.h
 
 clean:
 	rm -f $(wildcard *.o)
 	rm -f assemble
-	rm -f emulate
