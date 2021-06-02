@@ -3,20 +3,22 @@
 
 tokenset tokenize(char line[]) {
   tokenset tokens = {"\0", {"\0"}};
-  char *instruction = line;
-  strcpy(tokens.opcode, strtok_r(instruction, " ", &instruction));
-  char *reg = strtok(instruction, ",");
-  int i = 0;
-  while (reg != NULL) {
-    strcpy(tokens.operands[i], reg);
-    reg = strtok(NULL, ",");
-    i++;
+  if (line[0] != '\0') {
+    char *instruction = line;
+    strcpy(tokens.opcode, strtok_r(instruction, " ", &instruction)); 
+    char *reg = strtok(instruction, ",");
+    int i = 0;
+    while (reg != NULL) {
+      strcpy(tokens.operands[i], reg);
+      reg = strtok(NULL, ",");
+      i++;
+    }
   }
   return tokens;
 }
 
 void printTokens(tokenset tokens) {
-  printf("%s\n", "tokens: ");
+  printf("%s\n", "__tokens__ ");
   printf("opcode: \"%s\"\n", tokens.opcode);
   for (int i = 0; i < MAX_OPERANDS; i++) {
     printf("operand %d: %s\n", i, tokens.operands[i]);
