@@ -12,13 +12,13 @@
 
 word32 multiply(tokenset tokens) {
   word32 instruction = MUL_FORMAT;
-  int rd = tokens.operands[0][REG_NUM];
-  int rm = tokens.operands[1][REG_NUM];
-  int rs = tokens.operands[2][REG_NUM];
+  uint8_t rd = tokens.operands[0][1];
+  uint8_t rm = tokens.operands[1][1];
+  uint8_t rs = tokens.operands[2][1];
 
   if (!strcmp(tokens.opcode, "mla")) {
     instruction |= A_BIT;
-    int rn = tokens.operands[3][REG_NUM];
+    uint8_t rn = tokens.operands[3][1];
     instruction |= rn << RN_POS;
   }
 

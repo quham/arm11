@@ -9,10 +9,11 @@
 typedef uint32_t word32;
 #define MAX_OPERANDS 4
 #define MAX_OPCODE_LEN 5
+#define LINE_LENGTH 511
 
 typedef struct tokens {
   char opcode[MAX_OPCODE_LEN];
-  char operands[MAX_OPERANDS];
+  char operands[MAX_OPERANDS][LINE_LENGTH];
 } tokenset;
 
 #endif

@@ -1,15 +1,14 @@
 #include "tokenizer.h"
-
 #include "ass_general.h"
 
 tokenset tokenize(char line[]) {
-  tokenset tokens = {NULL};
+  tokenset tokens = {"\0", {"\0"}};
   char *instruction = line;
-  tokens.opcode = strtok_r(instruction, " ", &instruction);
+  strcpy(tokens.opcode, strtok_r(instruction, " ", &instruction));
   char *reg = strtok(instruction, ",");
   int i = 0;
   while (reg != NULL) {
-    tokens.operands[i] = reg;
+    strcpy(tokens.operands[i], reg);
     reg = strtok(NULL, ",");
     i++;
   }
