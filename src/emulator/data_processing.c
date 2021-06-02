@@ -4,16 +4,7 @@
 
 #include "em_general.h"
 
-instr instruction = 0;
-State *state;
-
-void dataProcessing(instr new_instruction, State *new_state) {
-  instruction = new_instruction;
-  state = new_state;
-  performOperation();
-}
-
-void performOperation(void) {
+void dataProcessing(instr instruction, State *state) {
   word32 result;
   word32 opcode = getBits(instruction, 21, 25);
   word32 operand2 = getOperand(instruction, checkImmediate(instruction), state);
