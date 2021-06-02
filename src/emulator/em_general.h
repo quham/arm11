@@ -5,10 +5,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "arm_general.h"
+
 typedef uint32_t instr;
-typedef uint32_t word32;
 typedef uint8_t byte;
-#define WORD_SIZE 32
 #define BYTES_PER_WORD 4
 #define MEMORY_SIZE 65536
 #define NUMBER_OF_REGISTERS 17

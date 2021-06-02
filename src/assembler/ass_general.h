@@ -18,4 +18,8 @@ typedef struct tokens {
   char operands[MAX_OPERANDS][LINE_LENGTH];
 } tokenset;
 
-#endif
+// Single data transfer
+#define SDT_FORMAT 0xe8000000;
+#define REG_LEN 3
+
+#endif // ASSEMBLER_CONSTS

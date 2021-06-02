@@ -77,7 +77,7 @@ void execute(itype type, State* state, word32* decoded, word32* fetched) {
         *fetched = NOT_INIT;
         *decoded = NOT_INIT;
         break;
-      default:
+      default:  // unreachable?
         exit(EXIT_SUCCESS);
     }
   }
