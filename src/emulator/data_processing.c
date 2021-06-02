@@ -7,7 +7,7 @@
 instr instruction = 0;
 State *state;
 
-void data_processing(instr new_instruction, State *new_state) {
+void dataProcessing(instr new_instruction, State *new_state) {
   instruction = new_instruction;
   state = new_state;
   performOperation();
