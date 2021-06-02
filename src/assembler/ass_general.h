@@ -5,8 +5,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 typedef uint32_t word32;
+#define MAX_OPERANDS 4
+#define MAX_OPCODE_LEN 5
+
+typedef struct tokens {
+  char opcode[MAX_OPCODE_LEN];
+  char operands[MAX_OPERANDS];
+} tokenset;
 
 #endif
