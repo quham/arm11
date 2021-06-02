@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   bin = fopen(argv[2], "w");
 
   if (assembly == NULL || bin == NULL) {
-    perror("Errot: A file is null");
+    perror("Error: A file is null");
     exit(EXIT_FAILURE);
   }
 
