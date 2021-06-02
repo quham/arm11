@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "arm_general.h"
+
 typedef uint32_t word32;
 #define MAX_OPERANDS 4
 #define MAX_OPCODE_LEN 5
