@@ -1,7 +1,3 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "em_general.h"
 
 void branch(instr instruction, State *state) {

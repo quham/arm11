@@ -1,3 +1,11 @@
+#include <math.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "arm_general.h"
 #include "assembler/ass_general.h"
 
 #define LINE_LENGTH 511
@@ -37,8 +45,8 @@ int main(int argc, char **argv) {
     printf("\n");
   }
 
-  Table sym_table = symbolise(asm_lines);  // TODO create a symbol_table (FIRST PASS)
-  assemble(asm_lines, bin, sym_table, NUM_OF_LINES);
+  // Table sym_table = symbolise(asm_lines);  // TODO create a symbol_table (FIRST PASS)
+  // assemble(asm_lines, bin, sym_table, NUM_OF_LINES); // TODO: fix assemble
   // TODO write to binary file using mapping from symbolise (SECOND PASS)
 
   fclose(assembly);
@@ -51,36 +59,36 @@ Table symbolise(char asm_lines[][LINE_LENGTH]) {
   return t;
 }
 
-void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines) {
-  for (int i = 0; i < lines; i++) {
-    if (!strchr(line, ':')) {
-      instr binary;
-      tokenset tokens = tokenize(asm_lines[i]);
-      switch (tokens.opcode[0]) {
-        case 'b':
-          binary = branch(tokens);  // pass symbol table?
-          break;
-        case 'm':
-          if (tokens.opcode = "mov") {
-            binary = data_processing(tokens);
-          } else {
-            binary = multiply(tokens);
-          }
-          break;
-        case 'l':
-          binary = single_data_transfer(tokens);
-          break;
-        case 's':
-          if (tokens.opcode = "str") {
-            binary = single_data_transfer(tokens);
-          } else {
-            binary = data_processing(tokens);
-          }
-          break;
-        default:
-          binary = data_processing(tokens);
-      }
-      fwrite(&binary, sizeof(instr), 1, binary_file);
-    }
-  }
-}
+// void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines) {
+//   for (int i = 0; i < lines; i++) {
+//     if (!strchr(line, ':')) {
+//       instr binary;
+//       tokenset tokens = tokenize(asm_lines[i]);
+//       switch (tokens.opcode[0]) {
+//         case 'b':
+//           binary = branch(tokens);  // pass symbol table?
+//           break;
+//         case 'm':
+//           if (tokens.opcode = "mov") {
+//             binary = data_processing(tokens);
+//           } else {
+//             binary = multiply(tokens);
+//           }
+//           break;
+//         case 'l':
+//           binary = single_data_transfer(tokens);
+//           break;
+//         case 's':
+//           if (tokens.opcode = "str") {
+//             binary = single_data_transfer(tokens);
+//           } else {
+//             binary = data_processing(tokens);
+//           }
+//           break;
+//         default:
+//           binary = data_processing(tokens);
+//       }
+//       fwrite(&binary, sizeof(instr), 1, binary_file);
+//     }
+//   }
+// }
