@@ -10,12 +10,16 @@ PROGS   = assemble
 
 all: assemble
 
-assemble: assemble.o tokenizer.o
-	$(CC) -o $(PROGS) assemble.o tokenizer.o
+assemble: assemble.o tokenizer.o multiply.o
+	$(CC) -o $(PROGS) assemble.o tokenizer.o multiply.o
 
 assemble.o: ass_general.h tokenizer.h
 
-tokenizer.o: tokenizer.h
+tokenizer.o: tokenizer.h ass_general.h
+
+multiply.o: tokenizer.h ass_general.h
+
+
 
 clean:
 	rm -f $(wildcard *.o)

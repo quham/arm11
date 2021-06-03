@@ -5,10 +5,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "arm_general.h"
+
 typedef uint32_t instr;
-typedef uint32_t word32;
 typedef uint8_t byte;
-#define WORD_SIZE 32
 #define BYTES_PER_WORD 4
 #define MEMORY_SIZE 65536
 #define NUMBER_OF_REGISTERS 17
@@ -38,16 +38,16 @@ void printState(State*);
 // Data processing
 #define ROTATION_MULTIPLIER 2
 #define ROUNDING_ERROR 0.5
-void data_processing(instr, State*);
+void dataProcessing(instr, State*);
 void performOperation(void);
 bool checkSub(word32, word32);
 bool checkAdd(word32, word32);
 
 // Single data transfer
-void single_data_transfer(instr, State*);
+void singleDataTransfer(instr, State*);
 void store(word32, word32, State*);
-word32 combine_offset(word32 reg, word32 offset, instr);
-void transfer_data(State*, instr, word32 rd, word32 rdIndex, word32);
+word32 combineOffset(word32 reg, word32 offset, instr);
+void transferData(State*, instr, word32 rd, word32 rdIndex, word32);
 
 // Branch
 void branch(instr, State*);
