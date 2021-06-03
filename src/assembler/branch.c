@@ -1,5 +1,5 @@
 #include <stdio.h>
-instr branch(tokens tokens, ) {
+instr branch(tokens tokens) {
     word32 target;
     /*
     if (isLabel(tokens.operands[0]) ){//is alpha not digits
