@@ -22,4 +22,8 @@ typedef struct tokens {
 #define SDT_FORMAT 0xe8000000;
 #define REG_LEN 3
 
-#endif // ASSEMBLER_CONSTS
+// Tokenizer
+tokenset tokenize(char line[]);
+void printTokens(tokenset);
+
+#endif  // ASSEMBLER_CONSTS
