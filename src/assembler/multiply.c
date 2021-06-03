@@ -3,9 +3,10 @@
 
 #define MUL_FORMAT 0xe0000090
 #define A_BIT 0x100000
-#define MUL_OP_NUM 3
+#define ACC 3
+#define MUL_OPERANDS 3
 
-int getRegNum(char reg[]);
+uint8_t getRegNum(char reg[]);
 
 /* shift values, for position in instruction */
 #define RD_POS 0xf
@@ -14,15 +15,14 @@ int getRegNum(char reg[]);
 
 word32 multiply(tokenset tokens) {
   word32 instruction = MUL_FORMAT;
-  uint8_t regs[MAX_OPERANDS] = {0};
-
-  for (int i = 0; i < MUL_OP_NUM; i++) {
-      regs[i] = getRegNum(tokens.operands[i]);
-  }
+  uint8_t regs[MUL_OPERANDS] = {0};
 
   if (!strcmp(tokens.opcode, "mla")) {
-    uint8_t rn = getRegNum(tokens.operands[MUL_OP_NUM]);
-    instruction |= rn << RN_POS | A_BIT;
+    instruction |= (getRegNum(tokens.operands[ACC]) << RN_POS) | A_BIT;
+  }
+
+  for (int i = 0; i < MUL_OPERANDS; i++) {
+      regs[i] = getRegNum(tokens.operands[i]);
   }
 
   /* rd, rs and rm placed into instruction */
@@ -30,7 +30,6 @@ word32 multiply(tokenset tokens) {
   return instruction;
 }
 
-int getRegNum(char reg[]) {
-    char *end;
-    return (int) strtol(reg, &end, 10);
+uint8_t getRegNum(char reg[]) {
+    return strtol(reg + 1, NULL, 10);
 }
