@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
 
 
   Table sym_table = symbolise(asm_lines); // TODO create a symbol_table (FIRST PASS)  
-  assemble(asm_lines, bin, sym_table);    // TODO write to binary file using mapping from symbolise (SECOND PASS)
+  assemble(asm_lines, bin, sym_table,NUM_OF_LINES);    // TODO write to binary file using mapping from symbolise (SECOND PASS)
   
   fclose(assembly);
   fclose(bin);
@@ -63,4 +63,39 @@ Table symbolise(char asm_lines[][LINE_LENGTH]) {
     return t;
 }
 
-void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table) {}
+void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines) {
+    for (int i = 0 ; i < lines ; i++){
+        if (!strchr(line, ':')) {
+            instr binary;
+            tokenset tokens = tokenize(asm_lines[i]);
+            switch(tokens.opcode[0]){
+                case 'b':
+                    binary = branch(tokens);//pass symbol table?
+                    break;
+                case 'm':
+                    if (tokens.opcode = "mov"){
+                        binary = data_processing(tokens);
+                    }else{
+                        binary = multiply(tokens);
+                    }
+                    break;
+                case 'l':
+                    binary = single_data_transfer(tokens);
+                    break;
+                case 's':
+                    if (tokens.opcode = "str") {
+                        binary = single_data_transfer(tokens);
+                    }else{
+                        binary = data_processing(tokens);
+                    }
+                    break;
+                default:
+                    binary = data_processing(tokens);
+            }
+            fwrite(&binary , sizeof(instr), 1, binary_file);
+        }
+
+
+    }
+
+}
