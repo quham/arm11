@@ -1,7 +1,7 @@
 #ifndef ASS_GENERAL_H
 #define ASS_GENERAL_H
 
-#include <stdio.h>
+#include <stdio.h>  // no nested includes
 
 #define MAX_OPERANDS 4
 #define MAX_OPCODE_LEN 5
