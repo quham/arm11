@@ -2,9 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "check_condition.h"
-#include "em_general.h"
-#include "instr_decompose.h"
+#include "emulator/em_general.h"
 
 int main(int argc, char **argv) {
   if (argc != 2) {  // number of arguments main takes
