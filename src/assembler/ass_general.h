@@ -1,6 +1,8 @@
 #ifndef ASS_GENERAL_H
 #define ASS_GENERAL_H
 
+#include <stdio.h>
+
 #define MAX_OPERANDS 4
 #define MAX_OPCODE_LEN 5
 #define LINE_LENGTH 511
