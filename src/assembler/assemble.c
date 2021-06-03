@@ -14,7 +14,7 @@ void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_tab
 int main(int argc, char **argv) {
 
   if (argc != 3) {
-    perror("Invalid arguements! \n");
+    perror("Error: Invalid arguements\n");
     exit(EXIT_FAILURE);
   }
 
@@ -22,18 +22,17 @@ int main(int argc, char **argv) {
   assembly = fopen(argv[1], "r");
 
   FILE *bin;
-  bin   = fopen(argv[2], "w");
+  bin = fopen(argv[2], "w");
 
   if (assembly == NULL || bin == NULL) {
-    perror("A file is null! \n");
+    perror("Error: A file is null");
     exit(EXIT_FAILURE);
   }
 
   fseek(assembly, 0, SEEK_END);
-  int32_t NUM_OF_LINES = ftell(assembly);
+  const int NUM_OF_LINES = ftell(assembly);
   char asm_lines[NUM_OF_LINES][LINE_LENGTH];
   fseek(assembly, 0, SEEK_SET);
-
 
   int i = 0;
   while (fgets(asm_lines[i], LINE_LENGTH, assembly)) {
@@ -41,16 +40,17 @@ int main(int argc, char **argv) {
     i++;
   }
 
-  printf("Lines to convert:\n\n"); // prints tokenset of each assembly line
-  for (int j = 0; j < i - 1; j++) {
-    tokens tokens = tokenize(asm_lines[j]);
-    print_tokens(tokens);
+  printf("Lines to convert:\n\n");  // prints tokenset of each assembly line
+  for (int j = 0; j < i; j++) {
+    tokenset tokens = tokenize(asm_lines[j]);
+    printTokens(tokens);
     printf("\n");
-  }  
+  }
 
 
   Table sym_table = symbolise(asm_lines); // TODO create a symbol_table (FIRST PASS)  
-  assemble(asm_lines, bin, sym_table,NUM_OF_LINES);    // TODO write to binary file using mapping from symbolise (SECOND PASS)
+  assemble(asm_lines, bin, sym_table,NUM_OF_LINES);   
+   // TODO write to binary file using mapping from symbolise (SECOND PASS)
   
   fclose(assembly);
   fclose(bin);
@@ -59,8 +59,8 @@ int main(int argc, char **argv) {
 
 
 Table symbolise(char asm_lines[][LINE_LENGTH]) {
-    Table t = {0};
-    return t;
+  Table t = {0};
+  return t;
 }
 
 void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines) {
