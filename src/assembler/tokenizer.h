@@ -1,19 +1,8 @@
 #ifndef ASS_TOKENIZER_H
 #define ASS_TOKENIZER_H
-#include <string.h>
-#include <stdio.h>
+#include "ass_general.h"
 
-
-typedef union tokens {
-  char *label;
-  struct ops { 
-    char *opcode;
-    char *operands[4];
-  } ops;
-} tokens;
-
-tokens tokenize(char line[]);
-void print_tokens(tokenset);
-
+tokenset tokenize(char line[]);
+void printTokens(tokenset);
 
 #endif

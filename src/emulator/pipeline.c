@@ -64,20 +64,20 @@ void execute(itype type, State* state, word32* decoded, word32* fetched) {
   if (checkCond(*decoded, state)) {
     switch (type) {
       case PROCESSING:
-        data_processing(*decoded, state);
+        dataProcessing(*decoded, state);
         break;
       case MULTIPLY:
         multiply(*decoded, state);
         break;
       case TRANSFER:
-        single_data_transfer(*decoded, state);
+        singleDataTransfer(*decoded, state);
         break;
       case BRANCH:
         branch(*decoded, state);
         *fetched = NOT_INIT;
         *decoded = NOT_INIT;
         break;
-      default:
+      default:  // unreachable?
         exit(EXIT_SUCCESS);
     }
   }
