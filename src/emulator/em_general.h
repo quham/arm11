@@ -1,11 +1,6 @@
 #ifndef EMULATOR_CONSTS
 #define EMULATOR_CONSTS
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
-
-typedef uint32_t instr;
 typedef uint8_t byte;
 #define BYTES_PER_WORD 4
 #define MEMORY_SIZE 65536

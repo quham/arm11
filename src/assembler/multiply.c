@@ -1,5 +1,4 @@
 #include "ass_general.h"
-#include "tokenizer.h"
 
 #define MUL_FORMAT 0xe0000090
 #define A_BIT 0x100000
@@ -22,7 +21,7 @@ word32 multiply(tokenset tokens) {
   }
 
   for (int i = 0; i < MUL_OPERANDS; i++) {
-      regs[i] = getRegNum(tokens.operands[i]);
+    regs[i] = getRegNum(tokens.operands[i]);
   }
 
   /* rd, rs and rm placed into instruction */
@@ -31,5 +30,5 @@ word32 multiply(tokenset tokens) {
 }
 
 uint8_t getRegNum(char reg[]) {
-    return strtol(reg + 1, NULL, 10);
+  return strtol(reg + 1, NULL, 10);
 }

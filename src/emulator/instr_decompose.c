@@ -1,9 +1,3 @@
-#include <math.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "em_general.h"
 
 bool checkBit(instr instruction, int bit_no) {
