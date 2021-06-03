@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-void unwrap(char *bracketed, int opnum, tokenset tokens);
 tokenset checkLsl(tokenset);
 char *removeWhitespace(char *str);
 
