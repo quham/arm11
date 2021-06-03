@@ -1,20 +1,45 @@
 #include "tokenizer.h"
 #include "ass_general.h"
+#include <stdbool.h>
+#include <ctype.h>
+
+tokenset checkLsl(tokenset);
+char *removeWhitespace(char *str);
 
 tokenset tokenize(char line[]) {
-  tokenset tokens = {"\0", {"\0"}};
+  tokenset tokens = {"\0", {{"\0"}}};
+
   if (line[0] != '\0') {
     char *instruction = line;
-    strcpy(tokens.opcode, strtok_r(instruction, " ", &instruction)); 
+    strcpy(tokens.opcode, strtok_r(instruction, " ", &instruction));
+  
     char *reg = strtok(instruction, ",");
-    int i = 0;
+    int op = 0;
     while (reg != NULL) {
-      strcpy(tokens.operands[i], reg);
+
+      char *has_closing = strchr(reg, ']');
+      while (reg[0] == ' ') {
+        reg++;
+      }
+
+      if (reg[0] == '[' && !has_closing) { // at least 2 elements in bracket
+        reg++;
+        strcat(tokens.operands[op], reg);
+        strcat(tokens.operands[op], ",");
+        reg = strtok(NULL, "]");
+      } 
+      
+      if (reg[0] == '[' && has_closing) {  // just 1 element in bracket
+        memcpy(tokens.operands[op], reg + 1, 2);
+      } else {
+        strcat(tokens.operands[op], reg); 
+      }
+      
       reg = strtok(NULL, ",");
-      i++;
+      op++;
     }
   }
-  return tokens;
+  return checkLsl(tokens);;
 }
 
 void printTokens(tokenset tokens) {
@@ -24,3 +49,24 @@ void printTokens(tokenset tokens) {
     printf("operand %d: %s\n", i, tokens.operands[i]);
   }
 }
+
+tokenset checkLsl(tokenset tokens) {
+  if (strcmp(tokens.opcode, "lsl")) {
+    return tokens;
+  }
+  if (strchr(tokens.operands[1], '#')) {
+    printf("%s\n", "replacing lsl");
+    strcpy(tokens.opcode, "mov");
+    strcpy(tokens.operands[2], "lsl ");
+    strcat(tokens.operands[2], tokens.operands[1]);
+    strcpy(tokens.operands[1], tokens.operands[0]);
+  }
+  return tokens;
+}
+
+char *removeWhitespace(char *str) {
+   while(isspace(*str)) {
+     str++;
+   }
+   return str;
+ }
