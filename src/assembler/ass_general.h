@@ -6,9 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "arm_general.h"
-
-typedef uint32_t word32;
 #define MAX_OPERANDS 4
 #define MAX_OPCODE_LEN 5
 #define LINE_LENGTH 511
@@ -25,5 +22,14 @@ typedef struct tokens {
 // Tokenizer
 tokenset tokenize(char line[]);
 void printTokens(tokenset);
+
+// Assembler
+struct Table {
+  char *test;
+};
+
+typedef struct Table Table;
+Table symbolise(char asm_lines[][LINE_LENGTH]);
+void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table);
 
 #endif  // ASSEMBLER_CONSTS

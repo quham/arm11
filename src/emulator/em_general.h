@@ -5,8 +5,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "arm_general.h"
-
 typedef uint32_t instr;
 typedef uint8_t byte;
 #define BYTES_PER_WORD 4
@@ -34,6 +32,9 @@ itype decode(instr);
 void pipeline(State*);
 void printRegisters(State*);
 void printState(State*);
+
+// Check condition
+bool checkCond(instr, State* state);
 
 // Data processing
 #define ROTATION_MULTIPLIER 2

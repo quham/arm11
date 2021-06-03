@@ -42,6 +42,12 @@ tokenset tokenize(char line[]) {
   return checkLsl(tokens);;
 }
 
+char *removeWhitespace(char *str) {
+   while(isspace(*str)) {
+     str++;
+   }
+   return str;
+ }
 void printTokens(tokenset tokens) {
   printf("%s\n", "__tokens__ ");
   printf("opcode: \"%s\"\n", tokens.opcode);

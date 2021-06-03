@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "arm_general.h"
 #include "em_general.h"
 
 // stores little endian byte ordered word in big-endian format
