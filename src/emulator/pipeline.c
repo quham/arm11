@@ -1,7 +1,3 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "em_general.h"
 
 void printState(State* state) {
@@ -52,10 +48,10 @@ itype decode(instr instruction) {
       } else if (!instruction) {
         return TERMINATE;
       } else {
-        return PROCESSING;  // can reach with invalid function
+        return PROCESSING;
       }
     default:
-      perror("Error: Invalid instruction type\n");  // doesn't catch all invalid functions
+      perror("Error: Invalid instruction type\n");
       exit(EXIT_FAILURE);
   }
 }

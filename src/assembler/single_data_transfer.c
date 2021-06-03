@@ -1,20 +1,4 @@
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "ass_general.h"
-#define MOV_CONSTANT_SIZE 0xff
-
-// temp from arm_general
-#include "instr_compose.c"
-#define WORD_SIZE 32
-void setBit(word32 *word, int index) {
-  *word |= 1 << index;
-}
-
-void setBit(word32 *word, int index);
-// end temp
 
 void setPrePost(word32 instruction) {
   setBit(instruction, 24);
