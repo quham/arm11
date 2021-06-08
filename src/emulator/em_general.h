@@ -2,11 +2,12 @@
 #define EMULATOR_CONSTS
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "../arm_general.h"
 
-typedef uint8_t byte;
 #define BYTES_PER_WORD 4
+#define BYTE_SIZE 8
 #define MEMORY_SIZE 65536
 #define NUMBER_OF_REGISTERS 17
 
@@ -23,7 +24,6 @@ typedef struct State State;
 
 // Pipeline
 #define NOT_INIT 0xFFFFFFFF
-#define BYTE_SIZE 8
 #define PC_PIPELINE_OFFSET 8
 typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
 word32 fetch(word32 index, State*);
@@ -70,7 +70,7 @@ bool checkSet(instr);
 bool checkImmediate(instr);
 void setFlag(State*, int index, bool bit_value);
 void rotateRight(word32* operand, int amount);
-void makeShift(word32* operand, uint8_t shift_value, word32 shift_type, instr, State*, bool);
+void makeShift(word32* operand, byte shift_value, word32 shift_type, instr, State*, bool);
 word32 signExtend(word32 number, int no_of_bits);
 
 // Check condition

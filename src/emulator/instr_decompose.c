@@ -8,7 +8,11 @@ bool checkBit(instr instruction, int bit_no) {
 
 void setFlag(State* state, int index, bool bit) {
   word32 cpsr = state->regs[CPSR_INDEX];
-  state->regs[CPSR_INDEX] = bit ? (cpsr | (1 << index)) : (cpsr & ~(1 << index));
+  if (bit) {
+    setBit(&state->regs[CPSR_INDEX], index);
+  } else {
+    state->regs[CPSR_INDEX] = cpsr & ~(1 << index);
+  }
 }
 
 bool checkImmediate(instr instruction) {
