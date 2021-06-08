@@ -8,15 +8,15 @@ EMULATOR_OBJ := $(patsubst %.c, %.o, $(shell find emulator -type f -name '*.c'))
 
 .PHONY: all clean
 
-all: assemble emulate
+all: assembler/assemble emulator/emulate
 
-assemble: assemble.o $(ASSEMBLER_OBJ) 
+assembler/assemble: assembler/assemble.o $(ASSEMBLER_OBJ) 
 
-emulate: emulate.o $(EMULATOR_OBJ)
+emulator/emulate: emulator/emulate.o $(EMULATOR_OBJ)
 
-assemble.o: assembler/ass_general.h arm_general.h
+assemble.o: assembler/ass_general.h
 
-emulate.o: emulator/em_general.h arm_general.h
+emulate.o: emulator/em_general.h
 
 clean:
 	rm -f $(wildcard *.o)

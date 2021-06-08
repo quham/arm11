@@ -22,19 +22,19 @@ word32 singleDataTransfer(tokenset tokens) {
 
   char rn[REG_LEN];
   strcpy(rn, addr);
-  char expr[WORD_SIZE];
+  char expr[WORD_SIZE + 1];
   strcpy(expr, post_expr);
   bool constant_address = addr[0] == '=';
 
-  if (constant_address) {
+  if (constant_address) {  // constant
     setPrePost(instruction);
     strcpy(rn, "r15");      // sets to PC
   } else if (!post_expr) {  // pre-indexing
     setPrePost(instruction);
-    strcpy(rn, strtok(addr, ","));  // sets to PC
+    strcpy(rn, strtok(addr, ","));
     char *offset = strtok(NULL, " ");
-    if (!offset) {           // zero offset
-      strcpy(expr, "#0x0");  // sets to PC
+    if (!offset) {  // zero offset
+      strcpy(expr, "#0x0");
     }
   }
 
@@ -49,7 +49,7 @@ word32 singleDataTransfer(tokenset tokens) {
     }
   }
 
-  setBits(&instruction, 0, expr_value);       // set offset
+  setBits(&instruction, 0, expr_value);      // set offset
   setBits(&instruction, 16, regNumber(rn));  // set base reg index
 
   return instruction;

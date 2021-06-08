@@ -21,7 +21,7 @@ typedef struct Table Table;
 // Single data transfer
 #define MOV_CONSTANT_SIZE 0xff
 #define SDT_FORMAT 0xe8000000;
-#define REG_LEN 3
+#define REG_LEN 4
 
 // Tokenizer
 tokenset tokenize(char line[]);
