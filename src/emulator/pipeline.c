@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "em_general.h"
 
 void printState(State* state) {

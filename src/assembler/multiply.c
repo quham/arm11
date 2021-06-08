@@ -1,4 +1,7 @@
 #include "ass_general.h"
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
 
 #define MUL_FORMAT 0xe0000090
 #define A_BIT 0x100000
