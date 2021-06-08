@@ -28,7 +28,6 @@ typedef struct Table Table;
 tokenset tokenize(char line[]);
 void printTokens(tokenset);
 tokenset checkLsl(tokenset);
-char *removeWhitespace(char *str);
 
 // Assemble
 void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines);
