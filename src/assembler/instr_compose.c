@@ -1,5 +1,6 @@
 #include "ass_general.h"
 #include <stdlib.h>
+#include <stdint.h>
 
 void setBits(word32 *word, int index, word32 value) {
   *word |= value << index;

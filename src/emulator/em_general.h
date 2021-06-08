@@ -2,6 +2,7 @@
 #define EMULATOR_CONSTS
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "../arm_general.h"
 

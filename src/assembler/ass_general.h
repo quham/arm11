@@ -1,8 +1,9 @@
 #ifndef ASS_GENERAL_H
 #define ASS_GENERAL_H
 
-#include "../arm_general.h"
 #include <stdio.h>
+
+#include "../arm_general.h"
 
 #define MAX_OPERANDS 4
 #define MAX_OPCODE_LEN 5
@@ -36,5 +37,10 @@ Table symbolise(char asm_lines[][LINE_LENGTH]);
 // Instruction compose
 uint8_t regNumber(char *reg_token);
 void setBits(word32 *word, int index, word32 value);
+
+// Multiply
+#define MUL_FORMAT 0xe0000090
+#define ACC 3
+#define MUL_OPERANDS 3
 
 #endif  // ASSEMBLER_CONSTS
