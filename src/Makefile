@@ -22,5 +22,5 @@ clean:
 	rm -f $(wildcard *.o)
 	rm -f $(wildcard assembler/*.o)
 	rm -f $(wildcard emulator/*.o)
-	rm -f assemble
-	rm -f emulate
+	rm -f assembler/assemble
+	rm -f emulator/emulate
