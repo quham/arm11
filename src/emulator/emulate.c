@@ -4,8 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "emulator/em_general.h"
-#include "arm_general.h"
+#include "em_general.h"
 
 int main(int argc, char **argv) {
   if (argc != 2) {  // number of arguments main takes

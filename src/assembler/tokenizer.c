@@ -1,3 +1,7 @@
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "ass_general.h"
 
 tokenset tokenize(char line[]) {

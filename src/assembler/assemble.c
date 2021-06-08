@@ -5,8 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "arm_general.h"
-#include "assembler/ass_general.h"
+#include "ass_general.h"
 
 #define LINE_LENGTH 511
 

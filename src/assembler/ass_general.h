@@ -1,7 +1,8 @@
 #ifndef ASS_GENERAL_H
 #define ASS_GENERAL_H
 
-#include <stdio.h>  // no nested includes
+#include "../arm_general.h"
+#include <stdio.h>
 
 #define MAX_OPERANDS 4
 #define MAX_OPCODE_LEN 5
@@ -20,7 +21,7 @@ typedef struct Table Table;
 // Single data transfer
 #define MOV_CONSTANT_SIZE 0xff
 #define SDT_FORMAT 0xe8000000;
-#define REG_LEN 3
+#define REG_LEN 4
 
 // Tokenizer
 tokenset tokenize(char line[]);
@@ -31,5 +32,9 @@ char *removeWhitespace(char *str);
 // Assemble
 void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines);
 Table symbolise(char asm_lines[][LINE_LENGTH]);
+
+// Instruction compose
+uint8_t regNumber(char *reg_token);
+void setBits(word32 *word, int index, word32 value);
 
 #endif  // ASSEMBLER_CONSTS

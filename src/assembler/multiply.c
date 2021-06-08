@@ -1,3 +1,7 @@
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "ass_general.h"
 
 #define MUL_FORMAT 0xe0000090

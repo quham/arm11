@@ -1,6 +1,10 @@
 #ifndef EMULATOR_CONSTS
 #define EMULATOR_CONSTS
 
+#include <stdbool.h>
+
+#include "../arm_general.h"
+
 typedef uint8_t byte;
 #define BYTES_PER_WORD 4
 #define MEMORY_SIZE 65536

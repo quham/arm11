@@ -1,5 +1,3 @@
-#include <stdbool.h>
-
 #include "em_general.h"
 
 // returns true if the condition code's respective CPSR flags match

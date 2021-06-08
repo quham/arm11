@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "em_general.h"
 
 bool checkBit(instr instruction, int bit_no) {
