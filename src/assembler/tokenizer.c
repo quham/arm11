@@ -9,7 +9,7 @@ tokenset tokenize(char line[]) {
 
   if (line[0] != '\0') {
     char *instruction = line;
-    strcpy(tokens.opcode, sstrtok_r(instruction, " ", &instruction));
+    strcpy(tokens.opcode, strtok_r(instruction, " ", &instruction));
 
     char *reg = strtok(instruction, ",");
     int op = 0;
@@ -37,14 +37,6 @@ tokenset tokenize(char line[]) {
     }
   }
   return checkLsl(tokens);
-  ;
-}
-
-char *removeWhitespace(char *str) {
-  while (isspace(*str)) {
-    str++;
-  }
-  return str;
 }
 
 void printTokens(tokenset tokens) {
