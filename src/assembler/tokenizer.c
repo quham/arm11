@@ -9,7 +9,7 @@ tokenset tokenize(char line[]) {
 
   if (line[0] != '\0') {
     char *instruction = line;
-    // strcpy(tokens.opcode, sstrtok_r(instruction, " ", &instruction));
+    strcpy(tokens.opcode, sstrtok_r(instruction, " ", &instruction));
 
     char *reg = strtok(instruction, ",");
     int op = 0;

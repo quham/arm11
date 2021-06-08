@@ -6,7 +6,7 @@
 
 word32 multiply(tokenset tokens) {
   word32 instruction = MUL_FORMAT;
-  uint8_t regs[MUL_OPERANDS] = {0};
+  byte regs[MUL_OPERANDS] = {0};
 
   if (!strcmp(tokens.opcode, "mla")) {
     setBits(&instruction, 11, regNumber(tokens.operands[ACC]));  // sets RN

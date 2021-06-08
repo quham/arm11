@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 typedef uint32_t word32;
+typedef uint8_t byte;
 typedef word32 instr;
 #define WORD_SIZE 32
 

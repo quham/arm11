@@ -35,7 +35,7 @@ void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_tab
 Table symbolise(char asm_lines[][LINE_LENGTH]);
 
 // Instruction compose
-uint8_t regNumber(char *reg_token);
+byte regNumber(char *reg_token);
 void setBits(word32 *word, int index, word32 value);
 
 // Multiply
