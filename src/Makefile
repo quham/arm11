@@ -20,6 +20,7 @@ emulate.o: emulator/em_general.h arm_general.h
 
 clean:
 	rm -f $(wildcard *.o)
-	rm -f assembler/$(wildcard *)
+	rm -f $(wildcard assembler/*.o)
+	rm -f $(wildcard emulator/*.o)
 	rm -f assemble
 	rm -f emulate
