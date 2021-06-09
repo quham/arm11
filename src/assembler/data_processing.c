@@ -23,19 +23,18 @@ void printBits(word32 x) {
 }
 
 word32 dataProcessing(tokenset tokens) {
-    short *computes_result;
-    *computes_result = 1;
+    bool computes_result = true;
     byte rd, rn;
     rd = rn = 0;
     instr instruction = DP_FORMAT;
 
-    byte opcode = getOpcode(&instruction, tokens.opcode, computes_result);
+    byte opcode = getOpcode(&instruction, tokens.opcode, &computes_result);
     if (computes_result) {
         rd = regNumber(tokens.operands[0]);
         rn = regNumber(tokens.operands[1]);
         setOperand(&instruction, tokens.operands + 2 * LINE_LENGTH); // passing last 2 arguments
     } else {
-        setOperand(&instruction, tokens.operands + LINE_LENGTH); // passing last 2 arguments
+        setOperand(&instruction, tokens.operands + LINE_LENGTH);
         if (!strcmp(tokens.opcode, "mov")) {
             rd = regNumber(tokens.operands[0]);
         } else {
@@ -56,12 +55,10 @@ void setOperand(instr *instruction, char operands[2][LINE_LENGTH]) {
         setExpression(instruction, rm);
     } else {
         if (operands[1] != NULL) {// whether there is a shift
-            char **save_ptr = NULL;
-            char *shift_type, *shift_operand;
-            word32 shift_t, shift_op;
+            char *shift_type = strtok(operands[1], " ");
+            char *shift_operand = strtok(NULL, " ");
 
-            shift_type = strtok_r(operands[1], " ", save_ptr);
-            shift_operand = strtok_r(NULL, " ", save_ptr);
+            word32 shift_op;
             word32 shift_t = getShiftTypeInt(shift_type);
 
             // this if-else sets shift operand
@@ -127,7 +124,7 @@ byte getShiftTypeInt(const char *str) {
 
 // Returns opcode. Sets S Flag if needed.
 // computes_result shows if 2 or 3 arguments
-byte getOpcode(word32 *instruction, const char *str, short *computes_result) {
+byte getOpcode(word32 *instruction, const char *str, bool *computes_result) {
     if (!strcmp(str, "and"))
         return 0;
     if (!strcmp(str, "eor"))
@@ -139,23 +136,23 @@ byte getOpcode(word32 *instruction, const char *str, short *computes_result) {
     if (!strcmp(str, "add"))
         return 4;
     if (!strcmp(str, "tst")) {
-        *computes_result = 0;
+        *computes_result = false;
         setCondCodeFlag(instruction);
         return 8;
     }
     if (!strcmp(str, "teq")) {
-        *computes_result = 0;
+        *computes_result = false;
         setCondCodeFlag(instruction);
         return 9;
     }
     if (!strcmp(str, "cmp")) {
-        *computes_result = 0;
+        *computes_result = false;
         return 10;
     }
     if (!strcmp(str, "orr"))
         return 12;
     if (!strcmp(str, "mov")) {
-        *computes_result = 0;
+        *computes_result = false;
         return 13;
     }
 

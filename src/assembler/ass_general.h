@@ -2,6 +2,7 @@
 #define ASS_GENERAL_H
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "../arm_general.h"
 
@@ -28,6 +29,7 @@ typedef struct Table Table;
 tokenset tokenize(char line[]);
 void printTokens(tokenset);
 tokenset checkLsl(tokenset);
+extern char *strtok_r(char *, const char *, char **);
 
 // Assemble
 void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines);
@@ -46,7 +48,7 @@ word32 dataProcessing(tokenset tokens);
 void setOperand(instr *, char operands[2][LINE_LENGTH]);
 void setExpression(instr *, word32 expression);
 byte getShiftTypeInt(const char *str);
-byte getOpcode(word32 *instruction, const char *str, short *computes_result);
+byte getOpcode(word32 *instruction, const char *str, bool *computes_result);
 
 // Multiply
 #define MUL_FORMAT 0xe0000090
