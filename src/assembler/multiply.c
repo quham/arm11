@@ -9,7 +9,7 @@ word32 multiply(tokenset tokens) {
   byte regs[MUL_OPERANDS] = {0};
 
   if (!strcmp(tokens.opcode, "mla")) {
-    updateBits(&instruction, 11, regNumber(tokens.operands[ACC]));  // sets Rn
+    updateBits(&instruction, 12, regNumber(tokens.operands[ACC]));  // sets Rn
     setBit(&instruction, 21);                                       // set accumulator
   }
 
@@ -17,8 +17,8 @@ word32 multiply(tokenset tokens) {
     regs[i] = regNumber(tokens.operands[i]);
   }
 
-  updateBits(&instruction, 15, regs[0]);  // set Rd
-  updateBits(&instruction, 7, regs[2]);   // set Rs
+  updateBits(&instruction, 16, regs[0]);  // set Rd
+  updateBits(&instruction, 8, regs[2]);   // set Rs
   updateRm(&instruction, regs[1]);
   return instruction;
 }

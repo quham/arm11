@@ -1,5 +1,6 @@
 #include "ass_general.h"
 
+/*
 instr branch(tokenset tokens, word32 address, Table table) {
   word32 target = 0;
   if (isalpha(tokens.operands[0][0])) {  // is alpha not digits
@@ -38,3 +39,4 @@ instr branch(tokenset tokens, word32 address, Table table) {
   setBits(&binary, 28, cond);
   return binary;
 }
+*/

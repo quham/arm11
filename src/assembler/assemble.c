@@ -5,11 +5,33 @@
 #include "ass_general.h"
 
 #define LINE_LENGTH 511
+void printBits(word32 x) {
+    int i;
+    word32 mask = 1 << 31;
+    for (i = 0; i < 32; ++i) {
+        if (i % 4 == 0)
+            printf(" ");
+        if ((x & mask) == 0) {
+            printf("0");
+        } else {
+            printf("1");
+        }
+        x = x << 1;
+    }
+    printf("\n ");
+}
 
 int main(int argc, char **argv) {
+    /*char line[] = "mov r2, #4128768";
+    tokenset tokens = tokenize(line);
+    printTokens(tokens);
+    printf("\n");
+    word32 binary = dataProcessing(tokens);
+    printBits(binary);*/
+
   if (argc != 3) {
-    perror("Error: Invalid arguements\n");
-    exit(EXIT_FAILURE);
+    perror("Error: Invalid arguments\n");
+    //exit(EXIT_FAILURE);
   }
 
   FILE *assembly;
@@ -34,15 +56,15 @@ int main(int argc, char **argv) {
     i++;
   }
 
-  printf("Lines to convert:\n\n");  // prints tokenset of each assembly line
-  for (int j = 0; j < i; j++) {
-    tokenset tokens = tokenize(asm_lines[j]);
-    printTokens(tokens);
-    printf("\n");
-  }
+  // printf("Lines to convert:\n\n");  // prints tokenset of each assembly line
+  // for (int j = 0; j < i; j++) {
+  //   tokenset tokens = tokenize(asm_lines[j]);
+  //   printTokens(tokens);
+  //   printf("\n");
+  // }
 
-  // Table sym_table = symbolise(asm_lines);  // TODO create a symbol_table (FIRST PASS)
-  // assemble(asm_lines, bin, sym_table, NUM_OF_LINES); // TODO: fix assemble
+  Table sym_table = symbolise(asm_lines);  // TODO create a symbol_table (FIRST PASS)
+  assemble(asm_lines, bin, sym_table, NUM_OF_LINES); // TODO: fix assemble
   // TODO write to binary file using mapping from symbolise (SECOND PASS)
 
   fclose(assembly);
@@ -55,36 +77,41 @@ Table symbolise(char asm_lines[][LINE_LENGTH]) {
   return t;
 }
 
-// void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines) {
-//   for (int i = 0; i < lines; i++) {
-//     if (!strchr(line, ':')) {
-//       instr binary;
-//       tokenset tokens = tokenize(asm_lines[i]);
-//       switch (tokens.opcode[0]) {
-//         case 'b':
-//           binary = branch(tokens);  // pass symbol table?
-//           break;
-//         case 'm':
-//           if (tokens.opcode = "mov") {
-//             binary = data_processing(tokens);
-//           } else {
-//             binary = multiply(tokens);
-//           }
-//           break;
-//         case 'l':
-//           binary = single_data_transfer(tokens);
-//           break;
-//         case 's':
-//           if (tokens.opcode = "str") {
-//             binary = single_data_transfer(tokens);
-//           } else {
-//             binary = data_processing(tokens);
-//           }
-//           break;
-//         default:
-//           binary = data_processing(tokens);
-//       }
-//       fwrite(&binary, sizeof(instr), 1, binary_file);
-//     }
-//   }
-// }
+void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines) {
+  for (int i = 0; i < lines; i++) {
+    if (!strcmp(asm_lines[i], "")) {   // NEED FIX LINE LENGTH
+      break;
+    }
+    if (!strchr(asm_lines[i], ':')) {
+      instr binary = 0;
+      tokenset tokens = tokenize(asm_lines[i]);
+      printTokens(tokens);
+      switch (tokens.opcode[0]) {
+        case 'b':
+//          binary = branch(tokens);  // pass symbol table?
+          break;
+        case 'm':
+          if (!strcmp(tokens.opcode, "mov")) {
+            binary = dataProcessing(tokens);
+          } else {
+            binary = multiply(tokens);
+          }
+          break;
+        case 'l':
+          binary = singleDataTransfer(tokens);
+          break;
+        case 's':
+          if (!strcmp(tokens.opcode, "str")) {
+            binary = singleDataTransfer(tokens);
+          } else {
+            binary = dataProcessing(tokens);
+          }
+          break;
+        default:
+          printf("processing\n");
+          binary = dataProcessing(tokens);
+      }
+      fwrite(&binary, sizeof(instr), 1, binary_file);
+    }
+  }
+}

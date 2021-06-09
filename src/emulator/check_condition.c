@@ -8,7 +8,7 @@ bool checkCond(instr instruction, State *state) {
   bool z_flag = checkBit(cpsr, 30);
   bool v_flag = checkBit(cpsr, 28);
 
-  // check each code and respective cpsr flags
+  // check each code and respective CPSR flags
   bool eq = (code == 0x0) && z_flag;
   bool ne = (code == 0x1) && !z_flag;
   bool ge = (code == 0xa) && (n_flag == v_flag);

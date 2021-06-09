@@ -2,6 +2,7 @@
 #define ASS_GENERAL_H
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "../arm_general.h"
 
@@ -23,11 +24,13 @@ typedef struct Table Table;
 #define SDT_FORMAT 0xe8000000;
 #define MOV_CONSTANT_SIZE 0xff
 #define REG_LEN 4
+word32 singleDataTransfer(tokenset tokens);  
 
 // Tokenizer
 tokenset tokenize(char line[]);
 void printTokens(tokenset);
 tokenset checkLsl(tokenset);
+extern char *strtok_r(char *, const char *, char **);
 
 // Assemble
 void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines);
@@ -42,15 +45,16 @@ void updateRm(instr *, byte rm);
 
 // Data processing
 #define DP_FORMAT 0xe0000000
-word32 dataProcessing(tokenset *tokens);
+word32 dataProcessing(tokenset tokens);
 void setOperand(instr *, char operands[2][LINE_LENGTH]);
 void setExpression(instr *, word32 expression);
 byte getShiftTypeInt(const char *str);
-byte getOpcode(instr *, const char *str);
+byte getOpcode(word32 *instruction, const char *str, bool *computes_result);
 
 // Multiply
 #define MUL_FORMAT 0xe0000090
 #define ACC 3
 #define MUL_OPERANDS 3
+word32 multiply(tokenset tokens);
 
 #endif  // ASSEMBLER_CONSTS
