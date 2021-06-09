@@ -5,22 +5,8 @@
 
 #include "ass_general.h"
 #define FIVE_BIT_INTEGER 31
+#define HALF_WORD = 16
 
-void printBits(word32 x) {
-  int i;
-  word32 mask = 1 << 31;
-  for (i = 0; i < 32; ++i) {
-    if (i % 4 == 0)
-      printf(" ");
-    if ((x & mask) == 0) {
-      printf("0");
-    } else {
-      printf("1");
-    }
-    x = x << 1;
-  }
-  printf("\n ");
-}
 
 word32 dataProcessing(tokenset tokens) {
     bool computes_result = true;
@@ -32,9 +18,9 @@ word32 dataProcessing(tokenset tokens) {
     if (computes_result) {
         rd = regNumber(tokens.operands[0]);
         rn = regNumber(tokens.operands[1]);
-        setOperand(&instruction, tokens.operands + 2 * LINE_LENGTH); // passing last 2 arguments
+        setOperand(&instruction, &tokens.operands[2]); // passing last 2 arguments
     } else {
-        setOperand(&instruction, tokens.operands + LINE_LENGTH);
+        setOperand(&instruction, &tokens.operands[1]);
         if (!strcmp(tokens.opcode, "mov")) {
             rd = regNumber(tokens.operands[0]);
         } else {
@@ -47,14 +33,15 @@ word32 dataProcessing(tokenset tokens) {
     return instruction;
 }
 
-// function takes just third and fourth arguments
+// function takes just last two operands
 void setOperand(instr *instruction, char operands[2][LINE_LENGTH]) {
-    // reg number of Immediate constant
-    byte rm = regNumber(operands[0]);
     if (operands[0][0] == '#') {
-        setExpression(instruction, rm);
+        //  gets immediate from any base
+        word32 imm = strtol(operands[0] + 1, NULL, 0);
+        setExpression(instruction, imm);
     } else {
-        if (operands[1] != NULL) {// whether there is a shift
+        byte rm = regNumber(operands[0]);
+        if(operands[1][0] != '\0') { // when there is a shift
             char *shift_type = strtok(operands[1], " ");
             char *shift_operand = strtok(NULL, " ");
 
@@ -87,25 +74,30 @@ void setOperand(instr *instruction, char operands[2][LINE_LENGTH]) {
 // number can be encoded. If 1 is on LSB and number
 // greater than 1, it can`t fit in 8 bits -> error.
 void setExpression(instr *instruction, word32 expression) {
-  setImmediate(instruction);
-  word32 rotation = 0;
+    setImmediate(instruction);
+    byte rotation = 0;
 
-  if (expression < 256) {
-    updateBits(instruction, 0, expression);
-  } else {
-      while (!(expression & 1)) {  // shifts and compares LSB with 1
-          expression >>= 1;
-          rotation++;
-      }
-      if (expression < 256) {
-          rotation = WORD_SIZE - rotation;  // full rotation should be made
-          updateBits(instruction, 0, expression);  // set Immediate expression
-          updateBits(instruction, 8, rotation);    // set rotate bits
-      } else {
-          perror("Error: Immediate value does not fit in 8 bits\n");
-          exit(EXIT_FAILURE);
-      }
-  }
+    if (expression < 256) {
+        updateBits(instruction, 0, expression);
+    } else {
+        while (!(expression & 1)) {// shifts and compares LSB with 1
+            expression >>= 1;
+            rotation++;
+        }
+        if (rotation % 2 != 0) {
+            expression <<= 1;
+            rotation--;
+        }
+        if (expression < 256) {
+            rotation = (WORD_SIZE - rotation) / 2; // full rotation should be made
+            updateBits(instruction, 0, expression);// set Immediate expression
+            updateBits(instruction, 8, rotation);  // set rotate bits
+        } else {
+            // rotation cannot be made
+            perror("Error: Immediate value does not fit in 8 bits\n");
+            exit(EXIT_FAILURE);
+        }
+    }
 }
 
 byte getShiftTypeInt(const char *str) {
@@ -117,7 +109,6 @@ byte getShiftTypeInt(const char *str) {
     return 2;
   if (!strcmp(str, "ror"))
     return 3;
-
   perror("Error: Unsupported shift type\n");
   exit(EXIT_FAILURE);
 }
@@ -147,6 +138,7 @@ byte getOpcode(word32 *instruction, const char *str, bool *computes_result) {
     }
     if (!strcmp(str, "cmp")) {
         *computes_result = false;
+        setCondCodeFlag(instruction);
         return 10;
     }
     if (!strcmp(str, "orr"))

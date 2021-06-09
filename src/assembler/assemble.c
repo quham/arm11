@@ -5,8 +5,30 @@
 #include "ass_general.h"
 
 #define LINE_LENGTH 511
+void printBits(word32 x) {
+    int i;
+    word32 mask = 1 << 31;
+    for (i = 0; i < 32; ++i) {
+        if (i % 4 == 0)
+            printf(" ");
+        if ((x & mask) == 0) {
+            printf("0");
+        } else {
+            printf("1");
+        }
+        x = x << 1;
+    }
+    printf("\n ");
+}
 
 int main(int argc, char **argv) {
+    /*char line[] = "mov r2, #4128768";
+    tokenset tokens = tokenize(line);
+    printTokens(tokens);
+    printf("\n");
+    word32 binary = dataProcessing(tokens);
+    printBits(binary);*/
+
   if (argc != 3) {
     perror("Error: Invalid arguements\n");
     exit(EXIT_FAILURE);
@@ -70,7 +92,7 @@ void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_tab
           break;
         case 'm':
           if (!strcmp(tokens.opcode, "mov")) {
-            //binary = dataProcessing(tokens);
+            binary = dataProcessing(tokens);
           } else {
             binary = multiply(tokens);
           }
@@ -82,12 +104,12 @@ void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_tab
           if (!strcmp(tokens.opcode, "str")) {
             binary = singleDataTransfer(tokens);
           } else {
-            //binary = dataProcessing(tokens);
+            binary = dataProcessing(tokens);
           }
           break;
         default:
           printf("processing\n");
-          //binary = dataProcessing(tokens);
+          binary = dataProcessing(tokens);
       }
       fwrite(&binary, sizeof(instr), 1, binary_file);
     }
