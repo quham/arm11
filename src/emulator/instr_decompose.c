@@ -2,17 +2,17 @@
 
 #include "em_general.h"
 
-bool checkBit(instr instruction, int bit_no) {
-  return 1 & (instruction >> bit_no);
-}
-
-void setFlag(State* state, int index, bool bit) {
+void updateFlag(State* state, int index, bool bit) {
   word32 cpsr = state->regs[CPSR_INDEX];
   if (bit) {
     setBit(&state->regs[CPSR_INDEX], index);
   } else {
     state->regs[CPSR_INDEX] = cpsr & ~(1 << index);
   }
+}
+
+bool checkBit(instr instruction, int bit_no) {
+  return 1 & (instruction >> bit_no);
 }
 
 bool checkImmediate(instr instruction) {
@@ -23,39 +23,36 @@ bool checkSet(instr instruction) {
   return checkBit(instruction, 20);
 }
 
-// inclusive start_index, exclusive end_index
+// inclusive start_index, exclusive end_index, indices start from LSB to MSB
 word32 getBits(word32 word, int start_index, int end_index) {
   word32 mask = UINT32_MAX >> (WORD_SIZE - (end_index - start_index));
   return (word >> start_index) & mask;
 }
 
-word32 condCode(instr instruction) {
+// index starts from LSB
+byte getByte(word32 word, int index) {
+  return getBits(word, index * BYTE_SIZE, (index + 1) * BYTE_SIZE);
+}
+
+byte condCode(instr instruction) {
   return getBits(instruction, 28, 32);
 }
 
-word32 getRs(instr instruction) {
+byte getRs(instr instruction) {
   return getBits(instruction, 8, 12);
 }
 
-word32 getRm(instr instruction) {
+byte getRm(instr instruction) {
   return getBits(instruction, 0, 4);
 }
 
-word32 getRd(instr instruction) {
+byte getRd(instr instruction) {
   return getBits(instruction, 12, 16);
 }
 
-word32 getRn(instr instruction) {
+// Rn position in Data Processing and Single data transfer
+byte getRn(instr instruction) {
   return getBits(instruction, 16, 20);
-}
-
-void rotateRight(word32* operand, int amount) {
-  word32 msb = 0;
-  word32 mask = 1;
-  for (int i = 0; i < amount; i++) {
-    msb = mask & *operand;
-    *operand = (msb << (WORD_SIZE - 1)) | (*operand >> 1);
-  }
 }
 
 word32 signExtend(word32 number, int no_of_bits) {
@@ -63,7 +60,7 @@ word32 signExtend(word32 number, int no_of_bits) {
   return number | (number & (1 << (no_of_bits - 1)) ? mask : 0);
 }
 
-bool addressValid(word32 addr) {
+bool validAddress(word32 addr) {
   if (addr > MEMORY_SIZE) {
     fprintf(stdout, "Error: Out of bounds memory access at address 0x%08x\n", addr);
     return false;
@@ -101,10 +98,19 @@ word32 getOperand(word32 instruction, bool immediate_cond, State* state) {
     }
 
     if (immediate_cond) {
-      setFlag(state, 29, carry_out);
+      updateFlag(state, 29, carry_out);
     }
   }
   return operand;
+}
+
+void rotateRight(word32* operand, int amount) {
+  word32 msb = 0;
+  word32 mask = 1;
+  for (int i = 0; i < amount; i++) {
+    msb = mask & *operand;
+    *operand = (msb << (WORD_SIZE - 1)) | (*operand >> 1);
+  }
 }
 
 /* ---------- Debugging ---------- */

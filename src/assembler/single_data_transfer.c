@@ -14,10 +14,10 @@ word32 singleDataTransfer(tokenset tokens) {
   char *rd = tokens.operands[1];
   char *addr = tokens.operands[2];
   char *post_expr = tokens.operands[3];
-  setBits(&instruction, 12, regNumber(rd));  // set destination index
+  updateBits(&instruction, 12, regNumber(rd));  // set Rd
 
   if (!strcmp(type, "ldr")) {
-    setBit(&instruction, 20);  // sets L bit
+    setBit(&instruction, 20);  // sets Load/Store flag
   }
 
   char rn[REG_LEN];
@@ -49,8 +49,8 @@ word32 singleDataTransfer(tokenset tokens) {
     }
   }
 
-  setBits(&instruction, 0, expr_value);      // set offset
-  setBits(&instruction, 16, regNumber(rn));  // set base reg index
+  updateBits(&instruction, 0, expr_value);      // set offset
+  updateBits(&instruction, 16, regNumber(rn));  // set base reg index
 
   return instruction;
 }

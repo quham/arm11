@@ -2,7 +2,7 @@
 
 // returns true if the condition code's respective CPSR flags match
 bool checkCond(instr instruction, State *state) {
-  word32 code = condCode(instruction);
+  byte code = condCode(instruction);
   word32 cpsr = state->regs[CPSR_INDEX];
   bool n_flag = checkBit(cpsr, 31);
   bool z_flag = checkBit(cpsr, 30);
