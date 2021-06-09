@@ -12,5 +12,6 @@ typedef word32 instr;
 #define BYTE_SIZE 8
 
 void setBit(word32 *, int index);
+word32 getBits(word32, int start_index, int end_index);
 
 #endif  // ARM_CONSTS
