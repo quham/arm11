@@ -24,6 +24,7 @@ typedef struct Table Table;
 #define SDT_FORMAT 0xe8000000;
 #define MOV_CONSTANT_SIZE 0xff
 #define REG_LEN 4
+word32 singleDataTransfer(tokenset tokens);  
 
 // Tokenizer
 tokenset tokenize(char line[]);
@@ -54,5 +55,6 @@ byte getOpcode(word32 *instruction, const char *str, bool *computes_result);
 #define MUL_FORMAT 0xe0000090
 #define ACC 3
 #define MUL_OPERANDS 3
+word32 multiply(tokenset tokens);
 
 #endif  // ASSEMBLER_CONSTS

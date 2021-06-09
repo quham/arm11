@@ -34,15 +34,15 @@ int main(int argc, char **argv) {
     i++;
   }
 
-  printf("Lines to convert:\n\n");  // prints tokenset of each assembly line
-  for (int j = 0; j < i; j++) {
-    tokenset tokens = tokenize(asm_lines[j]);
-    printTokens(tokens);
-    printf("\n");
-  }
+  // printf("Lines to convert:\n\n");  // prints tokenset of each assembly line
+  // for (int j = 0; j < i; j++) {
+  //   tokenset tokens = tokenize(asm_lines[j]);
+  //   printTokens(tokens);
+  //   printf("\n");
+  // }
 
-  // Table sym_table = symbolise(asm_lines);  // TODO create a symbol_table (FIRST PASS)
-  // assemble(asm_lines, bin, sym_table, NUM_OF_LINES); // TODO: fix assemble
+  Table sym_table = symbolise(asm_lines);  // TODO create a symbol_table (FIRST PASS)
+  assemble(asm_lines, bin, sym_table, NUM_OF_LINES); // TODO: fix assemble
   // TODO write to binary file using mapping from symbolise (SECOND PASS)
 
   fclose(assembly);
@@ -55,36 +55,41 @@ Table symbolise(char asm_lines[][LINE_LENGTH]) {
   return t;
 }
 
-// void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines) {
-//   for (int i = 0; i < lines; i++) {
-//     if (!strchr(line, ':')) {
-//       instr binary;
-//       tokenset tokens = tokenize(asm_lines[i]);
-//       switch (tokens.opcode[0]) {
-//         case 'b':
-//           binary = branch(tokens);  // pass symbol table?
-//           break;
-//         case 'm':
-//           if (tokens.opcode = "mov") {
-//             binary = data_processing(tokens);
-//           } else {
-//             binary = multiply(tokens);
-//           }
-//           break;
-//         case 'l':
-//           binary = single_data_transfer(tokens);
-//           break;
-//         case 's':
-//           if (tokens.opcode = "str") {
-//             binary = single_data_transfer(tokens);
-//           } else {
-//             binary = data_processing(tokens);
-//           }
-//           break;
-//         default:
-//           binary = data_processing(tokens);
-//       }
-//       fwrite(&binary, sizeof(instr), 1, binary_file);
-//     }
-//   }
-// }
+void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines) {
+  for (int i = 0; i < lines; i++) {
+    if (!strcmp(asm_lines[i], "")) {   // NEED FIX LINE LENGTH
+      break;
+    }
+    if (!strchr(asm_lines[i], ':')) {
+      instr binary = 0;
+      tokenset tokens = tokenize(asm_lines[i]);
+      printTokens(tokens);
+      switch (tokens.opcode[0]) {
+        case 'b':
+          //binary = branch(tokens);  // pass symbol table?
+          break;
+        case 'm':
+          if (!strcmp(tokens.opcode, "mov")) {
+            //binary = dataProcessing(tokens);
+          } else {
+            binary = multiply(tokens);
+          }
+          break;
+        case 'l':
+          binary = singleDataTransfer(tokens);
+          break;
+        case 's':
+          if (!strcmp(tokens.opcode, "str")) {
+            binary = singleDataTransfer(tokens);
+          } else {
+            //binary = dataProcessing(tokens);
+          }
+          break;
+        default:
+          printf("processing\n");
+          //binary = dataProcessing(tokens);
+      }
+      fwrite(&binary, sizeof(instr), 1, binary_file);
+    }
+  }
+}
