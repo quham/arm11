@@ -41,8 +41,8 @@ void setBits(word32 *word, int index, word32 value);
 word32 dataProcessing(tokenset *tokens);
 void setOperand(word32 *instruction, char operands[2][LINE_LENGTH]);
 void setExpression(word32 *instruction, word32 expression);
-uint8_t getTypeInt(const char *str);
-uint8_t getOpcode(word32 *instruction, const char *str);
+byte getShiftTypeInt(const char *str);
+byte getOpcode(word32 *instruction, const char *str);
 
 // Multiply
 #define MUL_FORMAT 0xe0000090
