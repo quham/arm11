@@ -1,6 +1,7 @@
-#include "ass_general.h"
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
+
+#include "ass_general.h"
 
 void updateBits(word32 *word, int index, word32 value) {
   *word |= value << index;
