@@ -58,10 +58,10 @@ void dataProcessing(instr instruction, State *state) {
   }
 
   if (checkSet(instruction)) {
-    bool Z = result == 0;
-    bool N = checkBit(result, 31);
-    setFlag(state, 31, N);
-    setFlag(state, 30, Z);
+    bool z = result == 0;
+    bool n = checkBit(result, 31);
+    setFlag(state, 31, n);
+    setFlag(state, 30, z);
     setFlag(state, 29, carry_out);
   }
 }

@@ -14,8 +14,8 @@
 //const char* compute_results = {"and", "eor", "sub", "rsb", "add", "orr"};
 //const char* not_compute_results = {"tst", "teq", "cmp"};
 
-void printBits(uint32_t x) { int i;
-uint32_t mask = 1 << 31;
+void printBits(word32 x) { int i;
+word32 mask = 1 << 31;
  for(i=0; i<32; ++i) {
    if (i % 4 == 0) 
      printf(" ");
@@ -42,7 +42,7 @@ int main(void) {
 */
 word32 dataProcessing(tokenset *tokens) {
   word32 instruction = DP_FORMAT;
-  uint32_t opcode = getOpcode(&instruction, tokens->opcode);
+  word32 opcode = getOpcode(&instruction, tokens->opcode);
   setOperand(&instruction, tokens->operands + 2 * LINE_LENGTH);
   instruction |= opcode << OPCODE_OFFSET;
   // mov is thecked first so we can distinguis between add
@@ -58,21 +58,21 @@ void setOperand(word32 *instruction, char operands[2][LINE_LENGTH]) {
   if (operands[0][0] == '#') {
     setExpression(instruction, strtol(operands[0] + 1, NULL, 0)); // ignores # and converts all to long
   } else {
-    uint8_t rm = atoi(operands[0] + 1); //ignores r and gets the reg number  
-    uint8_t shift = 0;
+    byte rm = atoi(operands[0] + 1); //ignores r and gets the reg number  
+    byte shift = 0;
     if (operands[1] != NULL) { // whether there is a shift
       char **save_ptr = NULL;
       char *shift_type, *shift_operand;
       shift_type = strtok_r(operands[1], " ", save_ptr);
       shift_operand = strtok_r(NULL, " ", save_ptr);
-      uint32_t shift_op;
-      uint32_t shift_t = getTypeInt(shift_type);
+      word32 shift_op;
+      word32 shift_t = getShiftTypeInt(shift_type);
 
       // this if-else sets shift operand
       if (shift_operand[0] == '#') { 
 	shift_op = strtol(shift_operand + 1, NULL, 0);
 	if (shift_op >= 64) {
-	  perror("Shift-operand value is too big!");
+	  perror("Error: Shift-operand value is too big\n");
 	  exit(EXIT_FAILURE);
 	}
       } else {
@@ -99,7 +99,7 @@ void setOperand(word32 *instruction, char operands[2][LINE_LENGTH]) {
 void setExpression(word32 *instruction, word32 expression) {
   *instruction |= I_FLAG;
   
-  uint32_t rotation = 0;
+  word32 rotation = 0;
   if (expression < 256) {
     *instruction |= expression;
   }
@@ -113,13 +113,13 @@ void setExpression(word32 *instruction, word32 expression) {
     *instruction |= expression;
     *instruction |= rotation << ROTATION_OFFSET;
   } else {
-    perror("Immediate value does not fit in 8 bits");
+    perror("Error: Immediate value does not fit in 8 bits\n");
     exit(EXIT_FAILURE);
   }
   return;   
 }
     
-uint8_t getTypeInt(const char *str) {
+byte getShiftTypeInt(const char *str) {
   if (!strcmp(str, "lsl"))
     return 0;
   if (!strcmp(str, "lsr"))
@@ -128,12 +128,11 @@ uint8_t getTypeInt(const char *str) {
     return 2;
   if(!strcmp(str, "ror"))
     return 3;
-
-  perror("Strange type for getTypeInt, data_processing, line 129");
+  perror("Error: Strange type for getShiftTypeInt, data_processing\n");
   exit(EXIT_FAILURE);
 }
 
-uint8_t getOpcode(word32 *instruction, const char *str) {
+byte getOpcode(word32 *instruction, const char *str) {
   if (!strcmp(str, "and"))
     return 0;
   if (!strcmp(str, "eor"))
@@ -160,6 +159,6 @@ uint8_t getOpcode(word32 *instruction, const char *str) {
     return 12;
   if (!strcmp(str, "mov"))
     return 13;
-  perror("Uncommon opcode");
-  return EXIT_FAILURE;
+  perror("Error: Unsupported opcode\n");
+  exit(EXIT_FAILURE);
 }

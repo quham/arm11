@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
   file = fopen(argv[1], "rb");
 
   if (file == NULL) {
-    perror("Error: File is null");
+    perror("Error: File is null\n");
     exit(EXIT_FAILURE);
   }
 
