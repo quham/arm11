@@ -1,6 +1,3 @@
-#include <math.h>
-#include <stdbool.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,7 +19,7 @@ int main(int argc, char **argv) {
   bin = fopen(argv[2], "w");
 
   if (assembly == NULL || bin == NULL) {
-    perror("Error: A file is null");
+    perror("Error: A file is null\n");
     exit(EXIT_FAILURE);
   }
 

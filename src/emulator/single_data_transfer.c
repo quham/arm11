@@ -1,11 +1,20 @@
+#include <stdlib.h>
+
 #include "em_general.h"
 
-// stores little endian byte ordered word in big-endian format
-void store(word32 word, word32 addr, State *state) {
-  if (addressValid(addr)) {
-    for (int i = 0; i < BYTES_PER_WORD; i++) {
-      state->memory[addr + i] = getBits(word, i * BYTE_SIZE, (i + 1) * BYTE_SIZE);
-    }
+void singleDataTransfer(instr instruction, State *state) {
+  word32 offset = getOperand(instruction, !checkImmediate(instruction), state);
+  byte rd_index = getRd(instruction);
+  byte rn_index = getRn(instruction);
+  word32 rd = state->regs[rd_index];
+  word32 rn = state->regs[rn_index];
+  word32 addr = combineOffset(rn, offset, instruction);
+
+  if (checkBit(instruction, 24)) {  // check pre/post bit
+    transferData(state, instruction, rd, rd_index, addr);
+  } else {
+    transferData(state, instruction, rd, rd_index, rn);
+    state->regs[rn_index] = addr;
   }
 }
 
@@ -25,18 +34,11 @@ void transferData(State *state, instr instruction, word32 rd, word32 rd_index, w
   }
 }
 
-void singleDataTransfer(instr instruction, State *state) {
-  word32 offset = getOperand(instruction, !checkImmediate(instruction), state);
-  word32 rd_index = getRd(instruction);
-  word32 rn_index = getRn(instruction);
-  word32 rd = state->regs[rd_index];
-  word32 rn = state->regs[rn_index];
-  word32 addr = combineOffset(rn, offset, instruction);
-
-  if (checkBit(instruction, 24)) {  // check pre/post bit
-    transferData(state, instruction, rd, rd_index, addr);
-  } else {
-    transferData(state, instruction, rd, rd_index, rn);
-    state->regs[rn_index] = addr;
+// stores little endian byte ordered word in big-endian format
+void store(word32 word, word32 addr, State *state) {
+  if (validAddress(addr)) {
+    for (int i = 0; i < BYTES_PER_WORD; i++) {
+      state->memory[addr + i] = getByte(word, i);
+    }
   }
 }

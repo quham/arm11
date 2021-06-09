@@ -16,13 +16,13 @@ int main(int argc, char **argv) {
   file = fopen(argv[1], "rb");
 
   if (file == NULL) {
-    perror("Error: File is null");
+    perror("Error: File is null\n");
     exit(EXIT_FAILURE);
   }
 
   // byte addressable memory
   State state = {{0}, {0}};
-  fread(state.memory, sizeof(byte), MEMORY_SIZE, file);
+  fread(state.memory, BYTE_SIZE, MEMORY_SIZE, file);
   fclose(file);
 
   pipeline(&state);

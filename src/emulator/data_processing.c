@@ -5,7 +5,7 @@
 
 void dataProcessing(instr instruction, State *state) {
   word32 result;
-  word32 opcode = getBits(instruction, 21, 25);
+  byte opcode = getBits(instruction, 21, 25);
   word32 operand2 = getOperand(instruction, checkImmediate(instruction), state);
   word32 rn = state->regs[getRn(instruction)];
   word32 *rd = state->regs + getRd(instruction);
@@ -58,11 +58,11 @@ void dataProcessing(instr instruction, State *state) {
   }
 
   if (checkSet(instruction)) {
-    bool Z = result == 0;
-    bool N = checkBit(result, 31);
-    setFlag(state, 31, N);
-    setFlag(state, 30, Z);
-    setFlag(state, 29, carry_out);
+    bool z_flag = result == 0;
+    bool n_flag = checkBit(result, 31);
+    updateFlag(state, 31, n_flag);
+    updateFlag(state, 30, z_flag);
+    updateFlag(state, 29, carry_out);
   }
 }
 
