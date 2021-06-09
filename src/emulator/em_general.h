@@ -59,7 +59,6 @@ void updateFlag(State*, int index, bool bit_value);
 bool checkBit(instr, int bit_no);
 bool checkImmediate(instr);
 bool checkSet(instr);
-word32 getBits(word32, int start_index, int end_index);
 byte getByte(word32, int index);
 byte condCode(instr);
 byte getRs(instr);
