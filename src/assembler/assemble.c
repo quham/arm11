@@ -30,8 +30,8 @@ int main(int argc, char **argv) {
     printBits(binary);*/
 
   if (argc != 3) {
-    perror("Error: Invalid arguements\n");
-    exit(EXIT_FAILURE);
+    perror("Error: Invalid arguments\n");
+    //exit(EXIT_FAILURE);
   }
 
   FILE *assembly;
@@ -88,7 +88,7 @@ void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_tab
       printTokens(tokens);
       switch (tokens.opcode[0]) {
         case 'b':
-          //binary = branch(tokens);  // pass symbol table?
+//          binary = branch(tokens);  // pass symbol table?
           break;
         case 'm':
           if (!strcmp(tokens.opcode, "mov")) {

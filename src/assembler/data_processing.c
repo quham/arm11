@@ -147,7 +147,7 @@ byte getOpcode(word32 *instruction, const char *str, bool *computes_result) {
         *computes_result = false;
         return 13;
     }
-
     perror("Error: Unsupported opcode\n");
     exit(EXIT_FAILURE);
 }
+
