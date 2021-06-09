@@ -20,8 +20,8 @@ struct Table {
 typedef struct Table Table;
 
 // Single data transfer
-#define MOV_CONSTANT_SIZE 0xff
 #define SDT_FORMAT 0xe8000000;
+#define MOV_CONSTANT_SIZE 0xff
 #define REG_LEN 4
 
 // Tokenizer
@@ -35,14 +35,18 @@ Table symbolise(char asm_lines[][LINE_LENGTH]);
 
 // Instruction compose
 byte regNumber(char *reg_token);
-void setBits(word32 *word, int index, word32 value);
+void updateBits(word32 *, int index, word32 value);
+void setCondCodeFlag(instr *);
+void setImmediate(instr *);
+void updateRm(instr *, byte rm);
 
-// Data processing functions
+// Data processing
+#define DP_FORMAT 0xe0000000
 word32 dataProcessing(tokenset *tokens);
-void setOperand(word32 *instruction, char operands[2][LINE_LENGTH]);
-void setExpression(word32 *instruction, word32 expression);
-uint8_t getTypeInt(const char *str);
-uint8_t getOpcode(word32 *instruction, const char *str);
+void setOperand(instr *, char operands[2][LINE_LENGTH]);
+void setExpression(instr *, word32 expression);
+byte getShiftTypeInt(const char *str);
+byte getOpcode(instr *, const char *str);
 
 // Multiply
 #define MUL_FORMAT 0xe0000090

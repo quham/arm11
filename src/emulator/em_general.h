@@ -7,8 +7,8 @@
 #include "../arm_general.h"
 
 #define BYTES_PER_WORD 4
-#define BYTE_SIZE 8
 #define MEMORY_SIZE 65536
+#define MEMORY_WORD_SIZE 16384
 #define NUMBER_OF_REGISTERS 17
 
 struct State {
@@ -24,30 +24,25 @@ typedef struct State State;
 
 // Pipeline
 #define NOT_INIT 0xFFFFFFFF
-#define PC_PIPELINE_OFFSET 8
 typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
+void pipeline(State*);
 word32 fetch(word32 index, State*);
 itype decode(instr);
-void pipeline(State*);
-void printRegisters(State*);
+void execute(itype, State*, word32* decoded, word32* fetched);
 void printState(State*);
-
-// Check condition
-bool checkCond(instr, State* state);
 
 // Data processing
 #define ROTATION_MULTIPLIER 2
 #define ROUNDING_ERROR 0.5
 void dataProcessing(instr, State*);
-void performOperation(void);
-bool checkSub(word32, word32);
 bool checkAdd(word32, word32);
+bool checkSub(word32, word32);
 
 // Single data transfer
 void singleDataTransfer(instr, State*);
-void store(word32, word32, State*);
 word32 combineOffset(word32 reg, word32 offset, instr);
 void transferData(State*, instr, word32 rd, word32 rdIndex, word32);
+void store(word32, word32 addr, State*);
 
 // Branch
 void branch(instr, State*);
@@ -55,25 +50,26 @@ void branch(instr, State*);
 // Multiply
 void multiply(instr, State*);
 
-// Decomposition
-#define ROTATION_MULTIPLIER 2
-word32 getOperand(instr, bool is_immediate, State*);
-word32 condCode(instr);
-word32 getBits(word32, int start_index, int end_index);
-word32 getRn(instr);
-word32 getRd(instr);
-word32 getRs(instr);
-word32 getRm(instr);
-bool addressValid(word32 addr);
-bool checkBit(instr, int bit_no);
-bool checkSet(instr);
-bool checkImmediate(instr);
-void setFlag(State*, int index, bool bit_value);
-void rotateRight(word32* operand, int amount);
-void makeShift(word32* operand, byte shift_value, word32 shift_type, instr, State*, bool);
-word32 signExtend(word32 number, int no_of_bits);
-
 // Check condition
 bool checkCond(instr, State*);
+
+// Decomposition
+#define ROTATION_MULTIPLIER 2
+void updateFlag(State*, int index, bool bit_value);
+bool checkBit(instr, int bit_no);
+bool checkImmediate(instr);
+bool checkSet(instr);
+word32 getBits(word32, int start_index, int end_index);
+byte getByte(word32, int index);
+byte condCode(instr);
+byte getRs(instr);
+byte getRm(instr);
+byte getRd(instr);
+byte getRn(instr);
+word32 signExtend(word32 number, int no_of_bits);
+bool validAddress(word32 addr);
+word32 getOperand(instr, bool is_immediate, State*);
+void rotateRight(word32* operand, int amount);
+void decomp_tests();
 
 #endif  // EMULATOR_CONSTS

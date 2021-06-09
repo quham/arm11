@@ -3,31 +3,27 @@
 
 #include "em_general.h"
 
-void printState(State* state) {
-  word32* regs = state->regs;
-
-  printf("Registers:\n");
-  for (int i = 0; i <= 12; i++) {  // iterate numbered registers
-    printf("$%-3d: %10d (0x%08x)\n", i, regs[i], regs[i]);
-  }
-  printf("PC  : %10d (0x%08x)\n", regs[PC_INDEX], regs[PC_INDEX]);
-  printf("CPSR: %10d (0x%08x)\n", regs[CPSR_INDEX], regs[CPSR_INDEX]);
-  printf("Non-zero memory:\n");
-  for (int i = 0; i < MEMORY_SIZE / BYTES_PER_WORD; i += BYTES_PER_WORD) {
-    word32 chunk = fetch(i, state);
-    if (chunk != 0) {
-      printf("0x%08lx: 0x", (long)i);
-      for (int j = 0; j < BYTES_PER_WORD; j++) {
-        printf("%02x", state->memory[i + j]);
-      }
-      printf("\n");
+void pipeline(State* state) {
+  instr decoded = NOT_INIT;
+  instr fetched = NOT_INIT;
+  itype type = 0;
+  while (type != TERMINATE) {
+    if (decoded != NOT_INIT) {
+      execute(type, state, &decoded, &fetched);
     }
+    if (fetched != NOT_INIT) {
+      decoded = fetched;
+      type = decode(fetched);
+    }
+    fetched = fetch(state->regs[PC_INDEX], state);
+    state->regs[PC_INDEX] += 4;
   }
+  printState(state);
 }
 
 // loads bytes (stored in little endian) into a word (big-endian)
 word32 fetch(word32 addr, State* state) {
-  if (addressValid(addr)) {
+  if (validAddress(addr)) {
     word32 word = 0;
     for (int i = 0; i < BYTES_PER_WORD; i++) {
       word |= (state->memory[addr + i]) << (BYTE_SIZE * i);
@@ -35,11 +31,11 @@ word32 fetch(word32 addr, State* state) {
     }
     return word;
   }
-  return 0;  // why is this here?
+  return 0;
 }
 
 itype decode(instr instruction) {
-  switch (getBits(instruction, 26, 28)) {
+  switch (getBits(instruction, 26, 28)) {  // instruction identifiable bits
     case 2:
       return BRANCH;
     case 1:
@@ -54,7 +50,7 @@ itype decode(instr instruction) {
         return PROCESSING;
       }
     default:
-      perror("Error: Invalid instruction type\n");
+      perror("Error: Invalid instruction format\n");
       exit(EXIT_FAILURE);
   }
 }
@@ -76,26 +72,32 @@ void execute(itype type, State* state, word32* decoded, word32* fetched) {
         *fetched = NOT_INIT;
         *decoded = NOT_INIT;
         break;
-      default:  // unreachable?
-        exit(EXIT_SUCCESS);
+      default:
+        perror("Error: Invalid instruction type\n");
+        exit(EXIT_FAILURE);
     }
   }
 }
 
-void pipeline(State* state) {
-  instr decoded = NOT_INIT;
-  instr fetched = NOT_INIT;
-  itype type = 0;
-  while (type != TERMINATE) {
-    if (decoded != NOT_INIT) {
-      execute(type, state, &decoded, &fetched);
-    }
-    if (fetched != NOT_INIT) {
-      decoded = fetched;
-      type = decode(fetched);
-    }
-    fetched = fetch(state->regs[PC_INDEX], state);
-    state->regs[PC_INDEX] += 4;
+void printState(State* state) {
+  word32* regs = state->regs;
+
+  printf("Registers:\n");
+  for (int i = 0; i <= 12; i++) {  // iterate numbered registers
+    printf("$%-3d: %10d (0x%08x)\n", i, regs[i], regs[i]);
   }
-  printState(state);
+  printf("PC  : %10d (0x%08x)\n", regs[PC_INDEX], regs[PC_INDEX]);
+  printf("CPSR: %10d (0x%08x)\n", regs[CPSR_INDEX], regs[CPSR_INDEX]);
+  printf("Non-zero memory:\n");
+
+  for (int i = 0; i < MEMORY_WORD_SIZE; i += BYTES_PER_WORD) {
+    word32 word = fetch(i, state);
+    if (word != 0) {
+      printf("0x%08x: 0x", i);
+      for (int j = 0; j < BYTES_PER_WORD; j++) {
+        printf("%02x", getByte(word, j));
+      }
+      printf("\n");
+    }
+  }
 }
