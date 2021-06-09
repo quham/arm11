@@ -11,7 +11,7 @@ instr branch(tokenset tokens, word32 address, Table table) {
   instr binary = offset;
   setBits(&binary, 24, 0xa);  // branch format
   word32 cond = 0;
-  switch (tokens.opcode[1]) {
+  switch (tokens.opcode[0][1]) {
     case 'e':
       cond = 0x0;
       break;
@@ -19,14 +19,14 @@ instr branch(tokenset tokens, word32 address, Table table) {
       cond = 0x1;
       break;
     case 'g':
-      if (tokens.opcode[2] == 'e') {
+      if (tokens.opcode[0][2] == 'e') {
         cond = 0xa;
       } else {
         cond = 0xc;
       }
       break;
     case 'l':
-      if (tokens.opcode[2] == 'e') {
+      if (tokens.opcode[0][2] == 'e') {
         cond = 0xd;
       } else {
         cond = 0xb;
