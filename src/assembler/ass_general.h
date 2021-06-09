@@ -42,11 +42,11 @@ void updateRm(instr *, byte rm);
 
 // Data processing
 #define DP_FORMAT 0xe0000000
-word32 dataProcessing(tokenset *tokens);
+word32 dataProcessing(tokenset tokens);
 void setOperand(instr *, char operands[2][LINE_LENGTH]);
 void setExpression(instr *, word32 expression);
 byte getShiftTypeInt(const char *str);
-byte getOpcode(instr *, const char *str);
+byte getOpcode(word32 *instruction, const char *str, short *computes_result);
 
 // Multiply
 #define MUL_FORMAT 0xe0000090
