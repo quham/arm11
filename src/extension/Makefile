@@ -9,11 +9,13 @@ LIBS   = -lm
 all: wormscii
 
 wormscii: wormscii.o map.o collision_detector.o parabola.o player_turn.o update_coord.o
-	$(CC) $(CFLAGS)	wormscii.o parabola.o -o wormscii $(LIBS)
+	$(CC) $(CFLAGS)	wormscii.o parabola.o map.o -o wormscii $(LIBS)
 
 wormscii.o: worms.h
 
 parabola.o: worms.h
+
+map.o: worms.h wormscii.o
 
 clean:
 	rm -f $(wildcard *.o)
