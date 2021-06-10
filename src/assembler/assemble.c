@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
   //   printf("\n");
   // }
 
-  Table sym_table = symbolise(asm_lines, i);  // TODO create a symbol_table (FIRST PASS)
+  Table *sym_table = symbolise(asm_lines, i);  // TODO create a table (FIRST PASS)
   assemble(asm_lines, bin, sym_table, i); //need number op
   // TODO: fix assemble
   // TODO write to binary file using mapping from symbolise (SECOND PASS)
@@ -73,19 +73,19 @@ int main(int argc, char **argv) {
   return EXIT_SUCCESS;
 }
 
-Table symbolise(char asm_lines[][LINE_LENGTH],int lines) {
-  Table t = makeTable();
+Table* symbolise(char asm_lines[][LINE_LENGTH],int lines) {
+  Table *table = makeTable();
   for (int i = 0; i < lines; i++) {
       if (strchr(asm_lines[i], ':')) {
-          put(table, (pair) {strtok(asm_lines + i, ':'), i*4});
+          put(table, (Pair) {strtok(asm_lines[i], ":"), i*4});
       }
 
   }
-  return t;
+  return table;
 }
 
 
-void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines) {
+void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table *table, int lines) {
   for (int i = 0; i < lines; i++) {
     if (!strchr(asm_lines[i], ':')) {
       instr binary = 0;
@@ -93,7 +93,7 @@ void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_tab
       printTokens(tokens);
       switch (tokens.opcode[0]) {
         case 'b':
-          binary = branch(tokens,(word32) i*4, symbol_table);  // pass symbol table?
+          binary = branch(tokens,(word32) i*4, table);
           break;
         case 'm':
           if (!strcmp(tokens.opcode, "mov")) {
@@ -119,7 +119,7 @@ void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_tab
       fwrite(&binary, sizeof(instr), 1, binary_file);
     }
   }
-  freeTable(symbol_table);
+  freeTable(table);
 }
 
 

@@ -1,10 +1,10 @@
 #include "ass_general.h"
 #include <stdlib.h>
 
-instr branch(tokenset tokens, word32 address, Table table) {
+instr branch(tokenset tokens, word32 address, Table *table) {
   word32 target = 0;
   if (tokens.operands[0][0] == '#') {
-      target = (word32) strtol(operands[0] + 1, NULL, 0);//implicit cast
+      target = (word32) strtol(tokens.operands[0] + 1, NULL, 0);//implicit cast
   }else{
       target = lookup(table, tokens.operands[0]);
   }
