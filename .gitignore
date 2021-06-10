@@ -33,3 +33,5 @@ assemble
 *.nav
 *.toc
 
+#ignore other junk operating system files
+.DS_Store
