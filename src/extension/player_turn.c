@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #include <stdbool.h>
 #define MAX_POWER 10
 #define BOMB_CHR '@'

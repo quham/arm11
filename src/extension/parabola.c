@@ -16,6 +16,7 @@ player_input toRadians(player_input input) {
   return input;
 }
 
+
 coordinate *parabola(player_input input) {
   input = toRadians(input);
 
