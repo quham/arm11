@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include "worms.h"
+#include <math.h>
 
 int main(void) {
 
@@ -14,5 +16,14 @@ int main(void) {
 
 
     /* ENTER GAME LOOP */
+    player_input input = {55, 40};
+    coordinate * curve = parabola(input);
+    for (int i = 0; i < 128 * 2; i ++) {
+        printf("(%d , %d)\n", (int) (curve->x), (int) (curve->y));
+        curve++;
+        if (curve->x == 0 && curve->y == 0) {
+            break;
+        }
+    }
 
 }
