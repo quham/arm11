@@ -34,7 +34,7 @@ extern char *strtok_r(char *, const char *, char **);
 
 // Assemble
 void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines);
-Table symbolise(char asm_lines[][LINE_LENGTH]);
+Table symbolise(char asm_lines[][LINE_LENGTH],int lines);
 
 // Instruction compose
 byte regNumber(char *reg_token);
@@ -56,5 +56,8 @@ byte getOpcode(word32 *instruction, const char *str, bool *computes_result);
 #define ACC 3
 #define MUL_OPERANDS 3
 word32 multiply(tokenset tokens);
+
+//Branch
+instr branch(tokenset tokens, word32 address, Table table);
 
 #endif  // ASSEMBLER_CONSTS
