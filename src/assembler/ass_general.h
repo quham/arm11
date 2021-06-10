@@ -1,8 +1,8 @@
 #ifndef ASS_GENERAL_H
 #define ASS_GENERAL_H
 
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "../arm_general.h"
 
@@ -40,7 +40,7 @@ void freeTable(Table *);
 #define SDT_FORMAT 0xe8000000;
 #define MOV_CONSTANT_SIZE 0xff
 #define REG_LEN 4
-word32 singleDataTransfer(tokenset);  
+word32 singleDataTransfer(tokenset);
 
 // Tokenizer
 tokenset tokenize(char line[]);
@@ -50,7 +50,7 @@ extern char *strtok_r(char *, const char *, char **);
 
 // Assemble
 void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table *, int lines);
-Table* symbolise(char asm_lines[][LINE_LENGTH],int lines);
+Table *symbolise(char asm_lines[][LINE_LENGTH], int lines);
 
 // Instruction compose
 byte regNumber(char *reg_token);
@@ -73,7 +73,7 @@ byte getOpcode(word32 *instruction, const char *str, bool *computes_result);
 #define MUL_OPERANDS 3
 word32 multiply(tokenset);
 
-//Branch
+// Branch
 instr branch(tokenset, word32 address, Table *);
 
 #endif  // ASSEMBLER_CONSTS

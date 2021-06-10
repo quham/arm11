@@ -23,7 +23,6 @@ bool checkSet(instr instruction) {
   return checkBit(instruction, 20);
 }
 
-
 // index starts from LSB
 byte getByte(word32 word, int index) {
   return getBits(word, index * BYTE_SIZE, (index + 1) * BYTE_SIZE);

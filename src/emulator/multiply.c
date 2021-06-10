@@ -9,7 +9,7 @@ void multiply(instr instruction, State *state) {
   word32 *regs = state->regs;
 
   regs[rd] = regs[rm] * regs[rs];
-  
+
   if (acc) {
     regs[rd] += regs[rn];
   }
