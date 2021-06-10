@@ -35,7 +35,7 @@ word32 lookup(Table *table, char *str) {
     }
   }
   perror("Error: key not in map\n");
-  return 0;
+  exit(EXIT_FAILURE);
 }
 
 void freeTable(Table *table) {
