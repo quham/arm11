@@ -74,10 +74,10 @@ int main(int argc, char **argv) {
 }
 
 Table symbolise(char asm_lines[][LINE_LENGTH],int lines) {
-  Table t = {0};//initTable();
+  Table t = makeTable();
   for (int i = 0; i < lines; i++) {
       if (strchr(asm_lines[i], ':')) {
-          //add(table, strtok(asm_lines + i, ':'), i*4);
+          put(table, (pair) {strtok(asm_lines + i, ':'), i*4});
       }
 
   }
@@ -87,9 +87,6 @@ Table symbolise(char asm_lines[][LINE_LENGTH],int lines) {
 
 void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_table, int lines) {
   for (int i = 0; i < lines; i++) {
-    //if (!strcmp(asm_lines[i], "")) {   // NEED FIX LINE LENGTH
-    //  break;
-    //}
     if (!strchr(asm_lines[i], ':')) {
       instr binary = 0;
       tokenset tokens = tokenize(asm_lines[i]);
@@ -122,4 +119,7 @@ void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table symbol_tab
       fwrite(&binary, sizeof(instr), 1, binary_file);
     }
   }
+  freeTable(symbol_table);
 }
+
+
