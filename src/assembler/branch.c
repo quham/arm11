@@ -1,13 +1,12 @@
 #include "ass_general.h"
-#include <ctype.h>
 #include <stdlib.h>
 
 instr branch(tokenset tokens, word32 address, Table table) {
   word32 target = 0;
-  if (isalpha(tokens.operands[0][0])) {  // is alpha not digits
-    //target = lookup(table, tokens.operands[0]);
-  } else {
-    target = atoi(tokens.operands[0]);
+  if (tokens.operands[0][0] == '#') {
+      target = (word32) strtol(operands[0] + 1, NULL, 0);//implicit cast
+  }else{
+      target = lookup(table, tokens.operands[0]);
   }
   word32 offset = getBits(target - address - 8, 26, 2);  // address of curr instr
   instr binary = offset;
@@ -40,4 +39,6 @@ instr branch(tokenset tokens, word32 address, Table table) {
     updateBits(&binary, 28, cond);
   return binary;
 }
+
+
 
