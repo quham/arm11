@@ -8,13 +8,13 @@
 
 
 typedef struct coordinate {
-	int x;
-	int y;
+	double x;
+	double y;
 } coordinate;
 
 typedef struct player_input {
-	int angle;
-	int power; //inital velocity ?
+	double angle;
+	double power; //inital velocity ?
 } player_input;
 
 coordinate *parabola(player_input input);
