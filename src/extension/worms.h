@@ -7,15 +7,14 @@
 #define MAP_WIDTH 132
 #define MAP_HEIGHT 40
 
-
 typedef struct coordinate {
-	double x;
-	double y;
+  double x;
+  double y;
 } coordinate;
 
 typedef struct player_input {
-	double angle;
-	double power; //inital velocity ?
+  double angle;
+  double power;  // inital velocity ?
 } player_input;
 
 coordinate *parabola(player_input input);

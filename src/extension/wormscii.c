@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
@@ -88,4 +87,3 @@ int getInt(void) {
     }
     return strtol(input, NULL, 10);
 }
-
