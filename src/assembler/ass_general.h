@@ -15,10 +15,21 @@ typedef struct tokens {
   char operands[MAX_OPERANDS][LINE_LENGTH];
 } tokenset;
 
-struct Table {
-  char *test;
-};
+// Symbol Table
+#define INITIAL_MAX_TABLE_SIZE 8
+typedef struct Pair Pair;
 typedef struct Table Table;
+
+struct Pair {
+  char *key;
+  word32 value;
+};
+
+struct Table {
+  int *size;
+  int *max_size;
+  Pair *elements;
+};
 
 // Single data transfer
 #define SDT_FORMAT 0xe8000000;
