@@ -15,6 +15,7 @@ word32 multiply(tokenset tokens) {
 
   for (int i = 0; i < MUL_OPERANDS; i++) {
     regs[i] = regNumber(tokens.operands[i]);
+    printf("adding: %08x\n", regs[i]);
   }
 
   updateBits(&instruction, 16, regs[0]);  // set Rd

@@ -76,8 +76,9 @@ int main(int argc, char **argv) {
 Table *symbolise(char asm_lines[][LINE_LENGTH], int lines) {
   Table *table = makeTable();
   for (int i = 0; i < lines; i++) {
-    if (strchr(asm_lines[i], ':')) {
-      put(table, (Pair){strtok(asm_lines[i], ":"), i * 4});
+    char* str = strtok(asm_lines[i], ":");
+    if (str != NULL) {
+      put(table, (Pair) {str, i * 4});
     }
   }
   return table;
@@ -101,11 +102,11 @@ void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table *table, in
           }
           break;
         case 'l':
-          binary = singleDataTransfer(tokens);
+          //binary = singleDataTransfer(tokens);
           break;
         case 's':
           if (!strcmp(tokens.opcode, "str")) {
-            binary = singleDataTransfer(tokens);
+            //binary = singleDataTransfer(tokens);
           } else {
             binary = dataProcessing(tokens);
           }

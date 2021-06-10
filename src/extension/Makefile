@@ -8,7 +8,7 @@ LIBS   = -lm
 
 all: wormscii
 
-wormscii: wormscii.o map.o collision_detector.o parabola.o player_turn.o update_coord.o
+wormscii: wormscii.o map.o parabola.o player_turn.o
 	$(CC) $(CFLAGS)	wormscii.o parabola.o -o wormscii $(LIBS)
 
 wormscii.o: worms.h
