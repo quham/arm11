@@ -8,7 +8,7 @@ void setPrePost(word32 instruction) {
   setBit(&instruction, 24);
 }
 
-word32 singleDataTransfer(tokenset tokens, FILE* file, int* lines) {
+word32 singleDataTransfer(tokenset tokens, FILE *file, int *lines) {
   word32 instruction = SDT_FORMAT;
   char *type = tokens.operands[0];
   char *rd = tokens.operands[1];
@@ -21,7 +21,7 @@ word32 singleDataTransfer(tokenset tokens, FILE* file, int* lines) {
   }
 
   char rn[REG_LEN];
-  strcpy(rn, addr);
+  strcpy(rn, addr); // TODO: safe memory copying
   char expr[WORD_SIZE + 1];
   strcpy(expr, post_expr);
   bool constant_address = addr[0] == '=';

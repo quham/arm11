@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #include "worms.h"
-#define PI  3.14159
+#define PI 3.14159
 #define GRAVITY 9.8
 
 double getY(double x, double angle, double u) {
@@ -16,15 +16,14 @@ player_input toRadians(player_input input) {
   return input;
 }
 
-
 coordinate *parabola(player_input input) {
   input = toRadians(input);
 
-  coordinate *coords = malloc(sizeof(coordinate) * 128 * 2); //TODO: maxsize 
+  coordinate *coords = malloc(sizeof(coordinate) * 128 * 2);  // TODO: maxsize
   coordinate position = {0, 0};
   bool is_moving = false;
   while (position.y > 0 || !is_moving) {
-    position.x++; //TODO: change to use time! 
+    position.x++;  // TODO: change to use time!
     position.y = getY(position.x, input.angle, input.power);
 
     coords[(int)position.x] = position;
