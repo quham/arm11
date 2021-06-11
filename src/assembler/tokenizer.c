@@ -16,6 +16,7 @@ tokenset tokenize(char line[]) {
   if (line[0] != '\0') {
     char *instruction = line;
     strcpy(tokens.opcode, strtok_r(instruction, " ", &instruction));
+    // TODO: Safe str copying / assertions
     char *reg = strtok(instruction, ",");
 
     int op = 0;
@@ -58,6 +59,7 @@ tokenset checkLsl(tokenset tokens) {
   }
   if (strchr(tokens.operands[1], '#')) {
     printf("%s\n", "replacing lsl");
+    // TODO: Safe str copying / assertions
     strcpy(tokens.opcode, "mov");
     strcpy(tokens.operands[2], "lsl ");
     strcat(tokens.operands[2], tokens.operands[1]);
