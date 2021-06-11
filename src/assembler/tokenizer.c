@@ -14,7 +14,6 @@ tokenset tokenize(char line[]) {
   tokenset tokens = {"\0", {{"\0"}}};
 
   if (line[0] != '\0') {
-
     char *instruction = line;
     strcpy(tokens.opcode, strtok_r(instruction, " ", &instruction));
     char *reg = strtok(instruction, ",");
