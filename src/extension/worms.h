@@ -7,7 +7,6 @@
 #define MAP_WIDTH 132
 #define MAP_HEIGHT 40
 
-
 typedef struct coordinate {
   double x;
   double y;

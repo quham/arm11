@@ -8,7 +8,7 @@ void setPrePost(word32 instruction) {
   setBit(&instruction, 24);
 }
 
-word32 singleDataTransfer(tokenset tokens, FILE* file, int* lines) {
+word32 singleDataTransfer(tokenset tokens, FILE *file, int *lines) {
   word32 instruction = SDT_FORMAT;
   char *type = tokens.operands[0];
   char *rd = tokens.operands[1];
