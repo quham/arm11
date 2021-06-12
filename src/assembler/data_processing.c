@@ -8,6 +8,9 @@
 #define HALF_WORD = 16
 
 word32 dataProcessing(tokenset tokens) {
+  if (!strcmp(tokens.opcode, "andeq")) {
+    return 0;
+  }
   bool computes_result = true;
   byte rd, rn;
   rd = rn = 0;

@@ -6,7 +6,7 @@
 
 #include "ass_general.h"
 
-word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *file_len) {
+word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *file_lines) {
   instr instruction = SDT_FORMAT;
   char *type = tokens.opcode;
   char *rd = tokens.operands[0];
@@ -22,6 +22,7 @@ word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *file_len) {
 
   if (addr[0] == '=') {  // check constant address
     setUpFlag(&instruction);
+    setPrePostFlag(&instruction);
     word32 const_expr = readHex(addr + 1);
     if (const_expr < MOV_CONST) {
       char mov_expr[MOV_CONST_LEN + 2] = {'#', '\0'};
@@ -29,11 +30,16 @@ word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *file_len) {
       safeStrCpy(addr, mov_expr);
       safeStrCpy(type, "mov");
       return dataProcessing(tokens);
-    } else {
-      safeSeek(file, *file_len);
-      (*file_len)++;
-      fwrite(&const_expr, sizeof(word32), 1, file);
+    } else {  // should gen new ldr instr
       updateBaseReg(&instruction, PC_INDEX);
+      word32 pc = ftell(file);
+      word32 end = *file_lines * sizeof(instr);
+      safeSeek(file, end);
+      fwrite(&const_expr, sizeof(word32), 1, file);  // TODO: unsafe
+      safeSeek(file, pc);
+      updateOffset(&instruction, (end - pc) - PC_PIPELINE_OFFSET);  // pc relative
+      (*file_lines)++;
+      return instruction;
     }
   }
 
@@ -48,13 +54,18 @@ word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *file_len) {
     expr[strlen(expr) - 1] = '\0';
   }
 
-  expr++;  // remove leading #
-  if (expr[0] == '-') {
+  if (expr[0] != '#') {
+    setImmediate(&instruction);
+  }
+
+  expr++;                // remove leading '#' / 'r'
+  if (expr[0] == '-') {  // check negative constants
     expr++;
   } else {
     setUpFlag(&instruction);
   }
-  updateBits(&instruction, 0, readHex(expr));  // set offset bits
+
+  updateOffset(&instruction, readHex(expr));
   return instruction;
 }
 
@@ -68,4 +79,8 @@ void setUpFlag(instr *instruction) {
 
 void updateBaseReg(instr *instruction, word32 value) {
   updateBits(instruction, 16, value);
+}
+
+void updateOffset(instr *instruction, word32 value) {
+  updateBits(instruction, 0, value);
 }

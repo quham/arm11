@@ -9,6 +9,7 @@
 #define MAX_OPERANDS 4
 #define MAX_OPCODE_LEN 6
 #define LINE_LENGTH 511
+#define PC_PIPELINE_OFFSET 8
 
 typedef struct tokens {
   char opcode[MAX_OPCODE_LEN];
@@ -32,7 +33,7 @@ struct Table {
 };
 
 Table *makeTable();
-void put(Table *, Pair pair);
+void put(Table *, char *key, word32 value);
 word32 lookup(Table *, char *str);
 void freeTable(Table *);
 
@@ -45,6 +46,7 @@ word32 singleDataTransfer(tokenset, FILE *file, word32 *lines);
 void setPrePostFlag(instr *);
 void setUpFlag(instr *);
 void updateBaseReg(instr *, word32 value);
+void updateOffset(instr *, word32 value);
 
 // Tokenizer
 tokenset tokenize(char line[]);

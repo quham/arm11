@@ -2,6 +2,7 @@
 
 #include "ass_general.h"
 
+// TODO: add format in constistency with other instrs
 instr branch(tokenset tokens, word32 address, Table *sym_table) {
   word32 target = 0;
   if (tokens.operands[0][0] == '#') {
@@ -9,7 +10,7 @@ instr branch(tokenset tokens, word32 address, Table *sym_table) {
   } else {
     target = lookup(sym_table, tokens.operands[0]);
   }
-  word32 offset = getBits(target - address - 8, 26, 2);  // address of curr instr
+  word32 offset = getBits(target - address - PC_PIPELINE_OFFSET, 26, 2);  // address of curr instr
   instr binary = offset;
   updateBits(&binary, 24, 0xa);  // branch format
   word32 cond;

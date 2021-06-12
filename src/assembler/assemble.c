@@ -22,11 +22,11 @@ int main(int argc, char **argv) {
   word32 line_num = 0;
   char line[LINE_LENGTH];
   while (fgets(line, LINE_LENGTH, assembly_file)) {  // fgets unsafe
-    char *label_end = strchr(line, ':');  // unsafe?
+    char *label_end = strchr(line, ':');             // unsafe?
     if (label_end) {
       *label_end = '\0';
       printf("line to put %s\n", line);
-      put(sym_table, (Pair){line, line_num * 4});
+      put(sym_table, line, line_num * 4);
     }
     line_num++;
   }
@@ -46,10 +46,15 @@ int main(int argc, char **argv) {
 }
 
 // TODO: use opcode map
-void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 num_of_lines) {
+void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 file_lines) {
   char line[LINE_LENGTH];
-  for (word32 i = 0; fgets(line, LINE_LENGTH, assembly_file) && !strchr(line, ':'); i++) {
-    line[strlen(line) - 1] = '\0';  // safe?
+  const word32 code_lines = file_lines;
+  for (word32 i = 0; i < code_lines; i++) {
+    fgets(line, LINE_LENGTH, assembly_file);
+    if (strchr(line, ':')) {  // skip labels
+      continue;
+    }
+    line[strlen(line) - 1] = '\0';
     instr binary = 0;
     tokenset tokens = tokenize(line);
     printTokens(tokens);
@@ -65,12 +70,11 @@ void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 n
         }
         break;
       case 'l':
-        binary = singleDataTransfer(tokens, binary_file, &num_of_lines);
+        binary = singleDataTransfer(tokens, binary_file, &file_lines);
         break;
       case 's':
         if (!strcmp(tokens.opcode, "str")) {
-          binary = singleDataTransfer(tokens, binary_file, &num_of_lines);
-          safeSeek(binary_file, i);
+          binary = singleDataTransfer(tokens, binary_file, &file_lines);
         } else {
           binary = dataProcessing(tokens);
         }

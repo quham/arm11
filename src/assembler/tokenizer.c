@@ -20,8 +20,13 @@ tokenset tokenize(char *line) {
 }
 
 void removeWhitespace(char **str) {
-  if (*str[0] == ' ' || *str[0] == '[') {
+  if (*str[0] == ' ') {
     (*str)++;
+  }
+  if (*str[0] != '\0') {
+    if (*str[0] == '[') {
+      (*str)++;
+    }
   }
 }
 

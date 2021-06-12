@@ -15,7 +15,7 @@ word32 getBits(word32 word, int start_index, int end_index) {
   return (word >> start_index) & mask;
 }
 
-void safeStrCpy(char* dest, char* src) {
+void safeStrCpy(char* dest, char* src) {  // TODO: use stncpy
   strcpy(dest, src);
   assert(dest[strlen(dest)] == '\0');
 }
