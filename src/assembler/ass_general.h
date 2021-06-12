@@ -7,7 +7,7 @@
 #include "../arm_general.h"
 
 #define MAX_OPERANDS 4
-#define MAX_OPCODE_LEN 5
+#define MAX_OPCODE_LEN 6
 #define LINE_LENGTH 511
 
 typedef struct tokens {
@@ -26,7 +26,7 @@ struct Pair {
 };
 
 struct Table {
-  int *size;
+  size_t *size;
   int *max_size;
   Pair *elements;
 };
@@ -51,6 +51,7 @@ tokenset tokenize(char line[]);
 void printTokens(tokenset);
 tokenset checkLsl(tokenset);
 extern char *strtok_r(char *, const char *, char **);
+void removeWhitespace(char **);
 
 // Assemble
 #define LINE_LENGTH 511

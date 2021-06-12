@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -22,4 +23,11 @@ void safeStrCpy(char* dest, char* src) {
 void safeStrCat(char* dest, char* src) {
   strcat(dest, src);
   assert(dest[strlen(dest)] == '\0');
+}
+
+void safeSeek(FILE* file, word32 line) {
+  if (fseek(file, line, SEEK_SET)) {
+    perror("Error: Seek file line failed\n");
+    exit(EXIT_FAILURE);
+  }
 }

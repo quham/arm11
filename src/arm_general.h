@@ -2,7 +2,7 @@
 #define ARM_GENERAL_H
 
 #include <stdint.h>
-#include <stdlib.h>
+#include <stdio.h>
 
 // Reg Indices
 #define PC_INDEX 15
@@ -20,5 +20,6 @@ void setBit(word32*, int index);
 word32 getBits(word32, int start_index, int end_index);
 void safeStrCpy(char* dest, char* src);
 void safeStrCat(char* dest, char* src);
+void safeSeek(FILE*, word32 file_len);
 
 #endif  // ARM_CONSTS

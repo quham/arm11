@@ -2,12 +2,12 @@
 
 #include "ass_general.h"
 
-instr branch(tokenset tokens, word32 address, Table *table) {
+instr branch(tokenset tokens, word32 address, Table *sym_table) {
   word32 target = 0;
   if (tokens.operands[0][0] == '#') {
     target = strtol(tokens.operands[0] + 1, NULL, 0);
   } else {
-    target = lookup(table, tokens.operands[0]);
+    target = lookup(sym_table, tokens.operands[0]);
   }
   word32 offset = getBits(target - address - 8, 26, 2);  // address of curr instr
   instr binary = offset;

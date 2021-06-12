@@ -5,18 +5,11 @@
 
 #include "ass_general.h"
 
-void removeWhitespace(char **str) {
-  if (*str[0] == ' ' || *str[0] == '[') {
-    (*str)++;
-  }
-}
-
 tokenset tokenize(char *line) {
   tokenset tokens = {"\0", {{"\0"}}};
-  strcpy(tokens.opcode, strtok_r(line, " ", &line));
-  // TODO: Safe str copying / assertions
-  char *reg = strtok(line, ",");
+  safeStrCpy(tokens.opcode, strtok(line, " "));  // TODO: assert safe strtok
 
+  char *reg = strtok(NULL, ",");
   for (int op = 0; reg; op++) {
     assert(op < MAX_OPERANDS);
     removeWhitespace(&reg);
@@ -24,6 +17,12 @@ tokenset tokenize(char *line) {
     reg = strtok(NULL, ",");
   }
   return checkLsl(tokens);
+}
+
+void removeWhitespace(char **str) {
+  if (*str[0] == ' ' || *str[0] == '[') {
+    (*str)++;
+  }
 }
 
 void printTokens(tokenset tokens) {
@@ -41,10 +40,10 @@ tokenset checkLsl(tokenset tokens) {
   if (strchr(tokens.operands[1], '#')) {
     printf("%s\n", "replacing lsl");
     // TODO: Safe str copying / assertions
-    strcpy(tokens.opcode, "mov");
-    strcpy(tokens.operands[2], "lsl ");
+    safeStrCpy(tokens.opcode, "mov");
+    safeStrCpy(tokens.operands[2], "lsl ");
     strcat(tokens.operands[2], tokens.operands[1]);
-    strcpy(tokens.operands[1], tokens.operands[0]);
+    safeStrCpy(tokens.operands[1], tokens.operands[0]);
   }
   return tokens;
 }

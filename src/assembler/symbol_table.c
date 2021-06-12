@@ -8,8 +8,8 @@
 
 Table *makeTable() {
   Table *table = malloc(sizeof(Table));
-  table->size = malloc(sizeof(int));
-  table->max_size = malloc(sizeof(int));
+  table->size = malloc(sizeof(size_t));
+  table->max_size = malloc(sizeof(size_t));
   table->elements = calloc(INITIAL_MAX_TABLE_SIZE, sizeof(Pair));
   *table->size = 0;
   *table->max_size = INITIAL_MAX_TABLE_SIZE;
@@ -23,13 +23,16 @@ void put(Table *table, Pair pair) {
     table->elements = realloc(table->elements, *table->max_size * sizeof(Pair));
     assert(table->elements != NULL);
   }
+  printf("putting: %s at %zu\n", pair.key, *table->size);
   table->elements[*table->size] = pair;
   (*table->size)++;
 }
 
 word32 lookup(Table *table, char *str) {
-  for (int i = 0; i < *table->size; i++) {
+  for (size_t i = 0; i < *table->size; i++) {
+    printf("getting: %s at %zu\n", str, i);
     Pair pair = table->elements[i];
+    printf("key: %s\n", pair.key);
     if (!strcmp(pair.key, str)) {
       return pair.value;
     }
@@ -48,7 +51,7 @@ void freeTable(Table *table) {
 // Debugging
 void test_table() {
   Table *table = makeTable();
-  printf("size: %d\n", *table->size);
+  printf("size: %zu\n", *table->size);
   Pair pair0 = {"str0", 0xe701a8e0};
   Pair pair1 = {"str1", 0xe701a8e1};
   Pair pair2 = {"str2", 0xe701a8e2};

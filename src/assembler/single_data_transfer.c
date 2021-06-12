@@ -6,7 +6,7 @@
 
 #include "ass_general.h"
 
-word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *lines) {
+word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *file_len) {
   instr instruction = SDT_FORMAT;
   char *type = tokens.opcode;
   char *rd = tokens.operands[0];
@@ -30,11 +30,8 @@ word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *lines) {
       safeStrCpy(type, "mov");
       return dataProcessing(tokens);
     } else {
-      if (fseek(file, *lines, SEEK_SET)) {
-        perror("Error: Seek assembly file line failed\n");
-        exit(EXIT_FAILURE);
-      }
-      (*lines)++;
+      safeSeek(file, *file_len);
+      (*file_len)++;
       fwrite(&const_expr, sizeof(word32), 1, file);
       updateBaseReg(&instruction, PC_INDEX);
     }

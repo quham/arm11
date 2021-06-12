@@ -5,7 +5,6 @@
 
 #include "ass_general.h"
 
-// TODO: deal with blank lines
 int main(int argc, char **argv) {
   if (argc != 3) {  // Number of arguments main takes
     perror("Error: Invalid arguments\n");
@@ -23,17 +22,15 @@ int main(int argc, char **argv) {
   word32 line_num = 0;
   char line[LINE_LENGTH];
   while (fgets(line, LINE_LENGTH, assembly_file)) {  // fgets unsafe
-    line_num++;
     char *label_end = strchr(line, ':');  // unsafe?
     if (label_end) {
       *label_end = '\0';
+      printf("line to put %s\n", line);
       put(sym_table, (Pair){line, line_num * 4});
     }
+    line_num++;
   }
-  if (fseek(assembly_file, 0, SEEK_SET)) {
-    perror("Error: Seek source file start failed\n");
-    exit(EXIT_FAILURE);
-  }
+  safeSeek(assembly_file, 0);
 
   FILE *bin = fopen(argv[2], "w");
   if (bin == NULL) {
@@ -49,10 +46,9 @@ int main(int argc, char **argv) {
 }
 
 // TODO: use opcode map
-// Bug: num_of_lines is for assembly but we need for binary (no because they are same?)
 void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 num_of_lines) {
   char line[LINE_LENGTH];
-  for (size_t i = 0; fgets(line, LINE_LENGTH, assembly_file) && !strchr(line, ':'); i++) {
+  for (word32 i = 0; fgets(line, LINE_LENGTH, assembly_file) && !strchr(line, ':'); i++) {
     line[strlen(line) - 1] = '\0';  // safe?
     instr binary = 0;
     tokenset tokens = tokenize(line);
@@ -74,7 +70,7 @@ void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 n
       case 's':
         if (!strcmp(tokens.opcode, "str")) {
           binary = singleDataTransfer(tokens, binary_file, &num_of_lines);
-          fseek(binary_file, i, SEEK_SET);
+          safeSeek(binary_file, i);
         } else {
           binary = dataProcessing(tokens);
         }
