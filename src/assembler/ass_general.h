@@ -16,7 +16,7 @@ typedef struct tokens {
 } tokenset;
 
 // Symbol Table
-#define INITIAL_MAX_TABLE_SIZE 8
+#define INITIAL_MAX_TABLE_SIZE 4  // maybe a little big
 typedef struct Pair Pair;
 typedef struct Table Table;
 
@@ -37,10 +37,14 @@ word32 lookup(Table *, char *str);
 void freeTable(Table *);
 
 // Single data transfer
-#define SDT_FORMAT 0xe8000000;
-#define MOV_CONSTANT_SIZE 0xff
+#define SDT_FORMAT 0xe4000000;
+#define MOV_CONST 0xff
+#define MOV_CONST_LEN 4
 #define REG_LEN 4
-word32 singleDataTransfer(tokenset, FILE *file, int *lines);
+word32 singleDataTransfer(tokenset, FILE *file, word32 *lines);
+void setPrePostFlag(instr *);
+void setUpFlag(instr *);
+void updateBaseReg(instr *, word32 value);
 
 // Tokenizer
 tokenset tokenize(char line[]);
@@ -49,11 +53,12 @@ tokenset checkLsl(tokenset);
 extern char *strtok_r(char *, const char *, char **);
 
 // Assemble
-void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table *, int lines);
-Table *symbolise(char asm_lines[][LINE_LENGTH], int lines);
+#define LINE_LENGTH 511
+void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 num_of_lines);
 
 // Instruction compose
 byte regNumber(char *reg_token);
+word32 readHex(char *hex);
 void updateBits(word32 *, int index, word32 value);
 void setCondCodeFlag(instr *);
 void setImmediate(instr *);

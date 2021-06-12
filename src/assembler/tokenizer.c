@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,42 +6,22 @@
 #include "ass_general.h"
 
 void removeWhitespace(char **str) {
-  while (*str[0] == ' ') {
+  if (*str[0] == ' ' || *str[0] == '[') {
     (*str)++;
   }
 }
 
-tokenset tokenize(char line[]) {
+tokenset tokenize(char *line) {
   tokenset tokens = {"\0", {{"\0"}}};
+  strcpy(tokens.opcode, strtok_r(line, " ", &line));
+  // TODO: Safe str copying / assertions
+  char *reg = strtok(line, ",");
 
-  if (line[0] != '\0') {
-    char *instruction = line;
-    strcpy(tokens.opcode, strtok_r(instruction, " ", &instruction));
-    // TODO: Safe str copying / assertions
-    char *reg = strtok(instruction, ",");
-
-    int op = 0;
-    while (reg != NULL) {
-      removeWhitespace(&reg);
-
-      char *has_closing = strchr(reg, ']');
-      if (reg[0] == '[' && !has_closing) {  // at least 2 elements in bracket
-        reg++;
-        strcat(tokens.operands[op], reg);
-        strcat(tokens.operands[op], ",");
-        reg = strtok(NULL, "]");
-      }
-
-      if (reg[0] == '[' && has_closing) {  // just 1 element in bracket
-        int r_strlen = (reg[4] == ']') ? 3 : 2;
-        memcpy(tokens.operands[op], reg + 1, r_strlen);
-      } else {
-        strcat(tokens.operands[op], reg);
-      }
-
-      reg = strtok(NULL, ",");
-      op++;
-    }
+  for (int op = 0; reg; op++) {
+    assert(op < MAX_OPERANDS);
+    removeWhitespace(&reg);
+    strcat(tokens.operands[op], reg);
+    reg = strtok(NULL, ",");
   }
   return checkLsl(tokens);
 }

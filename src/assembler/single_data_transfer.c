@@ -1,56 +1,74 @@
+#include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "ass_general.h"
 
-void setPrePost(word32 instruction) {
-  setBit(&instruction, 24);
-}
-
-word32 singleDataTransfer(tokenset tokens, FILE *file, int *lines) {
-  word32 instruction = SDT_FORMAT;
-  char *type = tokens.operands[0];
-  char *rd = tokens.operands[1];
-  char *addr = tokens.operands[2];
-  char *post_expr = tokens.operands[3];
-  updateBits(&instruction, 12, regNumber(rd));  // set Rd
+word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *lines) {
+  instr instruction = SDT_FORMAT;
+  char *type = tokens.opcode;
+  char *rd = tokens.operands[0];
+  char *addr = tokens.operands[1];
+  char *expr = tokens.operands[2];
+  updateBits(&instruction, 12, regNumber(rd));  // set Rd bits
 
   if (!strcmp(type, "ldr")) {
     setBit(&instruction, 20);  // sets Load/Store flag
   }
 
-  char rn[REG_LEN];
-  strcpy(rn, addr); // TODO: safe memory copying
-  char expr[WORD_SIZE + 1];
-  strcpy(expr, post_expr);
-  bool constant_address = addr[0] == '=';
+  updateBaseReg(&instruction, regNumber(strtok(addr, "]")));  // TODO: assert safe
 
-  if (constant_address) {  // constant
-    setPrePost(instruction);
-    strcpy(rn, "r15");      // sets to PC
-  } else if (!post_expr) {  // pre-indexing
-    setPrePost(instruction);
-    strcpy(rn, strtok(addr, ","));
-    char *offset = strtok(NULL, " ");
-    if (!offset) {  // zero offset
-      strcpy(expr, "#0x0");
-    }
-  }
-
-  word32 expr_value = strtol(expr + 1, NULL, 0);
-
-  if (constant_address) {
-    if (expr_value <= MOV_CONSTANT_SIZE) {
-      // reformat to mov
+  if (addr[0] == '=') {  // check constant address
+    setUpFlag(&instruction);
+    word32 const_expr = readHex(addr + 1);
+    if (const_expr < MOV_CONST) {
+      char mov_expr[MOV_CONST_LEN + 2] = {'#', '\0'};
+      safeStrCat(mov_expr, addr + 1);
+      safeStrCpy(addr, mov_expr);
+      safeStrCpy(type, "mov");
+      return dataProcessing(tokens);
     } else {
-      // store expr_value in four bytes
-      // update expr_value with shifted
+      if (fseek(file, *lines, SEEK_SET)) {
+        perror("Error: Seek assembly file line failed\n");
+        exit(EXIT_FAILURE);
+      }
+      (*lines)++;
+      fwrite(&const_expr, sizeof(word32), 1, file);
+      updateBaseReg(&instruction, PC_INDEX);
     }
   }
 
-  updateBits(&instruction, 0, expr_value);      // set offset
-  updateBits(&instruction, 16, regNumber(rn));  // set base reg index
+  if (expr[0] == '\0') {  // check zero-offset
+    setUpFlag(&instruction);
+    setPrePostFlag(&instruction);
+    return instruction;
+  }
 
+  if (expr[strlen(expr) - 1] == ']') {  // check pre-indexed
+    setPrePostFlag(&instruction);
+    expr[strlen(expr) - 1] = '\0';
+  }
+
+  expr++;  // remove leading #
+  if (expr[0] == '-') {
+    expr++;
+  } else {
+    setUpFlag(&instruction);
+  }
+  updateBits(&instruction, 0, readHex(expr));  // set offset bits
   return instruction;
+}
+
+void setPrePostFlag(instr *instruction) {
+  setBit(instruction, 24);
+}
+
+void setUpFlag(instr *instruction) {
+  setBit(instruction, 23);
+}
+
+void updateBaseReg(instr *instruction, word32 value) {
+  updateBits(instruction, 16, value);
 }

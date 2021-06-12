@@ -8,7 +8,11 @@ void updateBits(word32 *word, int index, word32 value) {
 }
 
 byte regNumber(char *reg_token) {
-  return strtol(reg_token + 1, NULL, 10);
+  return atoi(reg_token + 1);
+}
+
+word32 readHex(char *hex) {
+  return strtol(hex, NULL, 0);
 }
 
 void setCondCodeFlag(instr *instruction) {

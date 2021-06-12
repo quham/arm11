@@ -18,10 +18,6 @@ struct State {
 
 typedef struct State State;
 
-// Reg Indices
-#define PC_INDEX 15
-#define CPSR_INDEX 16
-
 // Pipeline
 #define NOT_INIT 0xFFFFFFFF
 typedef enum itype { PROCESSING, MULTIPLY, TRANSFER, BRANCH, TERMINATE } itype;
