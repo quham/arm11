@@ -26,9 +26,10 @@ int main(int argc, char **argv) {
     if (label_end) {
       *label_end = '\0';
       printf("line to put %s\n", line);
-      put(sym_table, line, line_num * 4);
+      put(sym_table, line, line_num * BYTES_PER_WORD);
+    } else if (line[0] != '\n') {
+      line_num++;
     }
-    line_num++;
   }
   safeSeek(assembly_file, 0);
 
@@ -49,9 +50,11 @@ int main(int argc, char **argv) {
 void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 file_lines) {
   char line[LINE_LENGTH];
   const word32 code_lines = file_lines;
+  // while loop better += 4 for i?
   for (word32 i = 0; i < code_lines; i++) {
     fgets(line, LINE_LENGTH, assembly_file);
-    if (strchr(line, ':')) {  // skip labels
+    if (strchr(line, ':') || line[0] == '\n') {  // skip labels
+      i--;
       continue;
     }
     line[strlen(line) - 1] = '\0';
@@ -60,7 +63,7 @@ void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 f
     printTokens(tokens);
     switch (tokens.opcode[0]) {
       case 'b':
-        binary = branch(tokens, i * 4, sym_table);
+        binary = branch(tokens, i * BYTES_PER_WORD, sym_table);
         break;
       case 'm':
         if (!strcmp(tokens.opcode, "mov")) {

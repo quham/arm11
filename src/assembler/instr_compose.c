@@ -26,3 +26,7 @@ void setImmediate(instr *instruction) {
 void updateRm(instr *instruction, byte rm) {
   updateBits(instruction, 0, rm);
 }
+
+word32 relativeAddr(word32 target, word32 pc) {
+  return target - pc - PC_PIPELINE_OFFSET;
+}

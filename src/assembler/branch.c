@@ -2,17 +2,18 @@
 
 #include "ass_general.h"
 
-// TODO: add format in constistency with other instrs
-instr branch(tokenset tokens, word32 address, Table *sym_table) {
-  word32 target = 0;
+instr branch(tokenset tokens, word32 pc, Table* sym_table) {
+  instr instruction = BRANCH_FORMAT;
+
+  word32 target;
   if (tokens.operands[0][0] == '#') {
-    target = strtol(tokens.operands[0] + 1, NULL, 0);
+    target = readHex(tokens.operands[0] + 1);
   } else {
     target = lookup(sym_table, tokens.operands[0]);
   }
-  word32 offset = getBits(target - address - PC_PIPELINE_OFFSET, 26, 2);  // address of curr instr
-  instr binary = offset;
-  updateBits(&binary, 24, 0xa);  // branch format
+
+  updateBits(&instruction, 0, getBits(relativeAddr(target, pc), 2, 26));
+
   word32 cond;
   switch (tokens.opcode[1]) {
     case 'e':
@@ -38,6 +39,7 @@ instr branch(tokenset tokens, word32 address, Table *sym_table) {
     default:
       cond = 0xe;
   }
-  updateBits(&binary, 28, cond);
-  return binary;
+  updateBits(&instruction, 28, cond);
+
+  return instruction;
 }

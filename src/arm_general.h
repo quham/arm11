@@ -4,6 +4,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#define BYTES_PER_WORD 4
+
+
 // Reg Indices
 #define PC_INDEX 15
 #define CPSR_INDEX 16

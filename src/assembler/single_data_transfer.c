@@ -30,14 +30,14 @@ word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *file_lines) {
       safeStrCpy(addr, mov_expr);
       safeStrCpy(type, "mov");
       return dataProcessing(tokens);
-    } else {  // should gen new ldr instr
+    } else {  // should gen new ldr instr // bug: should not use ftell for pc
       updateBaseReg(&instruction, PC_INDEX);
       word32 pc = ftell(file);
       word32 end = *file_lines * sizeof(instr);
       safeSeek(file, end);
       fwrite(&const_expr, sizeof(word32), 1, file);  // TODO: unsafe
       safeSeek(file, pc);
-      updateOffset(&instruction, (end - pc) - PC_PIPELINE_OFFSET);  // pc relative
+      updateOffset(&instruction, relativeAddr(end, pc));
       (*file_lines)++;
       return instruction;
     }
