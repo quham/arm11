@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
+#include <unistd.h>
 
 #include "worms.h"
 
@@ -12,20 +13,25 @@
 
 
 int main(void) {
-
+    system("clear");
     printf("                                    \n");
     printf("      ~^~@  WELCOME TO WORMSCII  @~^~\n");
     printf("\n");
     printf(" *~       HELP THE WORLD RECOVER  ~*     \n");
     printf("   ~*  EXTERMINATE MISBEHAVING WORMS  *~ \n\n");
-
+    sleep(3);
     //INTRODUCTION / GAME RULES ??
     system("clear");
 
     char map[MAP_HEIGHT][MAP_WIDTH];
     initializeMap(map);
-    printMap(map);
+    //printMap(map);
 
+    player_input input = {65, 35};
+    //printf("%f\n", tan(3.14159));
+    coordinate *coords = parabola(input);
+
+    printParabola(map,coords);
 
     // ENTER GAME LOOP
     //while(1)
