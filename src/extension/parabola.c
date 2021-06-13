@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #include "worms.h"
-#define PI  3.14159
+#define PI 3.14159
 #define GRAVITY 9.8
 #define HORIZONTAL_STARTING_OFFSET 5
 #define VERTICAL_STARTING_OFFSET (8 + MAP_HEIGHT)
