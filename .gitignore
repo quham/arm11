@@ -35,3 +35,6 @@ assemble
 
 #ignore other junk operating system files
 .DS_Store
+
+#ignore junk IDE files
+.idea

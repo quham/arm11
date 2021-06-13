@@ -1,25 +1,21 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
 #include <ctype.h>
 #include <math.h>
-#include <unistd.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "worms.h"
 
 #define MAX_POWER 100
-#define INPUT_SIZE 10 // 10 should be enough for small integers
-
+#define INPUT_SIZE 10  // 10 should be enough for small integers
 
 int main(void) {
-    system("clear");
     printf("                                    \n");
     printf("      ~^~@  WELCOME TO WORMSCII  @~^~\n");
     printf("\n");
     printf(" *~       HELP THE WORLD RECOVER  ~*     \n");
     printf("   ~*  EXTERMINATE MISBEHAVING WORMS  *~ \n\n");
-    sleep(3);
     //INTRODUCTION / GAME RULES ??
     system("clear");
 
@@ -51,45 +47,44 @@ int main(void) {
 }
 
 void printInput(player_input input) {
-        printf("Power is %lf, angle is %lf \n", input.power, input.angle);
+  printf("Power is %lf, angle is %lf \n", input.power, input.angle);
 }
 
 player_input getPlayerInput(void) {
-    player_input input;
-    int angle, power;
+  player_input input;
+  int angle, power;
 
-    printf("Enter the power: ");
+  printf("Enter the power: ");
+  power = getInt();
+
+  printf("Enter the angle: ");
+  angle = getInt() % 360;
+
+  while (power > MAX_POWER) {
+    printf("Power should be in a range 0..%d, try again: ", MAX_POWER);
     power = getInt();
-
-    printf("Enter the angle: ");
-    angle = getInt() % 360;
-
-    while (power > MAX_POWER) {
-        printf("Power should be in a range 0..%d, try again: ", MAX_POWER);
-        power =  getInt();
-    }
-    input.power = (double) power;
-    input.angle = (double) angle;
-    return input;
+  }
+  input.power = (double)power;
+  input.angle = (double)angle;
+  return input;
 }
 
 bool checkInput(char input[]) {
-    for(int i = 0; i < strlen(input); i++)
-    {
-        if(isdigit(input[i])==0)
-        {
-            return false;
-        }
+  for (int i = 0; i < strlen(input); i++) {
+    if (isdigit(input[i]) == 0) {
+      return false;
     }
-    return true;
+  }
+  return true;
 }
 
 int getInt(void) {
-    char input[10];
-    scanf("%s",input);
-    while (!checkInput(input)) { ;
-        printf("Invalid input, please try again: ");
-        scanf("%s",input);
-    }
-    return strtol(input, NULL, 10);
+  char input[10];
+  scanf("%s", input);
+  while (!checkInput(input)) {
+    ;
+    printf("Invalid input, please try again: ");
+    scanf("%s", input);
+  }
+  return strtol(input, NULL, 10);
 }

@@ -40,7 +40,7 @@ void freeTable(Table *);
 #define SDT_FORMAT 0xe8000000;
 #define MOV_CONSTANT_SIZE 0xff
 #define REG_LEN 4
-word32 singleDataTransfer(tokenset, FILE* file, int* lines);
+word32 singleDataTransfer(tokenset, FILE *file, int *lines);
 
 // Tokenizer
 tokenset tokenize(char line[]);
