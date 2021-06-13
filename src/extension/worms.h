@@ -17,7 +17,12 @@ typedef struct player_input {
   double power;  // inital velocity ?
 } player_input;
 
+
+
+// parabola.c
 coordinate *parabola(player_input input);
+void printParabola(char map[MAP_HEIGHT][MAP_WIDTH], coordinate points[]);
+
 // map.c
 void printMap(char map[MAP_HEIGHT][MAP_WIDTH]);
 void initializeMap(char map[MAP_HEIGHT][MAP_WIDTH]);

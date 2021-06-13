@@ -11,34 +11,39 @@
 #define INPUT_SIZE 10  // 10 should be enough for small integers
 
 int main(void) {
-  printf("                                    \n");
-  printf("      ~^~@  WELCOME TO WORMSCII  @~^~\n");
-  printf("\n");
-  printf(" *~       HELP THE WORLD RECOVER  ~*     \n");
-  printf("   ~*  EXTERMINATE MISBEHAVING WORMS  *~ \n\n");
+    printf("                                    \n");
+    printf("      ~^~@  WELCOME TO WORMSCII  @~^~\n");
+    printf("\n");
+    printf(" *~       HELP THE WORLD RECOVER  ~*     \n");
+    printf("   ~*  EXTERMINATE MISBEHAVING WORMS  *~ \n\n");
+    //INTRODUCTION / GAME RULES ??
+    system("clear");
 
-  // INTRODUCTION / GAME RULES ??
-  system("clear");
+    char map[MAP_HEIGHT][MAP_WIDTH];
+    initializeMap(map);
+    //printMap(map);
 
-  char map[MAP_HEIGHT][MAP_WIDTH];
-  initializeMap(map);
-  printMap(map);
+    player_input input = {65, 35};
+    //printf("%f\n", tan(3.14159));
+    coordinate *coords = parabola(input);
 
-  // ENTER GAME LOOP
-  // while(1)
-  /*player_input input = {55, 40};
-  coordinate * curve = parabola(input);
-  for (int i = 0; i < 128 * 2; i ++) {
-      printf("(%d , %d)\n", (int) (curve->x), (int) (curve->y));
-      curve++;
-      if (curve->x == 0 && curve->y == 0) {
-          break;
-      }
-  }*/
-  // player_input input = getPlayerInput();
-  //    printInput(input);
+    printParabola(map,coords);
 
-  return 0;
+    // ENTER GAME LOOP
+    //while(1)
+    /*player_input input = {55, 40};
+    coordinate * curve = parabola(input);
+    for (int i = 0; i < 128 * 2; i ++) {
+        printf("(%d , %d)\n", (int) (curve->x), (int) (curve->y));
+        curve++;
+        if (curve->x == 0 && curve->y == 0) {
+            break;
+        }
+    }*/
+    //player_input input = getPlayerInput();
+//    printInput(input);
+
+    return 0;
 }
 
 void printInput(player_input input) {
