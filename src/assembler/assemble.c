@@ -19,16 +19,15 @@ int main(int argc, char **argv) {
 
   // Create symbol table and count file lines (first pass)
   Table *sym_table = makeTable();
-  word32 line_num = 0;
+  word32 code_line = 0;
   char line[LINE_LENGTH];
   while (fgets(line, LINE_LENGTH, assembly_file)) {  // fgets unsafe
     char *label_end = strchr(line, ':');             // unsafe?
     if (label_end) {
       *label_end = '\0';
-      printf("line to put %s\n", line);
-      put(sym_table, line, line_num * BYTES_PER_WORD);
+      put(sym_table, line, code_line * BYTES_PER_WORD);
     } else if (line[0] != '\n') {
-      line_num++;
+      code_line++;
     }
   }
   safeSeek(assembly_file, 0);
@@ -39,7 +38,7 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
-  assemble(assembly_file, bin, sym_table, line_num);  // Second pass
+  assemble(assembly_file, bin, sym_table, code_line);  // Second pass
 
   fclose(assembly_file);
   fclose(bin);
@@ -47,23 +46,25 @@ int main(int argc, char **argv) {
 }
 
 // TODO: use opcode map
-void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 file_lines) {
+void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, const word32 assembly_lines) {
   char line[LINE_LENGTH];
-  const word32 code_lines = file_lines;
-  // while loop better += 4 for i?
-  for (word32 i = 0; i < code_lines; i++) {
-    fgets(line, LINE_LENGTH, assembly_file);
-    if (strchr(line, ':') || line[0] == '\n') {  // skip labels
-      i--;
+  word32 binary_lines = assembly_lines;
+  word32 line_num = 0;
+  while (line_num < assembly_lines) {
+    if (fgets(line, LINE_LENGTH, assembly_file) == NULL) {
+      perror("Error: assembly line read failed\n");
+      exit(EXIT_FAILURE);
+    }
+    if (strchr(line, ':') || line[0] == '\n') {  // skip labels / blank lines
       continue;
     }
     line[strlen(line) - 1] = '\0';
-    instr binary = 0;
     tokenset tokens = tokenize(line);
     printTokens(tokens);
+    instr binary ;
     switch (tokens.opcode[0]) {
       case 'b':
-        binary = branch(tokens, i * BYTES_PER_WORD, sym_table);
+        binary = branch(tokens, line_num * BYTES_PER_WORD, sym_table);
         break;
       case 'm':
         if (!strcmp(tokens.opcode, "mov")) {
@@ -73,11 +74,11 @@ void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 f
         }
         break;
       case 'l':
-        binary = singleDataTransfer(tokens, binary_file, &file_lines);
+        binary = singleDataTransfer(tokens, binary_file, &binary_lines);
         break;
       case 's':
         if (!strcmp(tokens.opcode, "str")) {
-          binary = singleDataTransfer(tokens, binary_file, &file_lines);
+          binary = singleDataTransfer(tokens, binary_file, &binary_lines);
         } else {
           binary = dataProcessing(tokens);
         }
@@ -86,6 +87,7 @@ void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 f
         binary = dataProcessing(tokens);
     }
     fwrite(&binary, sizeof(instr), 1, binary_file);
+    line_num++;
   }
   freeTable(sym_table);
 }

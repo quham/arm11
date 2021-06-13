@@ -6,7 +6,7 @@
 
 #include "ass_general.h"
 
-word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *file_lines) {
+word32 singleDataTransfer(tokenset tokens, FILE *binary_file, word32 *binary_lines) {
   instr instruction = SDT_FORMAT;
   char *type = tokens.opcode;
   char *rd = tokens.operands[0];
@@ -30,15 +30,15 @@ word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *file_lines) {
       safeStrCpy(addr, mov_expr);
       safeStrCpy(type, "mov");
       return dataProcessing(tokens);
-    } else {  // should gen new ldr instr // bug: should not use ftell for pc
+    } else {  // should gen new ldr instr?
       updateBaseReg(&instruction, PC_INDEX);
-      word32 pc = ftell(file);
-      word32 end = *file_lines * sizeof(instr);
-      safeSeek(file, end);
-      fwrite(&const_expr, sizeof(word32), 1, file);  // TODO: unsafe
-      safeSeek(file, pc);
-      updateOffset(&instruction, relativeAddr(end, pc));
-      (*file_lines)++;
+      word32 cur_addr = ftell(binary_file);              // TODO: assert safe
+      word32 end_addr = *binary_lines * BYTES_PER_WORD;
+      safeSeek(binary_file, end_addr);
+      fwrite(&const_expr, sizeof(word32), 1, binary_file);  // TODO: unsafe
+      (*binary_lines)++;
+      safeSeek(binary_file, cur_addr);
+      updateOffset(&instruction, relativeAddr(end_addr, cur_addr));
       return instruction;
     }
   }
@@ -54,7 +54,7 @@ word32 singleDataTransfer(tokenset tokens, FILE *file, word32 *file_lines) {
     expr[strlen(expr) - 1] = '\0';
   }
 
-  if (expr[0] != '#') {
+  if (expr[0] != '#') {  // check immediate
     setImmediate(&instruction);
   }
 
