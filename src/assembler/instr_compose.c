@@ -8,7 +8,7 @@ void updateBits(word32 *word, int index, word32 value) {
 }
 
 byte regNumber(char *reg_token) {
-  return atoi(reg_token + 1);
+  return atoi(reg_token + 1); // TODO: unsafe
 }
 
 word32 readHex(char *hex) {
