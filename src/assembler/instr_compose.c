@@ -8,7 +8,11 @@ void updateBits(word32 *word, int index, word32 value) {
 }
 
 byte regNumber(char *reg_token) {
-  return strtol(reg_token + 1, NULL, 10);
+  return atoi(reg_token + 1); // TODO: unsafe
+}
+
+word32 readHex(char *hex) {
+  return strtol(hex, NULL, 0);
 }
 
 void setCondCodeFlag(instr *instruction) {
@@ -21,4 +25,8 @@ void setImmediate(instr *instruction) {
 
 void updateRm(instr *instruction, byte rm) {
   updateBits(instruction, 0, rm);
+}
+
+word32 relativeAddr(word32 target, word32 pc) {
+  return target - pc - PC_PIPELINE_OFFSET;
 }

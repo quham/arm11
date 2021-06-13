@@ -8,14 +8,13 @@ word32 multiply(tokenset tokens) {
   word32 instruction = MUL_FORMAT;
   byte regs[MUL_OPERANDS] = {0};
 
-  if (!strcmp(tokens.opcode, "mla")) {
+  if (!strcmp(tokens.opcode, "mla")) { // TODO: assert safe?
     updateBits(&instruction, 12, regNumber(tokens.operands[ACC]));  // sets Rn
     setBit(&instruction, 21);                                       // set accumulator
   }
 
   for (int i = 0; i < MUL_OPERANDS; i++) {
     regs[i] = regNumber(tokens.operands[i]);
-    printf("adding: %08x\n", regs[i]);
   }
 
   updateBits(&instruction, 16, regs[0]);  // set Rd

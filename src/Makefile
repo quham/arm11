@@ -1,26 +1,28 @@
 CC      = gcc
 CFLAGS  = -Wall -g -D_POSIX_SOURCE -DEFAULT_SOURCE -std=c99 -Werror -pedantic
 
-ASSEMBLER_OBJ := $(patsubst %.c, %.o, $(shell find assembler -type f -name '*.c')) bit_manipulation.o
-EMULATOR_OBJ := $(patsubst %.c, %.o, $(shell find emulator -type f -name '*.c')) bit_manipulation.o
+ASSEMBLER_OBJ := $(patsubst %.c, %.o, $(shell find assembler -type f -name '*.c')) data_manipulation.o
+EMULATOR_OBJ := $(patsubst %.c, %.o, $(shell find emulator -type f -name '*.c')) data_manipulation.o
 
 .SUFFIXES: .c .o
 
 .PHONY: all clean
 
-all: assembler/assemble emulator/emulate
+all: assemble emulate
 
-assembler/assemble: assembler/assemble.o $(ASSEMBLER_OBJ) 
+assemble: $(ASSEMBLER_OBJ)
+				$(CC) $(CFLAGS) $(ASSEMBLER_OBJ) -o assemble
 
-emulator/emulate: emulator/emulate.o $(EMULATOR_OBJ)
+emulate: $(EMULATOR_OBJ)
+				$(CC) $(CFLAGS) $(EMULATOR_OBJ) -o emulate
 
-assemble.o: assembler/ass_general.h
+assembler/assemble.o: assembler/ass_general.h arm_general.h
 
-emulate.o: emulator/em_general.h
+emulator/emulate.o: emulator/em_general.h arm_general.h
 
 clean:
 	rm -f $(wildcard *.o)
 	rm -f $(wildcard assembler/*.o)
 	rm -f $(wildcard emulator/*.o)
-	rm -f assembler/assemble
-	rm -f emulator/emulate
+	rm -f assemble
+	rm -f emulate

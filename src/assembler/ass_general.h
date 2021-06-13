@@ -7,8 +7,9 @@
 #include "../arm_general.h"
 
 #define MAX_OPERANDS 4
-#define MAX_OPCODE_LEN 5
+#define MAX_OPCODE_LEN 6
 #define LINE_LENGTH 511
+#define PC_PIPELINE_OFFSET 8
 
 typedef struct tokens {
   char opcode[MAX_OPCODE_LEN];
@@ -16,7 +17,7 @@ typedef struct tokens {
 } tokenset;
 
 // Symbol Table
-#define INITIAL_MAX_TABLE_SIZE 8
+#define INITIAL_MAX_TABLE_SIZE 4  // maybe a little big
 typedef struct Pair Pair;
 typedef struct Table Table;
 
@@ -26,38 +27,46 @@ struct Pair {
 };
 
 struct Table {
-  int *size;
+  size_t *size;
   int *max_size;
   Pair *elements;
 };
 
 Table *makeTable();
-void put(Table *, Pair pair);
+void put(Table *, char *key, word32 value);
 word32 lookup(Table *, char *str);
 void freeTable(Table *);
 
 // Single data transfer
-#define SDT_FORMAT 0xe8000000;
-#define MOV_CONSTANT_SIZE 0xff
+#define SDT_FORMAT 0xe4000000;
+#define MOV_CONST 0xff
+#define MOV_CONST_LEN 4
 #define REG_LEN 4
-word32 singleDataTransfer(tokenset, FILE *file, int *lines);
+word32 singleDataTransfer(tokenset, FILE *file, word32 *lines);
+void setPrePostFlag(instr *);
+void setUpFlag(instr *);
+void updateBaseReg(instr *, word32 value);
+void updateOffset(instr *, word32 value);
 
 // Tokenizer
 tokenset tokenize(char line[]);
 void printTokens(tokenset);
 tokenset checkLsl(tokenset);
 extern char *strtok_r(char *, const char *, char **);
+void removeWhitespace(char **);
 
 // Assemble
-void assemble(char asm_lines[][LINE_LENGTH], FILE *binary_file, Table *, int lines);
-Table *symbolise(char asm_lines[][LINE_LENGTH], int lines);
+#define LINE_LENGTH 511
+void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 num_of_lines);
 
 // Instruction compose
 byte regNumber(char *reg_token);
+word32 readHex(char *hex);
 void updateBits(word32 *, int index, word32 value);
 void setCondCodeFlag(instr *);
 void setImmediate(instr *);
 void updateRm(instr *, byte rm);
+word32 relativeAddr(word32 target, word32 pc);
 
 // Data processing
 #define DP_FORMAT 0xe0000000
@@ -74,6 +83,7 @@ byte getOpcode(word32 *instruction, const char *str, bool *computes_result);
 word32 multiply(tokenset);
 
 // Branch
-instr branch(tokenset, word32 address, Table *);
+#define BRANCH_FORMAT 0x0a000000
+instr branch(tokenset, word32 pc, Table *);
 
 #endif  // ASSEMBLER_CONSTS

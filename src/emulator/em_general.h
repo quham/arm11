@@ -6,7 +6,6 @@
 
 #include "../arm_general.h"
 
-#define BYTES_PER_WORD 4
 #define MEMORY_SIZE 65536
 #define MEMORY_WORD_SIZE 16384
 #define NUMBER_OF_REGISTERS 17
@@ -17,10 +16,6 @@ struct State {
 };
 
 typedef struct State State;
-
-// Reg Indices
-#define PC_INDEX 15
-#define CPSR_INDEX 16
 
 // Pipeline
 #define NOT_INIT 0xFFFFFFFF
