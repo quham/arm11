@@ -22,10 +22,9 @@ int main(void) {
     system("clear");
 
     
-    initializeMap(map);
+    initializeMap();
 
-
-    player_input input = {45, 60};
+    player_input input = {60, 30};
    
     //printf("%f\n", tan(3.14159));
     coordinate coords[MAP_HEIGHT * MAP_WIDTH] = {0};

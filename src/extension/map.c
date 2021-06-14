@@ -42,7 +42,7 @@ void initializeMap() {
   // initializes bottom part
   for (int i = MAP_HEIGHT * BOTTOM_GROUND; i < MAP_HEIGHT; i++) {
     for (int j = 0; j < MAP_WIDTH; j++) {
-      map[i][j] = '@';
+      map[i][j] = '#';
     }
   }
 }

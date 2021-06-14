@@ -7,11 +7,15 @@
 #define PI 3.14159
 #define GRAVITY 9.8
 #define HORIZONTAL_STARTING_OFFSET 5
-#define VERTICAL_STARTING_OFFSET (MAP_HEIGHT - 10)
+#define VERTICAL_STARTING_OFFSET (MAP_HEIGHT - 9)
 #define TIME_INTERVAL 0.1
 
 bool inMap(coordinate position) {
-  return position.x >= 0 && position.y <= MAP_HEIGHT && position.x <= MAP_WIDTH;
+  return position.x >= 0 && position.x <= MAP_WIDTH;
+}
+
+bool isCollision(coordinate position) {
+  return (position.y < 0 || map[position.y][position.x] != '#');
 }
 
 void printCoordinates(coordinate *coords) {
@@ -34,7 +38,7 @@ void toRadians(player_input *input) {
 }
 
 void printXY(coordinate coord) {
-  printf("(%d,%d)\n", (int) coord.x, (int)coord.y);
+  printf("(%d,%d)\n", coord.x, coord.y);
 }
 
 void parabola(player_input input, coordinate *coords) { // FIX: currently only works with 60 < angles < 90
@@ -46,21 +50,16 @@ void parabola(player_input input, coordinate *coords) { // FIX: currently only w
 
   double interval = 1 / (input.power * 0.5); 
   int coord = 1;
-  for (double time = 0; inMap(position); time += interval) {
-    
+  for (double time = 0; inMap(position) && isCollision(position); time += interval) {
     double x = getX(input.power, input.angle, time);
-    position.y = VERTICAL_STARTING_OFFSET - getY(input.power, input.angle, x);
-    position.x = HORIZONTAL_STARTING_OFFSET + x;
-
-    //printXY(position);
-    if (map[position.y][position.x] == '@' || !inMap(position)) {
-      break;
-    } 
-
+    position.y = coords[0].y - getY(input.power, input.angle, x);
+    position.x = coords[0].x + x;
+    printXY(position);
     coords[coord] = position;
     coord++;
   }
-  coords[coord] = (coordinate) {-1, -1};
+  printf("TEST\n");
+  coords[coord - 1] = (coordinate) {-1, -1};
 }
 
 void printParabola(coordinate points[]) {
@@ -69,6 +68,7 @@ void printParabola(coordinate points[]) {
     for (int i = 0; points[i].x != -1; i++) {
        printXY(points[i]);
        if (points[i].y >= 0) { 
+          
           map[points[i].y][points[i].x] = '.';
        }
     }
