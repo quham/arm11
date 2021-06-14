@@ -17,6 +17,11 @@ typedef struct player_input {
   double power;  // inital velocity ?
 } player_input;
 
+typedef struct player{
+  coordinate curr_position;//replace with array?
+  int health;
+} player;
+
 extern char map[MAP_HEIGHT][MAP_WIDTH];
 
 // parabola.c
