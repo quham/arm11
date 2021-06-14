@@ -9,16 +9,22 @@
 #include "worms.h"
 
 char map[MAP_HEIGHT][MAP_WIDTH];
-player player_1; 
-player player_2;
+player player_1, player_2;
 
 int main(void) {
   startAnimation();
   initializeMap();
+<<<<<<< HEAD
   player_1 = (player) {{5, MAP_HEIGHT - 10}, 100}; // TODO: define constants
   player_2 = (player) {{MAP_WIDTH - 5, MAP_HEIGHT - 10}, 100};
   addTanks();
   printMap();
+=======
+  printMap();
+  player_1 = (player){{5, MAP_HEIGHT - 9}, 100};  // TODO: define constants
+  player_2 = (player){{MAP_WIDTH - 5, MAP_HEIGHT - 9}, 100};
+  addTanks();
+>>>>>>> de3fcf0b362ac0caa2deac2b2bce036d2f7499ed
 
   player *current_player = &player_1;
   while (true) {

@@ -46,9 +46,12 @@ void initializeMap() {
     }
   }
 }
-void addTanks(void){//need delete tank function equivalent setting to ' ' for movement
+
+// TODO: movement seperate into add each tank and make remove tank
+void addTanks(void) {
   int x = player_1.curr_position.x;
   int y = player_1.curr_position.y;
+<<<<<<< HEAD
   map[y][x] = '/';
   map[y][x-1] = '_';
   map[y+1][x] = '|';
@@ -61,6 +64,20 @@ void addTanks(void){//need delete tank function equivalent setting to ' ' for mo
   map[y+1][x] = '|';
   map[y+1][x+1] = '2';
   map[y+1][x+2] = '|';
+=======
+  map[x][y] = '/';
+  map[x - 1][y] = '-';
+  map[x][y + 1] = '|';
+  map[x - 1][y + 1] = '1';
+  map[x - 2][y + 1] = '|';
+  x = player_2.curr_position.x;
+  y = player_2.curr_position.y;
+  map[x][y] = '\\';
+  map[x + 1][y] = '-';
+  map[x][y + 1] = '|';
+  map[x + 1][y + 1] = '2';
+  map[x + 2][y + 1] = '|';
+>>>>>>> de3fcf0b362ac0caa2deac2b2bce036d2f7499ed
 }
 
 void printMap() {

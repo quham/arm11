@@ -23,8 +23,7 @@ typedef struct player {
 } player;
 
 extern char map[MAP_HEIGHT][MAP_WIDTH];
-extern player player_1; 
-extern player player_2;
+extern player player_1, player_2; 
 
 // Player turn
 void playerTurn(player, player_input);
