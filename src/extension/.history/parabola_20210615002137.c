@@ -57,10 +57,10 @@ void parabola(player_input input,
     coords[coord] = position;
     coord++;
   }
-  printf("TEST\n");
+  printf("TESTing\n");
   coordinate c ;
-  c.x = 5;
-  c.y = 5;
+  c.x = -1;
+  c.y = -1;
   printf("done");
   coords[coord - 1] = c;
   printf("done");

@@ -49,18 +49,18 @@ void initializeMap() {
 void addTanks(void){//need delete tank function equivalent setting to ' ' for movement
   int x = player_1.curr_position.x;
   int y = player_1.curr_position.y;
-  map[y][x] = '/';
-  map[y][x-1] = '_';
-  map[y+1][x] = '|';
-  map[y+1][x-1] = '1';
-  map[y+1][x-2]= '|';
+  map[x][y] = '/';
+  map[x-1][y] = '-';
+  map[x][y+1] = '|';
+  map[x-1][y+1] = '1';
+  map[x-2][y+1] = '|';
   x = player_2.curr_position.x;
   y = player_2.curr_position.y;
-  map[y][x] = '\\';
-  map[y][x+1] = '_';
-  map[y+1][x] = '|';
-  map[y+1][x+1] = '2';
-  map[y+1][x+2] = '|';
+  map[x][y] = '\\';
+  map[x+1][y] = '-';
+  map[x][y+1] = '|';
+  map[x+1][y+1] = '2';
+  map[x+2][y+1] = '|';
 }
 
 void printMap() {

@@ -15,10 +15,10 @@ player player_2;
 int main(void) {
   startAnimation();
   initializeMap();
-  player_1 = (player) {{5, MAP_HEIGHT - 10}, 100}; // TODO: define constants
-  player_2 = (player) {{MAP_WIDTH - 5, MAP_HEIGHT - 10}, 100};
   addTanks();
   printMap();
+  player_1 = (player) {{5, MAP_HEIGHT - 9}, 100}; // TODO: define constants
+  player_2 = (player) {{MAP_WIDTH - 5, MAP_HEIGHT - 9}, 100};
 
   player *current_player = &player_1;
   while (true) {
