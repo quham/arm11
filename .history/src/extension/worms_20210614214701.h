@@ -23,13 +23,9 @@ typedef struct player {
 } player;
 
 extern char map[MAP_HEIGHT][MAP_WIDTH];
-extern player player_1; 
-extern player player_2;
 
 // Player turn
 void playerTurn(player, player_input);
-void updateCoord(char, coordinate);
-bool isTankCollision(coordinate);
 
 // Parabola
 void parabola(player_input, coordinate*);
@@ -38,7 +34,6 @@ void printParabola(coordinate points[]);
 // Map
 void printMap();
 void initializeMap();
-void addTanks(void);
 
 // Wormscii
 #define INPUT_SIZE 4

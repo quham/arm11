@@ -13,7 +13,7 @@ bool inMap(coordinate position) {
 }
 
 bool isCollision(coordinate position) {
-  return position.y >= 0 && map[position.y][position.x] == '#';
+  return (position.y < 0 || map[position.y][position.x] != '#');
 }
 
 void printCoordinates(coordinate *coords) {

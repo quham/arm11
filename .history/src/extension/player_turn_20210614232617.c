@@ -1,6 +1,5 @@
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "worms.h"
 
@@ -14,8 +13,8 @@ void playerTurn(player player, player_input input) {
   parabola(input, coords);
   for (int i = 1; coords[i].x != -1; i++) {//condition for for loop? add skip
     isTankCollision(coords[i]);
-    updateCoord(BOMB_CHR, coords[i]);
-    updateCoord(TRAIL_CHR, coords[i - 1]);
+    updatePoint(BOMB_CHR, coords[i]);
+    updatePoint(TRAIL_CHR, coords[i - 1]);
   }
 }
 

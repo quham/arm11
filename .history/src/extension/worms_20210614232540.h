@@ -29,7 +29,7 @@ extern player player_2;
 // Player turn
 void playerTurn(player, player_input);
 void updateCoord(char, coordinate);
-bool isTankCollision(coordinate);
+bool isTankCollision(coordinate){
 
 // Parabola
 void parabola(player_input, coordinate*);
