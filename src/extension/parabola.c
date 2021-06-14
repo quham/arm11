@@ -6,8 +6,6 @@
 #include "worms.h"
 #define PI 3.14159
 #define GRAVITY 9.8
-#define HORIZONTAL_STARTING_OFFSET 5
-#define VERTICAL_STARTING_OFFSET (MAP_HEIGHT - 9)
 #define TIME_INTERVAL 0.1
 
 bool inMap(coordinate position) {
@@ -20,13 +18,14 @@ bool isCollision(coordinate position) {
 
 void printCoordinates(coordinate *coords) {
   while (inMap(coords[0])) {
-    printf("(%d,%d)\n", (int)coords->x, (int)coords->y); 
+    printf("(%d,%d)\n", (int)coords->x, (int)coords->y);
     coords++;
   }
 }
 
 double getY(double initial_velocity, double angle, double x) {
-  return ((x * tan(angle)) - ((GRAVITY * pow(x, 2) * (1 + pow(tan(angle), 2)) / (2 * pow(initial_velocity, 2)))));
+  return ((x * tan(angle)) -
+          ((GRAVITY * pow(x, 2) * (1 + pow(tan(angle), 2)) / (2 * pow(initial_velocity, 2)))));
 }
 
 double getX(double initial_veloctiy, double angle, double time) {
@@ -41,14 +40,14 @@ void printXY(coordinate coord) {
   printf("(%d,%d)\n", coord.x, coord.y);
 }
 
-void parabola(player_input input, coordinate *coords) { // FIX: currently only works with 60 < angles < 90
+void parabola(player_input input,
+              coordinate *coords) {  // FIX: currently only works with 60 < angles < 90
   toRadians(&input);
-  
-  
-  coordinate position = coords[0]; //TODO: turret pos - will be given
+
+  coordinate position = coords[0];  // TODO: turret pos - will be given
   printXY(position);
 
-  double interval = 1 / (input.power * 0.5); 
+  double interval = 1 / (input.power * 0.5);
   int coord = 1;
   for (double time = 0; inMap(position) && isCollision(position); time += interval) {
     double x = getX(input.power, input.angle, time);
@@ -59,18 +58,17 @@ void parabola(player_input input, coordinate *coords) { // FIX: currently only w
     coord++;
   }
   printf("TEST\n");
-  coords[coord - 1] = (coordinate) {-1, -1};
+  coords[coord - 1] = (coordinate){-1, -1};
 }
 
 void printParabola(coordinate points[]) {
- // printCoordinates(points);
-    
-    for (int i = 0; points[i].x != -1; i++) {
-       printXY(points[i]);
-       if (points[i].y >= 0) { 
-          
-          map[points[i].y][points[i].x] = '.';
-       }
+  // printCoordinates(points);
+
+  for (int i = 0; points[i].x != -1; i++) {
+    printXY(points[i]);
+    if (points[i].y >= 0) {
+      map[points[i].y][points[i].x] = '.';
     }
-    printMap();
+  }
+  printMap();
 }

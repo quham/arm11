@@ -13,29 +13,37 @@ typedef struct coordinate {
 } coordinate;
 
 typedef struct player_input {
-  double angle;
-  double power;  // inital velocity ?
+  int angle;
+  int power;
 } player_input;
 
-typedef struct player{
-  coordinate curr_position;//replace with array?
+typedef struct player {
+  coordinate curr_position;
   int health;
 } player;
 
 extern char map[MAP_HEIGHT][MAP_WIDTH];
 
-// parabola.c
-void parabola(player_input input, coordinate* coords);
+// Player turn
+void playerTurn(player, player_input);
+
+// Parabola
+void parabola(player_input, coordinate*);
 void printParabola(coordinate points[]);
 
-// map.c
+// Map
 void printMap();
 void initializeMap();
 
-// Wormscii.c
+// Wormscii
+#define INPUT_SIZE 4
+#define MAX_POWER 100
 player_input getPlayerInput(void);
-void printInput(player_input input);
-bool checkInput(char input[]);
+bool digitInput(char input[]);
 int getInt(void);
+void startAnimation(void);
+void exitAnimation(void);
+void getLine(char *input);
+void announceWinner(int player_number);
 
 #endif
