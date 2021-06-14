@@ -9,7 +9,7 @@ LIBS   = -lm
 all: wormscii
 
 wormscii: wormscii.o map.o parabola.o player_turn.o
-	$(CC) $(CFLAGS)	wormscii.o parabola.o map.o -o wormscii $(LIBS)
+	$(CC) $(CFLAGS)	wormscii.o parabola.o map.o player_turn.o -o wormscii $(LIBS)
 
 
 wormscii.o: worms.h
