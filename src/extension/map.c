@@ -12,7 +12,7 @@
 #define BOTTOM_HILL_START 0.37
 #define BOTTOM_HILL_END 0.68
 
-void initializeMap(char map[MAP_HEIGHT][MAP_WIDTH]) {
+void initializeMap() {
   // initializes upper part
   for (int i = 0; i < MAP_HEIGHT * UPPER_SKY; i++) {
     for (int j = 0; j < MAP_WIDTH; j++) {
@@ -47,7 +47,7 @@ void initializeMap(char map[MAP_HEIGHT][MAP_WIDTH]) {
   }
 }
 
-void printMap(char map[MAP_HEIGHT][MAP_WIDTH]) {
+void printMap() {
   printf(" ");
   for (int i = 0; i < MAP_WIDTH; i++) {
     printf("-");

@@ -7,7 +7,7 @@
 #define PI 3.14159
 #define GRAVITY 9.8
 #define HORIZONTAL_STARTING_OFFSET 5
-#define VERTICAL_STARTING_OFFSET (8 + MAP_HEIGHT)
+#define VERTICAL_STARTING_OFFSET (MAP_HEIGHT - 10)
 #define TIME_INTERVAL 0.1
 
 bool inMap(coordinate position) {
@@ -37,35 +37,40 @@ void printXY(coordinate coord) {
   printf("(%d,%d)\n", (int) coord.x, (int)coord.y);
 }
 
-coordinate *parabola(player_input input) { // FIX: currently only works with 60 < angles < 90
+void parabola(player_input input, coordinate *coords) { // FIX: currently only works with 60 < angles < 90
   toRadians(&input);
- 
-  coordinate *coords = calloc(sizeof(coordinate), MAP_HEIGHT * MAP_WIDTH); //TODO: maxsize 
-  coordinate position = {0, 0}; //TODO: turret pos - will be given
+  
+  
+  coordinate position = coords[0]; //TODO: turret pos - will be given
+  printXY(position);
 
   double interval = 1 / (input.power * 0.5); 
-  int coord = 0;
+  int coord = 1;
   for (double time = 0; inMap(position); time += interval) {
     
-    position.x = HORIZONTAL_STARTING_OFFSET + getX(input.power, input.angle, time);
-    position.y = VERTICAL_STARTING_OFFSET - getY(input.power, input.angle, position.x);
-    printXY(position);
+    double x = getX(input.power, input.angle, time);
+    position.y = VERTICAL_STARTING_OFFSET - getY(input.power, input.angle, x);
+    position.x = HORIZONTAL_STARTING_OFFSET + x;
+
+    //printXY(position);
+    if (map[position.y][position.x] == '@' || !inMap(position)) {
+      break;
+    } 
+
     coords[coord] = position;
     coord++;
   }
-
-  return coords;
+  coords[coord] = (coordinate) {-1, -1};
 }
 
-void printParabola(char map[MAP_HEIGHT][MAP_WIDTH], coordinate points[]) {
+void printParabola(coordinate points[]) {
  // printCoordinates(points);
-    for (int i = 0; i < MAP_HEIGHT * MAP_WIDTH; i++) {
-        char *ch = &map[(int) points[i].y][(int) points[i].x];
-        if ( *ch == '#') {
-            break;
-        } else if (*ch == ' ') {
-              *ch = '.';
-        }
+    
+    for (int i = 0; points[i].x != -1; i++) {
+       printXY(points[i]);
+       if (points[i].y >= 0) { 
+          map[points[i].y][points[i].x] = '.';
+       }
     }
-    printMap(map);
+    printMap();
 }
