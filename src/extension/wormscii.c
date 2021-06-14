@@ -10,6 +10,8 @@
 #define MAX_POWER 100
 #define INPUT_SIZE 10  // 10 should be enough for small integers
 
+char map[MAP_HEIGHT][MAP_WIDTH];
+
 int main(void) {
     printf("                                    \n");
     printf("      ~^~@  WELCOME TO WORMSCII  @~^~\n");
@@ -19,15 +21,18 @@ int main(void) {
     //INTRODUCTION / GAME RULES ??
     system("clear");
 
-    char map[MAP_HEIGHT][MAP_WIDTH];
-    initializeMap(map);
-    //printMap(map);
+    
+    initializeMap();
 
-    player_input input = {65, 35};
+    player_input input = {60, 30};
+   
     //printf("%f\n", tan(3.14159));
-    coordinate *coords = parabola(input);
+    coordinate coords[MAP_HEIGHT * MAP_WIDTH] = {0};
+    
+    coords[0] = (coordinate) {5, (MAP_HEIGHT - 9)};
+    parabola(input, coords);
 
-    printParabola(map,coords);
+    printParabola(coords);
 
     // ENTER GAME LOOP
     //while(1)

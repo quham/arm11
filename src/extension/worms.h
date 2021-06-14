@@ -8,8 +8,8 @@
 #define MAP_HEIGHT 40
 
 typedef struct coordinate {
-  double x;
-  double y;
+  int x;
+  int y;
 } coordinate;
 
 typedef struct player_input {
@@ -17,15 +17,15 @@ typedef struct player_input {
   double power;  // inital velocity ?
 } player_input;
 
-
+extern char map[MAP_HEIGHT][MAP_WIDTH];
 
 // parabola.c
-coordinate *parabola(player_input input);
-void printParabola(char map[MAP_HEIGHT][MAP_WIDTH], coordinate points[]);
+void parabola(player_input input, coordinate* coords);
+void printParabola(coordinate points[]);
 
 // map.c
-void printMap(char map[MAP_HEIGHT][MAP_WIDTH]);
-void initializeMap(char map[MAP_HEIGHT][MAP_WIDTH]);
+void printMap();
+void initializeMap();
 
 // Wormscii.c
 player_input getPlayerInput(void);
