@@ -9,7 +9,7 @@ bool isCollision(coordinate coord) {
   return !aboveMap(coord) && (map[coord.y][coord.x] == '#' || isTankCollision(coord));
 }
 
-// TODO: compute coorect coords when player 2 is shooting
+// TODO: compute correct coords when player 2 is shooting
 double getY(double initial_velocity, double angle, double time) {
   return sin(angle) * initial_velocity * time - GRAVITY * pow(time, 2) / 2;
 }
