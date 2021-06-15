@@ -77,6 +77,6 @@ void exitAnimation(void);
 void getLine(char *input);
 void announceWinner(int player_number);
 bool haveWinner(void);
-player *swapPlayer(player *current_player);
-
+//player *swapPlayer(player *current_player);
+void swapPlayer(player **current_player);
 #endif

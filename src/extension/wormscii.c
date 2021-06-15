@@ -29,13 +29,13 @@ int main(void) {
     if (haveWinner()) {
         break;
     }
-    current_player = swapPlayer(current_player);
+    swapPlayer(&current_player);
   }
 
   exitAnimation();
   return EXIT_SUCCESS;
 }
-
+//    current_player = swapPlayer(current_player);
 void printHealth(void) {
   printf("Player 1, current health: %d\n", player_1.health);
   printf("Player 2, current health: %d\n", player_2.health);
@@ -98,11 +98,19 @@ bool haveWinner(void) {
     return false;
 }
 
-player *swapPlayer(player *current_player) {
-    if (current_player->player_no == 1) {
-        return &player_2;
+//player *swapPlayer(player *current_player) {
+//    if (current_player->player_no == 1) {
+//        return &player_2;
+//    } else {
+//        return &player_1;
+//    }
+//}
+
+void swapPlayer(player **current_player) {
+    if ((*current_player)->player_no == 1) {
+        *current_player = &player_2;
     } else {
-        return &player_1;
+        *current_player = &player_1;
     }
 }
 
