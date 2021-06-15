@@ -13,25 +13,27 @@ player player_1, player_2;
 
 int main(void) {
   startAnimation();
-  player_1 = (player) {{5, MAP_HEIGHT - 10}, 100}; // TODO: define constants
-  player_2 = (player) {{MAP_WIDTH - 5, MAP_HEIGHT - 10}, 100};
+  player_1 = (player){{5, MAP_HEIGHT - 10}, 100};  // TODO: define constants
+  player_2 = (player){{MAP_WIDTH - 5, MAP_HEIGHT - 10}, 100};
   initializeMap();
   printMap();
   movePlayer(player_2, 20, 2, -1);
   printMap();
   player *current_player = &player_2;
   while (true) {
-    //Print player turn
-    player_input input = getPlayerInput();
+    player_input input;
+    printHealth();
     if (current_player == &player_1) {
       current_player = &player_2;
+      printf("Player 2's Turn\n");
+      input = getPlayerInput();
       input.angle = 180 - input.angle;
     } else {
       current_player = &player_1;
+      printf("Player 1's Turn\n");
+      input = getPlayerInput();
     }
     playerTurn(*current_player, input);
-    printMap();
-    printHealth();
     if (player_1.health <= 0) {
       announceWinner(2);
       break;
@@ -40,13 +42,12 @@ int main(void) {
       announceWinner(1);
       break;
     }
-    //initializeMap();
-    
   }
   exitAnimation();
   return EXIT_SUCCESS;
 }
-void printHealth(void){
+
+void printHealth(void) {
   printf("Player 1, current health: %d\n", player_1.health);
   printf("Player 2, current health: %d\n", player_2.health);
 }
@@ -59,7 +60,7 @@ player_input getPlayerInput(void) {
   for (; power > MAX_POWER || power < MIN_POWER; power = getInt()) {
     printf("Power should be in range %d..%d%%, try again: ", MIN_POWER, MAX_POWER);
   }
-  input.power = power / 2; // temporary division
+  input.power = power / 2;  // temporary division
 
   printf("Enter the angle: ");
   input.angle = getInt() % 360;

@@ -3,10 +3,19 @@
 
 #include <stdbool.h>
 
+// Game Settings
+#define SHOT_DAMAGE 20
+
 /* TO BE CONFIRMED */
 #define MAP_WIDTH 132
 #define MAP_HEIGHT 40
 #define TERM_COORD ((coordinate){-1, -1})
+
+// Characters
+#define BOMB_CHR '@'
+#define EMPTY_CHR ' '
+#define TRAIL_CHR '.'
+#define MAP_CHR '#'
 
 typedef struct coordinate {
   int x;
@@ -38,6 +47,12 @@ void movePlayer(player player, int move_no, int player_no, int direction);
 #define TIME_INTERVAL 0.1
 void parabola(player_input, coordinate *);
 void printParabola(coordinate points[]);
+bool isCollision(coordinate);
+bool isTankCol(coordinate);
+bool isMapCol(coordinate);
+double getY(double initial_velocity, double angle, double time);
+double getX(double initial_velocity, double angle, double time);
+double toRadians(player_input *);
 
 // Map
 void printMap();
