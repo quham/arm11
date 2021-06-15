@@ -30,6 +30,7 @@ extern player player_1, player_2;
 void playerTurn(player, player_input);
 void updateCoord(coordinate, char);
 bool isTankCollision(coordinate);
+void movePlayer(player player, int move_no, int player_no, int direction);
 
 // Parabola
 #define PI 3.14159

@@ -17,7 +17,8 @@ int main(void) {
   player_2 = (player) {{MAP_WIDTH - 5, MAP_HEIGHT - 10}, 100};
   initializeMap();
   printMap();
-
+  movePlayer(player_2, 20, 2, -1);
+  printMap();
   player *current_player = &player_2;
   while (true) {
     //Print player turn

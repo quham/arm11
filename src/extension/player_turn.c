@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #include "worms.h"
 
@@ -36,3 +37,47 @@ void updateCoord(coordinate coord, char ch) {
     map[coord.y][coord.x] = ch;
   }
 }
+
+void movePlayer(player player, int move_no, int player_no, int direction) {
+    int movement_no = 0;
+    int x = player.curr_coord.x;
+    int y = player.curr_coord.y;
+
+    int player_offset = player_no == 1 ? 1 : -1;
+
+    move_no = move_no * direction;
+    int move_offset = 0;
+
+    if (player_no == 1) {
+        if(direction == -1) {
+            move_offset = -2;
+        }
+    } else if (direction == 1) {
+        move_offset  = 2;
+    }
+
+    // ensures safety of the move
+    // just checks for one point, so the pointy edge wont work
+    coordinate p1 = {x + move_offset, y};
+    while (abs(movement_no) <= abs(move_no)) {
+        p1.x += direction;
+        if (!inBounds(p1) || map[p1.y][p1.x] != ' ') {
+            break;
+        }
+        movement_no += direction;
+    }
+
+    map[y][x] = ' ';
+    map[y][x - player_offset] = ' ';
+    map[y + 1][x] = ' ';
+    map[y + 1][x - player_offset] = ' ';
+    map[y + 1][x - 2 * player_offset] = ' ';
+
+    map[y][x + movement_no] = '/';
+    map[y][x - player_offset + movement_no] = '_';
+    map[y + 1][x + movement_no] = '|';
+    map[y + 1][x - player_offset + movement_no] = '0' + player_no;
+    map[y + 1][x - 2 * player_offset + movement_no] = '|';
+    printf("%d", movement_no);
+}
+
