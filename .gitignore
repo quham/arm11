@@ -38,3 +38,4 @@ assemble
 
 #ignore junk IDE files
 .idea
+.history
