@@ -9,12 +9,11 @@ bool isCollision(coordinate coord) {
   return !aboveMap(coord) && (map[coord.y][coord.x] == '#' || isTankCollision(coord));
 }
 
-// TODO: fix
 bool isTankCollision(coordinate coord) {
   int x1 = player_1.curr_coord.x;
   int x2 = player_2.curr_coord.x;
   char ch = map[coord.y][coord.x];
-  printf("%c",ch);
+  printf("%c", ch);
   if (ch == '#' || ch == ' ') {
     return false;
   }
@@ -24,10 +23,8 @@ bool isTankCollision(coordinate coord) {
     player_2.health -= 10;
   }
   return true;
-  
 }
 
-// TODO: compute correct coords when player 2 is shooting
 double getY(double initial_velocity, double angle, double time) {
   return sin(angle) * initial_velocity * time - GRAVITY * pow(time, 2) / 2;
 }
@@ -46,7 +43,7 @@ void parabola(player_input input, coordinate *coords) {
   coordinate coord = coords[1];
   const coordinate start_coord = coords[0];
 
-  double interval = 1 / (input.power * 0.5);
+  double interval = 1 / (input.power * 0.75);  // magic number
   int i = 1;
   for (double time = interval; inBounds(coord) && !isCollision(coord); time += interval, i++) {
     coord.y = start_coord.y - getY(input.power, angle, time);
