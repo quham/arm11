@@ -8,6 +8,12 @@
 #define MAP_HEIGHT 40
 #define TERM_COORD ((coordinate){-1, -1})
 
+// characters
+#define BOMB_CHR '@'
+#define EMPTY_CHR ' '
+#define TRAIL_CHR '.'
+#define MAP_CHR '#'
+
 typedef struct coordinate {
   int x;
   int y;

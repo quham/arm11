@@ -17,16 +17,16 @@ void initializeMap() {
   // initializes upper part
   for (int i = 0; i < MAP_HEIGHT * UPPER_SKY; i++) {
     for (int j = 0; j < MAP_WIDTH; j++) {
-      map[i][j] = ' ';
+      map[i][j] = EMPTY_CHR;
     }
   }
   // initializes upper half of the hill
   for (int i = MAP_HEIGHT * UPPER_SKY; i < MAP_HEIGHT * MIDDLE_GROUND; i++) {
     for (int j = 0; j < MAP_WIDTH; j++) {
       if (MAP_WIDTH * UPPER_HILL_START < j && j < MAP_WIDTH * UPPER_HILL_END) {
-        map[i][j] = '#';
+        map[i][j] = MAP_CHR;
       } else {
-        map[i][j] = ' ';
+        map[i][j] = EMPTY_CHR;
       }
     }
   }
@@ -34,16 +34,16 @@ void initializeMap() {
   for (int i = MAP_HEIGHT * MIDDLE_GROUND; i < MAP_HEIGHT * BOTTOM_GROUND; i++) {
     for (int j = 0; j < MAP_WIDTH; j++) {
       if (MAP_WIDTH * BOTTOM_HILL_START < j && j < MAP_WIDTH * BOTTOM_HILL_END) {
-        map[i][j] = '#';
+        map[i][j] = MAP_CHR;
       } else {
-        map[i][j] = ' ';
+        map[i][j] = EMPTY_CHR;
       }
     }
   }
   // initializes bottom part
   for (int i = MAP_HEIGHT * BOTTOM_GROUND; i < MAP_HEIGHT; i++) {
     for (int j = 0; j < MAP_WIDTH; j++) {
-      map[i][j] = '#';
+      map[i][j] = MAP_CHR;
     }
   }
   addTanks();
