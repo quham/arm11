@@ -45,24 +45,33 @@ void initializeMap() {
       map[i][j] = '#';
     }
   }
+  addTanks();
 }
 
-// TODO: movement seperate into add each tank and make remove tank
+bool inBounds(coordinate coord) {
+  return coord.x >= 0 && coord.x <= MAP_WIDTH;
+}
+
+bool aboveMap(coordinate coord) {
+  return coord.y < 0;
+}
+
+// TODO: movement: seperate into add each tank and make remove tank
 void addTanks(void) {
-  int x = player_1.curr_position.x;
-  int y = player_1.curr_position.y;
+  int x = player_1.curr_coord.x;
+  int y = player_1.curr_coord.y;
   map[y][x] = '/';
-  map[y][x-1] = '_';
-  map[y+1][x] = '|';
-  map[y+1][x-1] = '1';
-  map[y+1][x-2]= '|';
-  x = player_2.curr_position.x;
-  y = player_2.curr_position.y;
+  map[y][x - 1] = '_';
+  map[y + 1][x] = '|';
+  map[y + 1][x - 1] = '1';
+  map[y + 1][x - 2] = '|';
+  x = player_2.curr_coord.x;
+  y = player_2.curr_coord.y;
   map[y][x] = '\\';
-  map[y][x+1] = '_';
-  map[y+1][x] = '|';
-  map[y+1][x+1] = '2';
-  map[y+1][x+2] = '|';
+  map[y][x + 1] = '_';
+  map[y + 1][x] = '|';
+  map[y + 1][x + 1] = '2';
+  map[y + 1][x + 2] = '|';
 }
 
 void printMap() {

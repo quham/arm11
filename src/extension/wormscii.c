@@ -13,16 +13,20 @@ player player_1, player_2;
 
 int main(void) {
   startAnimation();
-  initializeMap();
   player_1 = (player) {{5, MAP_HEIGHT - 10}, 100}; // TODO: define constants
   player_2 = (player) {{MAP_WIDTH - 5, MAP_HEIGHT - 10}, 100};
-  addTanks();
+  initializeMap();
   printMap();
 
-  player *current_player = &player_1;
+  player *current_player = &player_2;
   while (true) {
     player_input input = getPlayerInput();
-    current_player = (current_player == &player_1) ? &player_2 : &player_1;
+    if (current_player == &player_1) {
+      current_player = &player_2;
+      input.angle = input.angle - 90;
+    } else {
+      current_player = &player_1;
+    }
     playerTurn(*current_player, input);
     if (player_1.health <= 0) {
       announceWinner(2);
@@ -32,6 +36,8 @@ int main(void) {
       announceWinner(1);
       break;
     }
+    initializeMap();
+    printMap();
   }
   exitAnimation();
   return EXIT_SUCCESS;
@@ -42,13 +48,13 @@ player_input getPlayerInput(void) {
 
   printf("Enter the %% power: ");
   int power = getInt();
-  for (; power > MAX_POWER; power = getInt()) {
-    printf("Power should be below %d%%, try again: ", MAX_POWER);
+  for (; power > MAX_POWER || power < MIN_POWER; power = getInt()) {
+    printf("Power should be in range %d..%d%%, try again: ", MIN_POWER, MAX_POWER);
   }
-  input.power = power;
+  input.power = power / 2; // temporary division
 
   printf("Enter the angle: ");
-  input.angle = getInt();
+  input.angle = getInt() % 360;
 
   return input;
 }
