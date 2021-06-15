@@ -3,12 +3,15 @@
 
 #include <stdbool.h>
 
+// Game Settings
+#define SHOT_DAMAGE 20
+
 /* TO BE CONFIRMED */
 #define MAP_WIDTH 132
 #define MAP_HEIGHT 40
 #define TERM_COORD ((coordinate){-1, -1})
 
-// characters
+// Characters
 #define BOMB_CHR '@'
 #define EMPTY_CHR ' '
 #define TRAIL_CHR '.'
@@ -35,7 +38,6 @@ extern player player_1, player_2;
 // Player turn
 void playerTurn(player, player_input);
 void updateCoord(coordinate, char);
-bool isTankCollision(coordinate);
 
 // Parabola
 #define PI 3.14159
@@ -43,6 +45,12 @@ bool isTankCollision(coordinate);
 #define TIME_INTERVAL 0.1
 void parabola(player_input, coordinate *);
 void printParabola(coordinate points[]);
+bool isCollision(coordinate);
+bool isTankCol(coordinate);
+bool isMapCol(coordinate);
+double getY(double initial_velocity, double angle, double time);
+double getX(double initial_velocity, double angle, double time);
+double toRadians(player_input *);
 
 // Map
 void printMap();
