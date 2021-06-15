@@ -13,36 +13,25 @@ player player_1, player_2;
 
 int main(void) {
   startAnimation();
-  player_1 = (player){{5, MAP_HEIGHT - 10}, 100};  // TODO: define constants
-  player_2 = (player){{MAP_WIDTH - 5, MAP_HEIGHT - 10}, 100};
+  player_1 = (player){{5, MAP_HEIGHT - 10}, MAX_HEALTH, 1};  // TODO: define constants
+  player_2 = (player){{MAP_WIDTH - 5, MAP_HEIGHT - 10}, MAX_HEALTH, 2};
   initializeMap();
   printMap();
-  movePlayer(player_2, 20, 2, -1);
-  printMap();
-  player *current_player = &player_2;
+  player_input input;
+  player *current_player = &player_1;
+
   while (true) {
-    player_input input;
     printHealth();
-    if (current_player == &player_1) {
-      current_player = &player_2;
-      printf("Player 2's Turn\n");
-      input = getPlayerInput();
-      input.angle = 180 - input.angle;
-    } else {
-      current_player = &player_1;
-      printf("Player 1's Turn\n");
-      input = getPlayerInput();
-    }
+    printf("Player %d's Turn\n", current_player->player_no);
+    input = getPlayerInput();
+    input.angle = current_player->player_no == 1 ? input.angle : 180 - input.angle;
     playerTurn(*current_player, input);
-    if (player_1.health <= 0) {
-      announceWinner(2);
-      break;
+    if (haveWinner()) {
+        break;
     }
-    if (player_2.health <= 0) {
-      announceWinner(1);
-      break;
-    }
+    current_player = swapPlayer(current_player);
   }
+
   exitAnimation();
   return EXIT_SUCCESS;
 }
@@ -96,6 +85,26 @@ bool digitInput(char input[]) {
 void startAnimation(void) {}
 
 void exitAnimation(void) {}
+
+bool haveWinner(void) {
+    if (player_1.health <= 0) {
+        announceWinner(2);
+        return true;
+    }
+    if (player_2.health <= 0) {
+        announceWinner(1);
+        return true;
+    }
+    return false;
+}
+
+player *swapPlayer(player *current_player) {
+    if (current_player->player_no == 1) {
+        return &player_2;
+    } else {
+        return &player_1;
+    }
+}
 
 void announceWinner(int player_number) {
   printf("\nPlayer %d Wins!\n", player_number);

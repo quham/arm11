@@ -30,6 +30,7 @@ typedef struct player_input {
 typedef struct player {
   coordinate curr_coord;
   int health;
+  int player_no;
 } player;
 
 extern char map[MAP_HEIGHT][MAP_WIDTH];
@@ -39,7 +40,7 @@ extern player player_1, player_2;
 void playerTurn(player, player_input);
 void updateCoord(coordinate, char);
 bool isTankCollision(coordinate);
-void movePlayer(player player, int move_no, int player_no, int direction);
+void movePlayer(player *player, int movement_no, int direction);
 
 // Parabola
 #define PI 3.14159
@@ -57,12 +58,14 @@ double toRadians(player_input *);
 // Map
 void printMap();
 void initializeMap();
-void addTanks(void);
+void addTank(player);
+void removeTank(player);
 bool inBounds(coordinate);
 bool aboveMap(coordinate);
 
 // Wormscii
 #define INPUT_SIZE 4
+#define MAX_HEALTH 100
 #define MAX_POWER 100
 #define MIN_POWER 10
 player_input getPlayerInput(void);
@@ -73,5 +76,7 @@ void startAnimation(void);
 void exitAnimation(void);
 void getLine(char *input);
 void announceWinner(int player_number);
+bool haveWinner(void);
+player *swapPlayer(player *current_player);
 
 #endif

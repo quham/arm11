@@ -46,33 +46,17 @@ void initializeMap() {
       map[i][j] = MAP_CHR;
     }
   }
-  addTanks();
+  //addTanks();
+  addTank(player_1);
+  addTank(player_2);
 }
 
 bool inBounds(coordinate coord) {
-  return coord.x >= 0 && coord.x <= MAP_WIDTH;
+  return coord.x >= 0 && coord.x < MAP_WIDTH;
 }
 
 bool aboveMap(coordinate coord) {
   return coord.y < 0;
-}
-
-// TODO: movement: seperate into add each tank and make remove tank
-void addTanks(void) {
-  int x = player_1.curr_coord.x;
-  int y = player_1.curr_coord.y;
-  map[y][x] = '/';
-  map[y][x - 1] = '_';
-  map[y + 1][x] = '|';
-  map[y + 1][x - 1] = '1';
-  map[y + 1][x - 2] = '|';
-  x = player_2.curr_coord.x;
-  y = player_2.curr_coord.y;
-  map[y][x] = '\\';
-  map[y][x + 1] = '_';
-  map[y + 1][x] = '|';
-  map[y + 1][x + 1] = '2';
-  map[y + 1][x + 2] = '|';
 }
 
 void printMap() {
@@ -95,4 +79,28 @@ void printMap() {
     printf("-");
   }
   printf("\n");
+}
+
+void addTank(player player) {
+    int x = player.curr_coord.x;
+    int y = player.curr_coord.y;
+    int player_offset = player.player_no == 1 ? 1 : -1;
+    char turret = player_offset == 1 ? '/' : '\\';
+    map[y][x] = turret;
+    map[y][x - player_offset] = '_';
+    map[y + 1][x] = '|';
+    map[y + 1][x - player_offset] = '0' + player.player_no;
+    map[y + 1][x - 2 * player_offset] = '|';
+
+}
+
+void removeTank(player player) {
+    int x = player.curr_coord.x;
+    int y = player.curr_coord.y;
+    int player_offset = player.player_no == 1 ? 1 : -1;
+    map[y][x] = ' ';
+    map[y][x - player_offset] = ' ';
+    map[y + 1][x] = ' ';
+    map[y + 1][x - player_offset] = ' ';
+    map[y + 1][x - 2 * player_offset] = ' ';
 }
