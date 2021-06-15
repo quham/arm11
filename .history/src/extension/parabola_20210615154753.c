@@ -14,7 +14,6 @@ bool isTankCollision(coordinate coord) {
   int x1 = player_1.curr_coord.x;
   int x2 = player_2.curr_coord.x;
   char ch = map[coord.y][coord.x];
-  printf("%c",ch);
   if (ch == '#' || ch == ' ') {
     return false;
   }
@@ -43,7 +42,7 @@ double toRadians(player_input *input) {
 void parabola(player_input input, coordinate *coords) {
   double angle = toRadians(&input);
 
-  coordinate coord = coords[1];
+  coordinate coord = coords[0];
   const coordinate start_coord = coords[0];
 
   double interval = 1 / (input.power * 0.5);

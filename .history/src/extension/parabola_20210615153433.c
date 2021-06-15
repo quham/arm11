@@ -14,17 +14,15 @@ bool isTankCollision(coordinate coord) {
   int x1 = player_1.curr_coord.x;
   int x2 = player_2.curr_coord.x;
   char ch = map[coord.y][coord.x];
-  printf("%c",ch);
-  if (ch == '#' || ch == ' ') {
-    return false;
+  if (ch != '#' && ch != ' ') {
+    if (abs(coord.x - x1) < abs(coord.x - x2)) {
+      player_1.health -= 10;
+    } else {
+      player_2.health -= 10;
+    }
+    return true;
   }
-  if (abs(coord.x - x1) < abs(coord.x - x2)) {
-    player_1.health -= 10;
-  } else {
-    player_2.health -= 10;
-  }
-  return true;
-  
+  return false;
 }
 
 // TODO: compute correct coords when player 2 is shooting
@@ -43,7 +41,7 @@ double toRadians(player_input *input) {
 void parabola(player_input input, coordinate *coords) {
   double angle = toRadians(&input);
 
-  coordinate coord = coords[1];
+  coordinate coord = coords[0];
   const coordinate start_coord = coords[0];
 
   double interval = 1 / (input.power * 0.5);

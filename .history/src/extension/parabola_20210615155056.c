@@ -43,7 +43,7 @@ double toRadians(player_input *input) {
 void parabola(player_input input, coordinate *coords) {
   double angle = toRadians(&input);
 
-  coordinate coord = coords[1];
+  coordinate coord = coords[0];
   const coordinate start_coord = coords[0];
 
   double interval = 1 / (input.power * 0.5);
