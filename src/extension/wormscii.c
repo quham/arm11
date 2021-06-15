@@ -23,7 +23,7 @@ int main(void) {
     player_input input = getPlayerInput();
     if (current_player == &player_1) {
       current_player = &player_2;
-      input.angle = input.angle - 90;
+      input.angle = 180 - input.angle;
     } else {
       current_player = &player_1;
     }

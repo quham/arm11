@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "worms.h"
 
@@ -75,6 +76,7 @@ void addTanks(void) {
 }
 
 void printMap() {
+  system("clear");  // not a good way of clearing screen
   printf(" ");
   for (int i = 0; i < MAP_WIDTH; i++) {
     printf("-");
