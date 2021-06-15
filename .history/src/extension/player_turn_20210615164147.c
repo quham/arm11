@@ -15,14 +15,13 @@ void playerTurn(player player, player_input input) {
   parabola(input, coords);
   // TODO: trailing chars
   updateCoord(coords[1], BOMB_CHR);
-  double scale = 1 / (input.power * 0.5);
-  //int interval = input.power / 10;
+  int interval = input.power / 10;
   for (int i = 2; coords[i].x != TERM_COORD.x; i++) {
-    if (i % 1 == 0) {  // TODO: change '1' to something based on time
+    if (i % interval == 0) {  // TODO: change '1' to something based on time
       updateCoord(coords[i], BOMB_CHR);
-      updateCoord(coords[i-1], TRAIL_CHR);
+      updateCoord(coords[i-interval], TRAIL_CHR);
       printMap();
-      nanosleep((struct timespec[]){{0,(int) 500000000.0 * scale}}, NULL);
+      nanosleep((struct timespec[]){{0, 20000000}}, NULL);
     }
   }
   nanosleep((struct timespec[]){{0, 1500000000}}, NULL);

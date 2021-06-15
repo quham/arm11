@@ -20,9 +20,9 @@ void playerTurn(player player, player_input input) {
   for (int i = 2; coords[i].x != TERM_COORD.x; i++) {
     if (i % 1 == 0) {  // TODO: change '1' to something based on time
       updateCoord(coords[i], BOMB_CHR);
-      updateCoord(coords[i-1], TRAIL_CHR);
+      updateCoord(coords[i-interval], TRAIL_CHR);
       printMap();
-      nanosleep((struct timespec[]){{0,(int) 500000000.0 * scale}}, NULL);
+      nanosleep((struct timespec[]){{0,(int) 1000000000.0 * scale}}, NULL);
     }
   }
   nanosleep((struct timespec[]){{0, 1500000000}}, NULL);

@@ -29,7 +29,6 @@ int main(void) {
       current_player = &player_1;
     }
     playerTurn(*current_player, input);
-    printMap();
     printHealth();
     if (player_1.health <= 0) {
       announceWinner(2);
@@ -40,14 +39,14 @@ int main(void) {
       break;
     }
     //initializeMap();
-    
+    printMap();
   }
   exitAnimation();
   return EXIT_SUCCESS;
 }
 void printHealth(void){
-  printf("Player 1, current health: %d\n", player_1.health);
-  printf("Player 2, current health: %d\n", player_2.health);
+  printf("Player 1, current health: %d", player_1.health);
+  printf("Player 2, current health: %d", player_2.health);
 }
 
 player_input getPlayerInput(void) {

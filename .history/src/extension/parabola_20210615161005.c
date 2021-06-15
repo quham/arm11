@@ -20,8 +20,10 @@ bool isTankCollision(coordinate coord) {
   }
   if (abs(coord.x - x1) < abs(coord.x - x2)) {
     player_1.health -= 10;
+    printf("Player 1 took damage! Current health: %d", player_1.health);
   } else {
     player_2.health -= 10;
+    printf("Player 1 took damage! Current health: %d", player_2.health);
   }
   return true;
   
