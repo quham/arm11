@@ -9,7 +9,7 @@ void parabola(player_input input, coordinate *coords) {
 
     const double angle = toRadians(&input);
     const coordinate start_coord = coords[0];
-    const double interval = 1 / (input.power * 0.75);  // magic number
+    const double interval = 1 / (input.power * INTERVAL_MULTIPLIER);
 
     coordinate coord = coords[1];
     int i = 1;
@@ -29,8 +29,8 @@ double getY(double initial_velocity, double angle, double time) {
     return sin(angle) * initial_velocity * time - GRAVITY * pow(time, 2) / 2;
 }
 
-double getX(double initial_veloctiy, double angle, double time) {
-    return cos(angle) * initial_veloctiy * time;
+double getX(double initial_velocity, double angle, double time) {
+    return cos(angle) * initial_velocity * time;
 }
 
 bool isCollision(coordinate coord) {

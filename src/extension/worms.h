@@ -41,11 +41,14 @@ void playerTurn(player, player_input);
 void updateCoord(coordinate, char);
 bool isTankCollision(coordinate);
 void movePlayer(player *player, int movement_no, int direction);
+void swapPlayer(player **current_player);
+void makeMove(player *player);
 
 // Parabola
 #define PI 3.14159
 #define GRAVITY 9.8
 #define TIME_INTERVAL 0.1
+#define INTERVAL_MULTIPLIER 0.75
 void parabola(player_input, coordinate *);
 void printParabola(coordinate points[]);
 bool isCollision(coordinate);
@@ -68,6 +71,10 @@ bool aboveMap(coordinate);
 #define MAX_HEALTH 100
 #define MAX_POWER 100
 #define MIN_POWER 10
+#define P1_X_OFFSET 5
+#define P2_X_OFFSET (MAP_WIDTH - 5)
+#define P_Y_OFFSET (MAP_HEIGHT - 10)
+#define POWER_DIVISION 2
 player_input getPlayerInput(void);
 bool digitInput(char input[]);
 int getInt(void);
@@ -77,6 +84,4 @@ void exitAnimation(void);
 void getLine(char *input);
 void announceWinner(int player_number);
 bool haveWinner(void);
-//player *swapPlayer(player *current_player);
-void swapPlayer(player **current_player);
 #endif

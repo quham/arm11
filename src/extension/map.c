@@ -82,10 +82,10 @@ void printMap() {
 }
 
 void addTank(player player) {
-    int x = player.curr_coord.x;
-    int y = player.curr_coord.y;
-    int player_offset = player.player_no == 1 ? 1 : -1;
-    char turret = player_offset == 1 ? '/' : '\\';
+    const int x = player.curr_coord.x;
+    const int y = player.curr_coord.y;
+    const int player_offset = player.player_no == 1 ? 1 : -1;
+    const char turret = player.player_no == 1 ? '/' : '\\';
     map[y][x] = turret;
     map[y][x - player_offset] = '_';
     map[y + 1][x] = '|';
@@ -95,9 +95,9 @@ void addTank(player player) {
 }
 
 void removeTank(player player) {
-    int x = player.curr_coord.x;
-    int y = player.curr_coord.y;
-    int player_offset = player.player_no == 1 ? 1 : -1;
+    const int x = player.curr_coord.x;
+    const int y = player.curr_coord.y;
+    const int player_offset = player.player_no == 1 ? 1 : -1;
     map[y][x] = ' ';
     map[y][x - player_offset] = ' ';
     map[y + 1][x] = ' ';

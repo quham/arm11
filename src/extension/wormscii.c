@@ -13,16 +13,17 @@ player player_1, player_2;
 
 int main(void) {
   startAnimation();
-  player_1 = (player){{5, MAP_HEIGHT - 10}, MAX_HEALTH, 1};  // TODO: define constants
-  player_2 = (player){{MAP_WIDTH - 5, MAP_HEIGHT - 10}, MAX_HEALTH, 2};
+  player_input input;
+  player_1 = (player){{P1_X_OFFSET, P_Y_OFFSET}, MAX_HEALTH, 1};
+  player_2 = (player){{P2_X_OFFSET, P_Y_OFFSET}, MAX_HEALTH, 2};
   initializeMap();
   printMap();
-  player_input input;
   player *current_player = &player_1;
 
   while (true) {
     printHealth();
     printf("Player %d's Turn\n", current_player->player_no);
+    makeMove(current_player);
     input = getPlayerInput();
     input.angle = current_player->player_no == 1 ? input.angle : 180 - input.angle;
     playerTurn(*current_player, input);
@@ -35,7 +36,7 @@ int main(void) {
   exitAnimation();
   return EXIT_SUCCESS;
 }
-//    current_player = swapPlayer(current_player);
+
 void printHealth(void) {
   printf("Player 1, current health: %d\n", player_1.health);
   printf("Player 2, current health: %d\n", player_2.health);
@@ -49,7 +50,7 @@ player_input getPlayerInput(void) {
   for (; power > MAX_POWER || power < MIN_POWER; power = getInt()) {
     printf("Power should be in range %d..%d%%, try again: ", MIN_POWER, MAX_POWER);
   }
-  input.power = power / 2;  // temporary division
+  input.power = power / POWER_DIVISION;
 
   printf("Enter the angle: ");
   input.angle = getInt() % 360;
@@ -96,22 +97,6 @@ bool haveWinner(void) {
         return true;
     }
     return false;
-}
-
-//player *swapPlayer(player *current_player) {
-//    if (current_player->player_no == 1) {
-//        return &player_2;
-//    } else {
-//        return &player_1;
-//    }
-//}
-
-void swapPlayer(player **current_player) {
-    if ((*current_player)->player_no == 1) {
-        *current_player = &player_2;
-    } else {
-        *current_player = &player_1;
-    }
 }
 
 void announceWinner(int player_number) {
