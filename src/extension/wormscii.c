@@ -13,35 +13,26 @@ player player_1, player_2;
 
 int main(void) {
   startAnimation();
-  player_1 = (player){{5, MAP_HEIGHT - 10}, 100};  // TODO: define constants
-  player_2 = (player){{MAP_WIDTH - 5, MAP_HEIGHT - 10}, 100};
+  player_input input;
+  player_1 = (player){{P1_X_OFFSET, P_Y_OFFSET}, MAX_HEALTH, 1};
+  player_2 = (player){{P2_X_OFFSET, P_Y_OFFSET}, MAX_HEALTH, 2};
   initializeMap();
   printMap();
+  player *current_player = &player_1;
 
-  player *current_player = &player_2;
   while (true) {
-    player_input input;
     printHealth();
-    if (current_player == &player_1) {
-      current_player = &player_2;
-      printf("Player 2's Turn\n");
-      input = getPlayerInput();
-      input.angle = 180 - input.angle;
-    } else {
-      current_player = &player_1;
-      printf("Player 1's Turn\n");
-      input = getPlayerInput();
-    }
+    printf("Player %d's Turn\n", current_player->player_no);
+    makeMove(current_player);
+    input = getPlayerInput();
+    input.angle = current_player->player_no == 1 ? input.angle : 180 - input.angle;
     playerTurn(*current_player, input);
-    if (player_1.health <= 0) {
-      announceWinner(2);
-      break;
+    if (haveWinner()) {
+        break;
     }
-    if (player_2.health <= 0) {
-      announceWinner(1);
-      break;
-    }
+    swapPlayer(&current_player);
   }
+
   exitAnimation();
   return EXIT_SUCCESS;
 }
@@ -59,7 +50,7 @@ player_input getPlayerInput(void) {
   for (; power > MAX_POWER || power < MIN_POWER; power = getInt()) {
     printf("Power should be in range %d..%d%%, try again: ", MIN_POWER, MAX_POWER);
   }
-  input.power = power / 2;  // temporary division
+  input.power = power / POWER_DIVISION;
 
   printf("Enter the angle: ");
   input.angle = getInt() % 360;
@@ -95,6 +86,18 @@ bool digitInput(char input[]) {
 void startAnimation(void) {}
 
 void exitAnimation(void) {}
+
+bool haveWinner(void) {
+    if (player_1.health <= 0) {
+        announceWinner(2);
+        return true;
+    }
+    if (player_2.health <= 0) {
+        announceWinner(1);
+        return true;
+    }
+    return false;
+}
 
 void announceWinner(int player_number) {
   printf("\nPlayer %d Wins!\n", player_number);

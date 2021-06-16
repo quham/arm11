@@ -1,5 +1,5 @@
 CC     = gcc 
-CFLAGS = -Wall -g -D_POSIX_SOURCE -DEFAULT_SOURCE -std=c99 -Werror -pedantic
+CFLAGS = -Wall -g -D_POSIX_SOURCE_C_SOURCE=199309L -DEFAULT_SOURCE -std=c99 -Werror -pedantic
 LIBS   = -lm
 
 .SUFFIXES: .c .o
