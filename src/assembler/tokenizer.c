@@ -13,7 +13,7 @@ tokenset tokenize(char *line) {
   for (int op = 0; reg; op++) {
     assert(op < MAX_OPERANDS);
     removeWhitespace(&reg);
-    strcat(tokens.operands[op], reg);
+    safeStrCat(tokens.operands[op], reg);
     reg = strtok(NULL, ",");
   }
   return checkLsl(tokens);
@@ -39,7 +39,7 @@ void printTokens(tokenset tokens) {
 }
 
 tokenset checkLsl(tokenset tokens) {
-  if (strcmp(tokens.opcode, "lsl")) {
+  if (strncmp(tokens.opcode, "lsl", 3)) {
     return tokens;
   }
   if (strchr(tokens.operands[1], '#')) {
@@ -47,7 +47,7 @@ tokenset checkLsl(tokenset tokens) {
     // TODO: Safe str copying / assertions
     safeStrCpy(tokens.opcode, "mov");
     safeStrCpy(tokens.operands[2], "lsl ");
-    strcat(tokens.operands[2], tokens.operands[1]);
+    safeStrCat(tokens.operands[2], tokens.operands[1]);
     safeStrCpy(tokens.operands[1], tokens.operands[0]);
   }
   return tokens;

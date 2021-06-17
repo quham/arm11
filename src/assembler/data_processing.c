@@ -26,7 +26,7 @@ word32 dataProcessing(tokenset tokens) {
   } else {
     // passing last 2 arguments
     setOperand(&instruction, &tokens.operands[1]);
-    if (!strcmp(tokens.opcode, "mov")) {
+    if (!strncmp(tokens.opcode, "mov", 3)) {
       rd = regNumber(tokens.operands[0]);
     } else {
       rn = regNumber(tokens.operands[0]);
