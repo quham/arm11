@@ -102,7 +102,7 @@ void setExpression(instr *instruction, word32 expression) {
   }
 }
 
-byte getShiftTypeInt(const char *str) {
+byte getShiftTypeInt(char *str) {
   if (!strcmp(str, "lsl"))
     return 0;
   if (!strcmp(str, "lsr"))
@@ -117,7 +117,7 @@ byte getShiftTypeInt(const char *str) {
 
 // Returns opcode. Sets S Flag if needed.
 // computes_result shows if 2 or 3 arguments
-byte getOpcode(word32 *instruction, const char *str, bool *computes_result) {
+byte getOpcode(word32 *instruction, char *str, bool *computes_result) {
   if (!strcmp(str, "and"))
     return 0;
   if (!strcmp(str, "eor"))

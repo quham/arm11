@@ -6,7 +6,7 @@
 
 #include "ass_general.h"
 
-Table *makeTable() {
+Table *makeTable(void) {
   Table *table = malloc(sizeof(Table));
   table->size = malloc(sizeof(size_t));
   table->max_size = malloc(sizeof(size_t));

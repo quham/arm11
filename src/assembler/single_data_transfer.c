@@ -6,7 +6,7 @@
 
 #include "ass_general.h"
 
-word32 singleDataTransfer(tokenset tokens, FILE *binary_file, word32 *binary_lines) {
+word32 singleDataTransfer(tokenset tokens, FILE *bin_file, word32 *bin_lines) {
   instr instruction = SDT_FORMAT;
   char *type = tokens.opcode;
   char *rd = tokens.operands[0];
@@ -32,12 +32,12 @@ word32 singleDataTransfer(tokenset tokens, FILE *binary_file, word32 *binary_lin
       return dataProcessing(tokens);
     } else {  // should gen new ldr instr?
       updateBaseReg(&instruction, PC_INDEX);
-      word32 cur_addr = ftell(binary_file);              // TODO: assert safe
-      word32 end_addr = *binary_lines * BYTES_PER_WORD;
-      safeSeek(binary_file, end_addr);
-      fwrite(&const_expr, sizeof(word32), 1, binary_file);  // TODO: unsafe
-      (*binary_lines)++;
-      safeSeek(binary_file, cur_addr);
+      word32 cur_addr = ftell(bin_file);  // TODO: assert safe
+      word32 end_addr = *bin_lines * BYTES_PER_WORD;
+      safeSeek(bin_file, end_addr);
+      fwrite(&const_expr, sizeof(word32), 1, bin_file);  // TODO: unsafe
+      (*bin_lines)++;
+      safeSeek(bin_file, cur_addr);
       updateOffset(&instruction, relativeAddr(end_addr, cur_addr));
       return instruction;
     }

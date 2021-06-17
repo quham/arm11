@@ -18,21 +18,19 @@ typedef struct tokens {
 
 // Symbol Table
 #define INITIAL_MAX_TABLE_SIZE 4  // maybe a little big
-typedef struct Pair Pair;
-typedef struct Table Table;
 
-struct Pair {
+typedef struct Pair {
   char *key;
   word32 value;
-};
+} Pair;
 
-struct Table {
+typedef struct Table {
   size_t *size;
   int *max_size;
   Pair *elements;
-};
+} Table;
 
-Table *makeTable();
+Table *makeTable(void);
 void put(Table *, char *key, word32 value);
 word32 lookup(Table *, char *str);
 void freeTable(Table *);
@@ -52,7 +50,7 @@ void updateOffset(instr *, word32 value);
 tokenset tokenize(char line[]);
 void printTokens(tokenset);
 tokenset checkLsl(tokenset);
-extern char *strtok_r(char *, const char *, char **);
+extern char *strtok_r(char *, char *, char **);
 void removeWhitespace(char **);
 
 // Assemble
@@ -73,8 +71,8 @@ word32 relativeAddr(word32 target, word32 pc);
 word32 dataProcessing(tokenset);
 void setOperand(instr *, char operands[2][LINE_LENGTH]);
 void setExpression(instr *, word32 expression);
-byte getShiftTypeInt(const char *str);
-byte getOpcode(word32 *instruction, const char *str, bool *computes_result);
+byte getShiftTypeInt(char *str);
+byte getOpcode(word32 *instruction, char *str, bool *computes_result);
 
 // Multiply
 #define MUL_FORMAT 0xe0000090

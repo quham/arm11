@@ -13,7 +13,7 @@
 #define BOTTOM_HILL_START 0.37
 #define BOTTOM_HILL_END 0.68
 
-void initializeMap() {
+void initializeMap(void) {
   // initializes upper part
   for (int i = 0; i < MAP_HEIGHT * UPPER_SKY; i++) {
     for (int j = 0; j < MAP_WIDTH; j++) {
@@ -82,10 +82,10 @@ void printMap() {
 }
 
 void addTank(player player) {
-    const int x = player.curr_coord.x;
-    const int y = player.curr_coord.y;
-    const int player_offset = player.player_no == 1 ? 1 : -1;
-    const char turret = player.player_no == 1 ? '/' : '\\';
+    int x = player.curr_coord.x;
+    int y = player.curr_coord.y;
+    int player_offset = player.player_no == 1 ? 1 : -1;
+    char turret = player.player_no == 1 ? '/' : '\\';
     map[y][x] = turret;
     map[y][x - player_offset] = '_';
     map[y + 1][x] = '|';
@@ -95,9 +95,9 @@ void addTank(player player) {
 }
 
 void removeTank(player player) {
-    const int x = player.curr_coord.x;
-    const int y = player.curr_coord.y;
-    const int player_offset = player.player_no == 1 ? 1 : -1;
+    int x = player.curr_coord.x;
+    int y = player.curr_coord.y;
+    int player_offset = player.player_no == 1 ? 1 : -1;
     map[y][x] = ' ';
     map[y][x - player_offset] = ' ';
     map[y + 1][x] = ' ';

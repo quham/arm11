@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 // Game Settings
-#define SHOT_DAMAGE 20
+#define SHOT_DAMAGE 50
 
 /* TO BE CONFIRMED */
 #define MAP_WIDTH 132
@@ -57,10 +57,11 @@ bool isMapCol(coordinate);
 double getY(double initial_velocity, double angle, double time);
 double getX(double initial_velocity, double angle, double time);
 double toRadians(player_input *);
+bool isTermCoord(coordinate coord);
 
 // Map
-void printMap();
-void initializeMap();
+void printMap(void);
+void initializeMap(void);
 void addTank(player);
 void removeTank(player);
 bool inBounds(coordinate);

@@ -20,16 +20,13 @@ int main(void) {
   printMap();
   player *current_player = &player_1;
 
-  while (true) {
+  while (!haveWinner()) {
     printHealth();
     printf("Player %d's Turn\n", current_player->player_no);
     makeMove(current_player);
     input = getPlayerInput();
     input.angle = current_player->player_no == 1 ? input.angle : 180 - input.angle;
     playerTurn(*current_player, input);
-    if (haveWinner()) {
-        break;
-    }
     swapPlayer(&current_player);
   }
 
@@ -89,11 +86,11 @@ void exitAnimation(void) {}
 
 bool haveWinner(void) {
     if (player_1.health <= 0) {
-        announceWinner(2);
+        announceWinner(player_2.player_no);
         return true;
     }
     if (player_2.health <= 0) {
-        announceWinner(1);
+        announceWinner(player_1.player_no);
         return true;
     }
     return false;
