@@ -1,9 +1,9 @@
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <math.h>
 
 #include "worms.h"
 
@@ -37,61 +37,60 @@ void updateCoord(coordinate coord, char ch) {
 }
 
 void movePlayer(player *player, int movement_no, int direction) {
-    int move_no = 0;
-    int move_offset = 0;
-    if (player->player_no == 1) {
-        if(direction == -1) {
-            move_offset = -2;
-        }
-    } else {
-        if (direction == 1) {
-            move_offset = 2;
-        }
+  int move_no = 0;
+  int move_offset = 0;
+  if (player->player_no == 1) {
+    if (direction == -1) {
+      move_offset = -2;
     }
+  } else {
+    if (direction == 1) {
+      move_offset = 2;
+    }
+  }
 
-    // ensures safety of the move
-    // check on the bottom point of the tank
-    coordinate p1 = {player->curr_coord.x + move_offset, player->curr_coord.y + 1};
-    while (abs(move_no) < movement_no) {
-        p1.x += direction;
-        if (!inBounds(p1) || map[p1.y][p1.x] != ' ') {
-            break;
-        }
-        move_no += direction;
+  // ensures safety of the move
+  // check on the bottom point of the tank
+  coordinate p1 = {player->curr_coord.x + move_offset, player->curr_coord.y + 1};
+  while (abs(move_no) < movement_no) {
+    p1.x += direction;
+    if (!inBounds(p1) || map[p1.y][p1.x] != ' ') {
+      break;
     }
-    removeTank(*player);
-    player->curr_coord.x += move_no;
-    addTank(*player);
+    move_no += direction;
+  }
+  removeTank(*player);
+  player->curr_coord.x += move_no;
+  addTank(*player);
 }
 
 void swapPlayer(player **current_player) {
-    if ((*current_player)->player_no == 1) {
-        *current_player = &player_2;
-    } else {
-        *current_player = &player_1;
-    }
+  if ((*current_player)->player_no == 1) {
+    *current_player = &player_2;
+  } else {
+    *current_player = &player_1;
+  }
 }
 
 void makeMove(player *player) {
-    char answer[INPUT_SIZE];
-    printf("Do you want to move a tank?(yes/no): ");
+  char answer[INPUT_SIZE];
+  printf("Do you want to move a tank?(yes/no): ");
+  getLine(answer);
+  if (!strcmp(answer, "yes")) {
+    printf("Enter the direction(l/r): ");
     getLine(answer);
-    if (!strcmp(answer, "yes")) {
-        printf("Enter the direction(l/r): ");
-        getLine(answer);
-        for (; strcmp(answer, "l") && strcmp(answer, "r"); getLine(answer)) {
-            printf("Please try again: ");
-        }
-        printf("Enter desired movement number: ");
-        int move_no = getInt();
-        int direction = !strcmp(answer, "l") ? -1 : 1;
-        movePlayer(player, move_no, direction);
-        printMap();
-        printHealth();
-    } else if (!strcmp(answer, "no")) {
-        return;
-    } else {
-        makeMove(player);
+    for (; strcmp(answer, "l") && strcmp(answer, "r"); getLine(answer)) {
+      printf("Please try again: ");
     }
-
+    printf("Enter desired movement number: ");
+    int move_no = getInt();
+    int direction = !strcmp(answer, "l") ? -1 : 1;
+    movePlayer(player, move_no, direction);
+    printMap();
+    printHealth();
+  } else if (!strcmp(answer, "no")) {
+    return;
+  } else {
+    makeMove(player);
+  }
 }

@@ -64,10 +64,19 @@ int getInt(void) {
 }
 
 void getLine(char *input) {
-  fflush(stdin);
   assert(fgets(input, INPUT_SIZE, stdin));
+
+  bool is_stdin_clear = false;
   if (input[strlen(input) - 1] == '\n') {
     input[strlen(input) - 1] = '\0';
+    is_stdin_clear = true;
+  }
+
+  if (!is_stdin_clear) {
+    char ch = getchar();
+    while (ch != '\n') {
+      ch = getchar();
+    }
   }
 }
 
@@ -80,20 +89,54 @@ bool digitInput(char input[]) {
   return input[0] != '0';  // input cant have leading 0
 }
 
-void startAnimation(void) {}
+// TODO: refactor into constant
+void startAnimation(void) {
+  system("clear");
+  printf("\n\n\n\n\n");
+  printf("     @       @   @@@@@@   @        @@@@@@   @@@@@@   @       @   @@@@@@ \n");
+  printf("     @   @   @   @        @        @        @    @   @ @   @ @   @      \n");
+  printf("     @  @ @  @   @@@@@    @        @        @    @   @  @ @  @   @@@@@  \n");
+  printf("     @ @   @ @   @        @   ~    @        @    @   @   @   @   @  ~   \n");
+  printf("     @       @   @@@@@@   @@@@@@   @@@@@@   @@@@@@   @       @   @@@@@@ \n");
+  printf("                                                                        \n");
+  printf("                              @@@@@@@   @@@@@@                          \n");
+  printf("                                 @      @    @      `@`                 \n");
+  printf("                                 @      @    @       `  .      worm inside         \n");
+  printf("                  !              @      @ ~  @           .    /          \n");
+  printf("                  _/             @      @@@@@@            \\_           \n");
+  printf("                 |~|        ~                             |~|           \n");
+  printf("     @       @   @@@@@@   @@@@@@   @       @   @@@@@@   @@@@@@   @    @ \n");
+  printf("     @   @   @   @    @   @    @   @ @   @ @   @        @        @    @ \n");
+  printf("     @  @ @  @   @    @   @@@@@@   @  @ @  @    @@@@    @        @    @ \n");
+  printf("     @ @   @ @   @ ~  @   @  @     @   @   @        @   @ ~      @    @ \n");
+  printf("     @       @   @@@@@@   @   @@   @       @   @@@@@@   @@@@@@   @    @ \n");
+  printf("\n\n\n\n\n");
+  printf("Do you want to start a game?(yes/no) ");
+
+  char input[INPUT_SIZE];
+
+  for (getLine(input); strcmp(input, "yes") != 0; getLine(input)) {
+    if (strncmp(input, "no", INPUT_SIZE) == 0) {
+      printf("Okay, bye!\n");
+      exit(EXIT_SUCCESS);
+    }
+    printf("Invalid input, please try again: ");
+  }
+  system("clear");
+}
 
 void exitAnimation(void) {}
 
 bool haveWinner(void) {
-    if (player_1.health <= 0) {
-        announceWinner(player_2.player_no);
-        return true;
-    }
-    if (player_2.health <= 0) {
-        announceWinner(player_1.player_no);
-        return true;
-    }
-    return false;
+  if (player_1.health <= 0) {
+    announceWinner(player_2.player_no);
+    return true;
+  }
+  if (player_2.health <= 0) {
+    announceWinner(player_1.player_no);
+    return true;
+  }
+  return false;
 }
 
 void announceWinner(int player_number) {

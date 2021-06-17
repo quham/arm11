@@ -46,7 +46,7 @@ void initializeMap(void) {
       map[i][j] = MAP_CHR;
     }
   }
-  //addTanks();
+  // addTanks();
   addTank(player_1);
   addTank(player_2);
 }
@@ -82,25 +82,24 @@ void printMap() {
 }
 
 void addTank(player player) {
-    int x = player.curr_coord.x;
-    int y = player.curr_coord.y;
-    int player_offset = player.player_no == 1 ? 1 : -1;
-    char turret = player.player_no == 1 ? '/' : '\\';
-    map[y][x] = turret;
-    map[y][x - player_offset] = '_';
-    map[y + 1][x] = '|';
-    map[y + 1][x - player_offset] = '0' + player.player_no;
-    map[y + 1][x - 2 * player_offset] = '|';
-
+  int x = player.curr_coord.x;
+  int y = player.curr_coord.y;
+  int player_offset = player.player_no == 1 ? 1 : -1;
+  char turret = player.player_no == 1 ? '/' : '\\';
+  map[y][x] = turret;
+  map[y][x - player_offset] = '_';
+  map[y + 1][x] = '|';
+  map[y + 1][x - player_offset] = '0' + player.player_no;
+  map[y + 1][x - 2 * player_offset] = '|';
 }
 
 void removeTank(player player) {
-    int x = player.curr_coord.x;
-    int y = player.curr_coord.y;
-    int player_offset = player.player_no == 1 ? 1 : -1;
-    map[y][x] = ' ';
-    map[y][x - player_offset] = ' ';
-    map[y + 1][x] = ' ';
-    map[y + 1][x - player_offset] = ' ';
-    map[y + 1][x - 2 * player_offset] = ' ';
+  int x = player.curr_coord.x;
+  int y = player.curr_coord.y;
+  int player_offset = player.player_no == 1 ? 1 : -1;
+  map[y][x] = ' ';
+  map[y][x - player_offset] = ' ';
+  map[y + 1][x] = ' ';
+  map[y + 1][x - player_offset] = ' ';
+  map[y + 1][x - 2 * player_offset] = ' ';
 }
