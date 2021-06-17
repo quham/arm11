@@ -7,7 +7,8 @@
 #include "em_general.h"
 
 int main(int argc, char **argv) {
-  if (argc != 2) {  // number of arguments main takes
+  // number of arguments main takes
+  if (argc != 2) {
     perror("Error: Invalid arguments\n");
     exit(EXIT_FAILURE);
   }

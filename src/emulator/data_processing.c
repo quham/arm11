@@ -5,56 +5,57 @@
 
 void dataProcessing(instr instruction, State *state) {
   word32 result;
-  byte opcode = getBits(instruction, 21, 25);
   word32 operand2 = getOperand(instruction, checkImmediate(instruction), state);
   word32 rn = state->regs[getRn(instruction)];
-  word32 *rd = state->regs + getRd(instruction);
+  word32 *rd = &state->regs[getRd(instruction)];
+  byte opcode = getBits(instruction, 21, 25);
   bool carry_out = checkBit(state->regs[CPSR_INDEX], 31);
 
   switch (opcode) {
-    case 0:  // 0000 and
+    case AND:
       result = rn & operand2;
       *rd = result;
       break;
-    case 1:  // 0001 eor
+    case EOR:
       result = rn ^ operand2;
       *rd = result;
       break;
-    case 2:  // 0010 sub
+      case SUB:
       result = rn - operand2;
       *rd = result;
       carry_out = checkSub(rn, operand2);
       break;
-    case 3:  // 0011 rsb
+    case RSB:
       result = operand2 - rn;
       *rd = result;
       carry_out = checkSub(operand2, rn);
       break;
-    case 4:  // 0100 add
+    case ADD:
       result = rn + operand2;
       *rd = result;
       carry_out = checkAdd(rn, operand2);
       break;
-    case 8:  // 1000 tst
+    case TST:
       result = rn & operand2;
       break;
-    case 9:  // 1001 teq
+    case TEQ:
       result = rn ^ operand2;
       break;
-    case 10:  // 1010 cmp
+    case CMP:
       result = rn - operand2;
       carry_out = checkSub(rn, operand2);
       break;
-    case 12:  // 1100 orr
+    case ORR:
       result = rn | operand2;
       *rd = result;
       break;
-    case 13:  // 1101 mov
+    case MOV:
       result = operand2;
       *rd = result;
       break;
     default:
       perror("Error: Unsupported ALU operation\n");
+      break;
   }
 
   if (checkSet(instruction)) {
@@ -67,7 +68,7 @@ void dataProcessing(instr instruction, State *state) {
 }
 
 bool checkAdd(word32 a, word32 b) {
-  return (a > UINT32_MAX - b);
+  return a > (UINT32_MAX - b);
 }
 
 bool checkSub(word32 a, word32 b) {

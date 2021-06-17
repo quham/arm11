@@ -73,25 +73,27 @@ word32 getOperand(word32 instruction, bool immediate_cond, State* state) {
     operand = state->regs[getRm(instruction)];
     word32 shift = getBits(instruction, 4, 12);
     word32 bit4 = checkBit(shift, 0);
-    word32 shift_value = bit4 ? state->regs[getRs(instruction)] : getBits(instruction, 7, 12);
+    word32 shift_value = bit4 ? getByte(state->regs[getRs(instruction)], 0) : getBits(instruction, 7, 12);
     word32 shift_type = getBits(shift, 1, 3);
-    bool carry_out = checkBit(operand, (shift_value % WORD_SIZE) - 1);
+    bool carry_out = checkBit(operand, shift_value - 1);
 
     switch (shift_type) {
-      case 0:  // logic shift left
+      case LSL:  // logic shift left
+        carry_out = checkBit(operand, WORD_SIZE - shift_value - 1);
         operand <<= shift_value;
         break;
-      case 1:  // logic shift right
+      case LSR:  // logic shift right
         operand >>= shift_value;
         break;
-      case 2:  // arithmetic shift right
+      case ASR:  // arithmetic shift right
         operand = signExtend(operand, shift_value);
         break;
-      case 3:  // rotate right
+      case ROR:  // rotate right
         rotateRight(&operand, shift_value);
+        break;
     }
 
-    if (immediate_cond) {
+    if (checkSet(instruction) && decode(instruction) == PROCESSING) {
       updateFlag(state, 29, carry_out);
     }
   }
@@ -99,7 +101,7 @@ word32 getOperand(word32 instruction, bool immediate_cond, State* state) {
 }
 
 void rotateRight(word32* operand, int amount) {
-  word32 msb = 0;
+  word32 msb;
   word32 mask = 1;
   for (int i = 0; i < amount; i++) {
     msb = mask & *operand;

@@ -26,8 +26,8 @@ word32 fetch(word32 addr, State* state) {
   if (validAddress(addr)) {
     word32 word = 0;
     for (int i = 0; i < BYTES_PER_WORD; i++) {
-      word |= (state->memory[addr + i]) << (BYTE_SIZE * i);
       // shift to place next byte
+      word |= (state->memory[addr + i]) << (BYTE_SIZE * i);
     }
     return word;
   }

@@ -10,12 +10,10 @@
 #define MEMORY_WORD_SIZE 16384
 #define NUMBER_OF_REGISTERS 17
 
-struct State {
+typedef struct State {
   word32 regs[NUMBER_OF_REGISTERS];
   byte memory[MEMORY_SIZE];
-};
-
-typedef struct State State;
+} State;
 
 // Pipeline
 #define NOT_INIT 0xFFFFFFFF
@@ -29,9 +27,10 @@ void printState(State*);
 // Data processing
 #define ROTATION_MULTIPLIER 2
 #define ROUNDING_ERROR 0.5
+enum opcode_bin { AND, EOR, SUB, RSB, ADD, TST = 8, TEQ = 9, CMP = 10, ORR = 12, MOV = 13};
 void dataProcessing(instr, State*);
-bool checkAdd(word32, word32);
-bool checkSub(word32, word32);
+bool checkAdd(word32 a, word32 b);
+bool checkSub(word32 a, word32 b);
 
 // Single data transfer
 void singleDataTransfer(instr, State*);
@@ -50,6 +49,7 @@ bool checkCond(instr, State*);
 
 // Decomposition
 #define ROTATION_MULTIPLIER 2
+enum shift_type { LSL, LSR, ASR, ROR } ;
 void updateFlag(State*, int index, bool bit_value);
 bool checkBit(instr, int bit_no);
 bool checkImmediate(instr);
@@ -64,6 +64,6 @@ word32 signExtend(word32 number, int no_of_bits);
 bool validAddress(word32 addr);
 word32 getOperand(instr, bool is_immediate, State*);
 void rotateRight(word32* operand, int amount);
-void decomp_tests();
+void decomp_tests(void);
 
 #endif  // EMULATOR_CONSTS
