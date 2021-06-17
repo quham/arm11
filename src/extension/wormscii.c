@@ -125,7 +125,15 @@ void startAnimation(void) {
   system("clear");
 }
 
-void exitAnimation(void) {}
+void exitAnimation(void) {
+  printf("\n\n\n\n\n");
+  printf("     @@@@@@   @@@@@@   @@@@@@  @@@@@@   @       @   @@@@@@  @       @      \n");
+  printf("     @        @   ~@   @    @  @        @   @   @   @   ~   @       @      \n");
+  printf("     @@@      @@@@@@   @@@@@@  @@@@@    @  @ @  @   @@@@@   @       @      \n");
+  printf("     @        @    @   @  @    @   ~    @ @   @ @   @       @       @      \n");
+  printf("     @        @    @   @   @@  @@@@@@   @      ~@   @@@@@@  @@@@@@  @@@@@@ \n");
+  printf("\n\n\n\n\n");
+}
 
 bool haveWinner(void) {
   if (player_1.health <= 0) {

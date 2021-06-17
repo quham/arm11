@@ -27,7 +27,7 @@ void printState(State*);
 // Data processing
 #define ROTATION_MULTIPLIER 2
 #define ROUNDING_ERROR 0.5
-enum opcode_bin { AND, EOR, SUB, RSB, ADD, TST = 8, TEQ = 9, CMP = 10, ORR = 12, MOV = 13};
+enum opcode_bin { AND, EOR, SUB, RSB, ADD, TST = 8, TEQ = 9, CMP = 10, ORR = 12, MOV = 13 };
 void dataProcessing(instr, State*);
 bool checkAdd(word32 a, word32 b);
 bool checkSub(word32 a, word32 b);
@@ -49,7 +49,7 @@ bool checkCond(instr, State*);
 
 // Decomposition
 #define ROTATION_MULTIPLIER 2
-enum shift_type { LSL, LSR, ASR, ROR } ;
+enum shift_type { LSL, LSR, ASR, ROR };
 void updateFlag(State*, int index, bool bit_value);
 bool checkBit(instr, int bit_no);
 bool checkImmediate(instr);

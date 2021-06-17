@@ -73,7 +73,8 @@ word32 getOperand(word32 instruction, bool immediate_cond, State* state) {
     operand = state->regs[getRm(instruction)];
     word32 shift = getBits(instruction, 4, 12);
     word32 bit4 = checkBit(shift, 0);
-    word32 shift_value = bit4 ? getByte(state->regs[getRs(instruction)], 0) : getBits(instruction, 7, 12);
+    word32 shift_value =
+        bit4 ? getByte(state->regs[getRs(instruction)], 0) : getBits(instruction, 7, 12);
     word32 shift_type = getBits(shift, 1, 3);
     bool carry_out = checkBit(operand, shift_value - 1);
 

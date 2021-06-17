@@ -59,7 +59,7 @@ bool aboveMap(coordinate coord) {
   return coord.y < 0;
 }
 
-void printMap() {
+void printMap(void) {
   system("clear");  // not a good way of clearing screen
   printf(" ");
   for (int i = 0; i < MAP_WIDTH; i++) {
