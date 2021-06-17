@@ -15,6 +15,7 @@ instr branch(tokenset tokens, word32 pc, Table* sym_table) {
   updateBits(&instruction, 0, getBits(relativeAddr(target, pc), 2, 26));
 
   word32 cond;
+  // change to symbol table
   switch (tokens.opcode[1]) {
     case 'e':
       cond = 0x0;
@@ -38,6 +39,7 @@ instr branch(tokenset tokens, word32 pc, Table* sym_table) {
       break;
     default:
       cond = 0xe;
+      break;
   }
   updateBits(&instruction, 28, cond);
 

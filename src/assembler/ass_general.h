@@ -17,7 +17,7 @@ typedef struct tokens {
 } tokenset;
 
 // Symbol Table
-#define INITIAL_MAX_TABLE_SIZE 4  // maybe a little big
+#define INITIAL_MAX_TABLE_SIZE 4
 
 typedef struct Pair {
   char *key;

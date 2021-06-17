@@ -112,7 +112,7 @@ void rotateRight(word32* operand, int amount) {
 /* ---------- Debugging ---------- */
 
 // test functions
-void decomp_tests() {
+void decomp_tests(void) {
   instr test_instruction = 0xaf0c324e;
 
   instr bits_12_to_20 = 0xc3;  // inclusive

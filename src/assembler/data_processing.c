@@ -5,10 +5,11 @@
 
 #include "ass_general.h"
 #define FIVE_BIT_INTEGER 31
-#define HALF_WORD = 16
+#define HALF_WORD 16
+#define ROTATION_MULTIPLIER 2
 
 word32 dataProcessing(tokenset tokens) {
-  if (!strcmp(tokens.opcode, "andeq")) {
+  if (!strncmp(tokens.opcode, "andeq", 5)) {
     return 0;
   }
   bool computes_result = true;
@@ -20,8 +21,10 @@ word32 dataProcessing(tokenset tokens) {
   if (computes_result) {
     rd = regNumber(tokens.operands[0]);
     rn = regNumber(tokens.operands[1]);
-    setOperand(&instruction, &tokens.operands[2]);  // passing last 2 arguments
+    // passing last 2 arguments
+    setOperand(&instruction, &tokens.operands[2]);
   } else {
+    // passing last 2 arguments
     setOperand(&instruction, &tokens.operands[1]);
     if (!strcmp(tokens.opcode, "mov")) {
       rd = regNumber(tokens.operands[0]);
@@ -91,9 +94,11 @@ void setExpression(instr *instruction, word32 expression) {
       rotation--;
     }
     if (expression < 256) {
-      rotation = (WORD_SIZE - rotation) / 2;   // full rotation should be made
-      updateBits(instruction, 0, expression);  // set Immediate expression
-      updateBits(instruction, 8, rotation);    // set rotate bits
+      // should complete the rotation, also accounts
+      // for rotation multiplier in emulator
+      rotation = (WORD_SIZE - rotation) / ROTATION_MULTIPLIER;
+      updateBits(instruction, 0, expression);
+      updateBits(instruction, 8, rotation);
     } else {
       // rotation cannot be made
       perror("Error: Immediate value does not fit in 8 bits\n");
@@ -102,6 +107,7 @@ void setExpression(instr *instruction, word32 expression) {
   }
 }
 
+// TODO: write symbol table
 byte getShiftTypeInt(char *str) {
   if (!strcmp(str, "lsl"))
     return 0;
@@ -119,35 +125,35 @@ byte getShiftTypeInt(char *str) {
 // computes_result shows if 2 or 3 arguments
 byte getOpcode(word32 *instruction, char *str, bool *computes_result) {
   if (!strcmp(str, "and"))
-    return 0;
+    return 0x0;
   if (!strcmp(str, "eor"))
-    return 1;
+    return 0x1;
   if (!strcmp(str, "sub"))
-    return 2;
+    return 0x2;
   if (!strcmp(str, "rsb"))
-    return 3;
+    return 0x3;
   if (!strcmp(str, "add"))
-    return 4;
+    return 0x4;
   if (!strcmp(str, "tst")) {
     *computes_result = false;
     setCondCodeFlag(instruction);
-    return 8;
+    return 0x8;
   }
   if (!strcmp(str, "teq")) {
     *computes_result = false;
     setCondCodeFlag(instruction);
-    return 9;
+    return 0x9;
   }
   if (!strcmp(str, "cmp")) {
     *computes_result = false;
     setCondCodeFlag(instruction);
-    return 10;
+    return 0xa;
   }
   if (!strcmp(str, "orr"))
-    return 12;
+    return 0xc;
   if (!strcmp(str, "mov")) {
     *computes_result = false;
-    return 13;
+    return 0xd;
   }
   perror("Error: Unsupported opcode\n");
   exit(EXIT_FAILURE);

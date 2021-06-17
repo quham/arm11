@@ -10,7 +10,7 @@ word32 multiply(tokenset tokens) {
 
   if (!strcmp(tokens.opcode, "mla")) { // TODO: assert safe?
     updateBits(&instruction, 12, regNumber(tokens.operands[ACC]));  // sets Rn
-    setBit(&instruction, 21);                                       // set accumulator
+    setBit(&instruction, 21); // set accumulator
   }
 
   for (int i = 0; i < MUL_OPERANDS; i++) {

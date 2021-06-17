@@ -6,7 +6,8 @@
 #include "ass_general.h"
 
 int main(int argc, char **argv) {
-  if (argc != 3) {  // Number of arguments main takes
+  // Number of arguments main takes
+  if (argc != 3) {
     perror("Error: Invalid arguments\n");
     exit(EXIT_FAILURE);
   }
@@ -21,8 +22,8 @@ int main(int argc, char **argv) {
   Table *sym_table = makeTable();
   word32 code_line = 0;
   char line[LINE_LENGTH];
-  while (fgets(line, LINE_LENGTH, ass_file)) {  // fgets unsafe
-    char *label_end = strchr(line, ':');        // TODO: unsafe?
+  while (fgets(line, LINE_LENGTH, ass_file)) {
+    char *label_end = strchr(line, ':');
     if (label_end) {
       *label_end = '\0';
       put(sym_table, line, code_line * BYTES_PER_WORD);
@@ -34,11 +35,11 @@ int main(int argc, char **argv) {
 
   FILE *bin_file = fopen(argv[2], "w");
   if (bin_file == NULL) {
-    perror("Error: Bin_fileary output file is null\n");
+    perror("Error: Binary file output file is null\n");
     exit(EXIT_FAILURE);
   }
-
-  assemble(ass_file, bin_file, sym_table, code_line);  // Second pass
+  // Second pass
+  assemble(ass_file, bin_file, sym_table, code_line);
 
   freeTable(sym_table);
   fclose(ass_file);
@@ -46,7 +47,6 @@ int main(int argc, char **argv) {
   return EXIT_SUCCESS;
 }
 
-// TODO: use opcode map
 void assemble(FILE *ass_file, FILE *bin_file, Table *sym_table, word32 ass_lines) {
   char line[LINE_LENGTH];
   word32 bin_lines = ass_lines;
@@ -63,6 +63,7 @@ void assemble(FILE *ass_file, FILE *bin_file, Table *sym_table, word32 ass_lines
     tokenset tokens = tokenize(line);
     printTokens(tokens);
     instr binary;
+    // TODO: make opcode symbol table
     switch (tokens.opcode[0]) {
       case 'b':
         binary = branch(tokens, line_num * BYTES_PER_WORD, sym_table);
@@ -86,6 +87,7 @@ void assemble(FILE *ass_file, FILE *bin_file, Table *sym_table, word32 ass_lines
         break;
       default:
         binary = dataProcessing(tokens);
+        break;
     }
     fwrite(&binary, sizeof(instr), 1, bin_file);
     line_num++;
