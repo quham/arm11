@@ -1,21 +1,234 @@
-\documentclass[11pt]{article}
-
+\documentclass[]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
 \usepackage{fullpage}
+\usepackage{wrapfig}
+\usepackage{lipsum}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+
 
 \begin{document}
-
-\title{Our Extension...}
-\author{TODO}
+\title{Final Report}
+\date{June 18, 2021}
+\author{qa120 - nf20 - ojm20 - av1620}
 
 \maketitle
 
-\section{Introduction}
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-culpa qui officia deserunt mollit anim id est laborum.
+\section*{Assembler Structure}
+
+We maintained a file structure consistent with the emulator, which meant we already had an initial understanding of the code structure. We have a file for each instruction type, one for the tokenizer and a final one for the symbol table. Some of the logic used to manipulate binary was repeated from the emulator, so we decided to extract some functions into a shared folder. This was particularly challenging as we needed to update our Makefile with the correct include paths. Since we felt it was important to prioritise correctness over execution speed, we chose to take the two-pass assembler approach. This meant we did not have to maintain a list of forward references, which might have been problematic and potentially inefficient. We thought the structure of the two-pass assembler also resulted in a more expandable design.
+
+\vspace{5mm}
+
+The main function performs the first pass by creating a symbol table and then populating it with any labels found, mapping them to their associated addresses. It then calls the ``assemble" function, which performs the second pass by tokenizing each instruction and passing it to the function associated with the correct instruction type. Each of these instruction functions then returns a line of binary, composed using the given tokens, which is subsequently written to the binary file.
+
+\vspace{5mm}
+
+\begin{wrapfigure}{L}{0.37\textwidth}
+\centering
+    \centering
+    \vspace{-3mm}
+    \includegraphics[height=63mm, width=55mm,scale=1]{Assembler final (1).png}
+    \caption{\label{fig1 :}Assembler Structure}
+\vspace{-5mm}
+\end{wrapfigure}
+
+We had difficulty designing the ``ldr" instruction. This is because it has the distinctive feature of adding an extra 4 bytes to the end of the program, at the time that it is called. To achieve this, we chose to pass ``singleDataTransfer" a pointer to the binary file, as well as the current number of expected binary file lines. The extra bytes could then be written to the end of the file, and the number of lines incremented (for subsequent calls of ``ldr" to work). 
+
+\vspace{3mm}
+
+Another challenging task was the implementation of the symbol table. We wanted to add each label on the first pass, so we chose to make the table dynamically-sized (because the number of assembly lines vary across files). Of course this meant that the table's contents is stored in memory allocated on the heap, meaning we had to be careful to free all parts of the symbol table of any given size. In hindsight, implementing this as a hash table would have been more efficient when assembling large files. An alternative would be to have two arrays in a struct, however this could lead to alignment issues so we decided against it.
+
+\newpage
+
+The tokenizer was especially awkward to write. We created several versions of the function before finally settling on the current one. The format of the assembly code in the tests made it particularly challenging, as each file was varied in its use of white-space characters. To get around this, we wrote a dedicated ``removeWhiteSpace" function. Looking back, we should have been more mindful of the differences in operand format. The difficulties became apparent when we came to writing the code for ``ldr", as it takes different bracketed arguments for different operands. Because of this, we completely rewrote ``tokenize" for the final time.
+
+\vspace{5mm}
+
+While we are proud of the work we have produced, certain things could be improved. One regret we have is that our instruction functions (``singleDataTransfer", ``multiply", etc) have inconsistent numbers of arguments, meaning we were not able to use C's function pointers when determining the relevant function for a given opcode. In future projects, we will try to employ more elegant language features where possible.
+
+\vspace{4mm}
+
+\section*{Extension}
+
+\vspace{4mm}
+
+\subsection*{Description}
+Our extension was initially based on the video game series Worms. In the game, anthropomorphic worms take turns to fire at each other across a deformable landscape, the winner is the last surviving team of worms.
+
+\vspace{3mm}
+
+It became apparent we could create a similar game that could be played via a video call (by communicating each turn-based input to the player who is running the game). This seemed to be an ideal feature, considering the rise in popularity of screen sharing and video calls in the current pandemic environment.
+
+\vspace{3mm}
+
+\begin{wrapfigure}[9]{L}{0.53\textwidth}
+\centering
+    \centering
+    \vspace{-3mm}
+\includegraphics[height=28mm, width=74mm,scale=1]{ArtilleryGame.png}
+
+  \caption{\label{fig2 :}Concept Map Layout}
+    \vspace{-4mm}
+\end{wrapfigure}
+
+
+
+Motivated by popular animated ASCII art online videos (\href{https://www.youtube.com/watch?v=DEqXNfs_HhY}{\textcolor{blue}{Donut-shaped C code}}), we wanted to implement the game graphics in a terminal window, using the ASCII character set. However, the scale of Worms was perhaps too epic for us to accurately portray in such a way, so we chose to focus only on player movement, player health, collision detection, and projectile shooting (with a mind to possible expansions later on).
+
+\vspace{10mm}
+
+\noindent \textbf{Our game is as follows}:
+
+\begin{enumerate}
+    \item At the beginning of each turn, the player is given the option (y/n) to move (l/r). If the answer is no, we skip to step 3.
+    \item If the answer is yes, they are asked how far (in characters). The player will then move this distance (using \textit{worm}hole teleportation), as long as there is flat ground to move to.
+    \item They are then asked to input a ``power" value (initial velocity) and an angle (in degrees), to fire a shot. Based on this input, the projectile trajectory is traced on the screen.
+    \item Each player has a health score (in percent). A player's health is decreased by 20 if they are hit.
+    \item The game proceeds until a player's health reaches 0, at which point the remaining player is declared the winner and receives eternal glory!
+\end{enumerate}
+\newpage
+\subsection*{Implementation}
+
+\vspace{3mm}
+
+
+
+Before we began to write any code, we created a simple animation as a ``proof of concept", to test whether the ASCII graphics would be feasible (one of the initial map designs is shown in Figure 2). We then drafted a function call diagram (Figure 3), which describes placeholder files, separating the problem into projectile physics, game logic, and graphics. We also prepared many placeholder functions such as ``startAnimation" that were completed at a later stage in development. In this way, we could equally distribute the labour for the core game, to which each team member could add independent features. We kept a single header to minimise include directives.
+
+\begin{wrapfigure}{L}{0.36\textwidth}
+\centering
+    \centering
+    \vspace{-5mm}
+\includegraphics[height=75mm, width=55mm,scale=1]{WORMSCIIF (1).png}
+    \vspace{-4mm}
+  \caption{\label{fig2 :}WORMSCII Call Diagram}
+    \vspace{-5mm}
+\end{wrapfigure}
+
+\vspace{8mm}
+
+Our map was implemented as a 2D array of characters which we could iterate over, plotting the landscape, curve, tanks. This seemed like the most obvious choice and indeed it has been a good design decision. The issues we had were mainly caused when indexing the map array, as the coordinates differ from traditional the Cartesian (for 2D array (0,0) is top left). We struggled especially because \textit{negative} y values were in fact \textit{above} the visible part of the map. This meant that when trying to check for collisions in this area, we were indexing using negative values, often causing a segmentation fault. We will discuss the debugging process further in the Testing section.
+
+\vspace{3mm}
+
+The ``bullet" trajectory is modelled using the player input and the equations of motion (suvat). To represent this continuous data using a fixed number of coordinates, we determined a sampling interval. It was important that this interval used time as the independent variable when determining each sample position, because it allowed the coordinates to be animated at the correct speed.
+
+\vspace{5mm}
+
+One important issue we had to resolve was how to \textit{accurately} detect collisions. For us to do this reliably, we chose to vary the time intervals based on the power, making them smaller for larger initial velocities. This altered the number of coordinates in the parabola, thereby giving us a consistent curve density. The result was a much lower probability of skipping over a landscape or player character, and we could simply check if a ``map character" was contained at the bullet's current coordinates.
+
+\vspace{3mm}
+
+The main function is contained in the wormscii.c file. When running the game in the terminal, the user is prompted with an introductory message and an option to start the game. We placed the main game loop directly afterwards. The game loop repeatedly executes the steps outlined in the description section. Step 1 is contained in the player\textunderscore turn function. The reading of the input here is implemented with some safe uses of ``fgets", these are then fed into the ``parabola" function along with a coordinate array. Here, the player input is used to calculate the curve coordinates, as mentioned earlier. These are stored in the array, which is used to print the path of the bullet to the screen.
+
+\vspace{3mm}
+
+\noindent We spent a long time working out how to ensure the game could be played on Linux. To get the ``nanosleep" function (from ``time.h") to work we had to add some extra cflags when compiling: \newline\indent{\centering-D\textunderscore POSIX\textunderscore SOURCE\textunderscore C\textunderscore SOURCE=199309L      -std=gnu99\par} \noindent We also learned how ``flush" standard input in a safe way using ``getchar", to make it run on both Linux and MacOS.
+
+\newpage
+\subsection*{Testing}
+
+\vspace{3mm}
+\begin{wrapfigure}[14]{R}{0.45\textwidth}
+\centering
+    \centering
+\vspace{-3mm}
+\includegraphics[height=45mm, width=65mm,scale=1]{parabola@.png}
+\vspace{1mm}
+  \caption{\label{fig2 :}First Iteration of Parabola}
+\end{wrapfigure}
+
+Due to the use of floating point arithmetic and the graphical nature of our game, we opted to create manual functions (such as ``printParabola", Figure 5) to visually test each function incrementally. Manually testing edge cases then gave us the confidence to progressively add features.
+
+\vspace{3mm}
+
+One of the initial tests (shown in Figure 4) depicts the shell trajectory and the implementation of some basic collision detection. In particular, Figure 4 highlights some of the inconsistencies in the curve. Based on this test we decided to change our parabola characters to `.'s with an `@' as the projectile. This gave the players a visual representation of the path, and also made it appear smoother.
+
+
+\vspace{3mm}
+
+
+\begin{wrapfigure}[16]{L}{0.48\textwidth}
+\centering
+    \centering
+\vspace{3mm}
+  \includegraphics[height=45mm, width=75mm,scale=1]{printParabola.png}
+\vspace{3mm}
+  \caption{\label{fig :}Parabola test function}
+
+\end{wrapfigure}
+
+
+Since our projectile coordinates can go above our map (as mentioned before), we initially had many runtime array indexing issues that were difficult to spot. Thankfully, we found these bugs thanks to Valgrind's ``memcheck" tool. This is a skill we have all learned to use throughout our C programming. In future, we could make better use of the available tools during development.
+
+\vspace{3mm}
+
+To make sure the terminal refresh rate was maintainable on different operating systems, we also tested it on a Raspberry Pi. Thankfully, the results were consistent with our faster laptop CPUs. We had wanted to explore using an emulator such as QEMU, but we had many problems installing a virtual machine on the laptops we were using. This is something we would like to try in the future, but we thought that the physical PI was the best alternative.  
+
+\vspace{3mm}
+
+Overall, we feel that the way we tested our extension was robust and reproducible. However, in future we would like to explore the idea of making unit tests, to increase the efficiency of our testing. However, this could also have delayed us due to the nature of our extension. This is certainly something we would do in any future, larger scale project.
+
+
+\newpage
+
+\section*{Group Work}
+
+\vspace{3mm}
+\begin{wrapfigure}[32]{L}{0.30\textwidth}
+\centering
+    \centering
+\vspace{-3mm}
+\includegraphics[height=130mm, width=40mm,scale=1]{discordChats.png}
+\vspace{1mm}
+  \caption{\label{fig3 :}Discord Channels}
+    \vspace{-2mm}
+\end{wrapfigure}
+
+Our group efficiency has varied greatly since the start of the project. In the first week, we completed much of the programming in a very short space of time. While this was good to a certain extent, it left us with lots to fix and debug. We wanted to change this, so we adapted to use our time in different ways. Now we spend more time planning and discussing.  In this way, we have increased the productivity of our programming sessions, making the interactions between our parts more seamless. 
+
+
+\vspace{3mm}
+
+As a group, our use of GitLab has improved vastly. Initially, we were having regular issues with local branches, our code would occasionally be lost and our commit messages were inconsistent. We began to change these things by devising a commit message format, which proved to be very rewarding. We can now make better use of sub-commands like ``blame" and ``log", as they display coherent commit messages, which give context to any unfamiliar code. While these are more essential in larger projects, it has certainly been a good habit to develop. To help with our branch issues, we now remove branches as soon as we have finished with them, which allows us to easily see what people are working on.
+
+\vspace{3mm}
+
+To avoid the problems we had with the emulator, when we started to work on the extension, we decided that the best course of action was to split up. Three of us began work on WORMSCII, while Oliver stayed to do some final debugging on the assembler. In this way, we could avoid any merge conflicts, as well as progress with the extension. In doing so, we saved a huge amount of time, which may have been spent in deadlock.
+
+\vspace{3mm}
+
+Our dependable Discord server is shown in Figure 6. We have already discussed its merits in the Checkpoint report, here we wish to bring attention to the categorisation of the different text and voice channels. The clear sections in which to write were exceptionally useful, they ensured we had clear communication throughout and were essential when we split the group up to work on different parts.
+
+\vspace{3mm}
+
+Even considering the progress we made, there is a huge amount we could do to become better team players. We often found coordinating our efforts difficult. This was due to time zones and varying sleep schedules. The disparity was further compounded by differing meal-times, social-lives and exercise routines. In order to maintain consistent project development, we should have devised a better ``todo" list format, and given clear indications as to the progress made on each task. Thankfully the trust between team members ensured we could be independent in most of our choices.  Working together was also challenging because we never had the chance to meet up in-person and discuss ideas. We could only do this via video call, which had delays so we would often talk over each other. We hope that with more practice in projects such as these, we will learn adapt better to those around us, and engage in more streamlined online discussion. 
+
+\vspace{3mm}
+
+Unfortunately, we did sometimes find ourselves in a deadlock. This was because we adapted our initial plans while programming, often noticing better design choices  along the way. Sometimes the changes were reliant on a second piece another teammates code, which itself required parts of the first. This rarely happened, but hindered progress nonetheless. While we still want an evolving design, in future, we could avoid these by aligning time in our schedules to pair program and work on the change together.
+
+
+\subsection*{Oliver Madine:}
+
+I think that working in this group enabled me to be productive. Having some experience working on open source projects, I felt a strength of mine would be to maintain the code by ensuring I had an understanding of the entire project. This allowed me to suggest areas where we could share code to reduce duplication, resolve bugs (involving intricate interactions between different parts of the code), and refactor to improve code quality. Although I tried to wait until a section of code wasn't being worked on before making any changes, I should have been mindful to avoid creating merge conflicts through unnecessary changes (such as using formatting tools that make small changes to files). Additionally, in future group work, I should prioritise deciding on implementation details that others are dependant on to progress. For example, delays in my implementation of a ``symbol table" caused further delays in the writing of code to assemble branch instructions.
+
+\subsection*{Andrii Verveha:}
+
+I was enormously pleased to be a part of this group, which consisted of understanding, new friendships, help and a good mood throughout the whole project. My team created a comfortable working environment, while having a similar level of programming experience allowed task division to be as equal as possible. I think I fitted nicely into the group, as I did my part (and some frequently used functions) on time, so was not preventing anyone from proceeding further. The thing I would like to change in the next project is the negotiations on some common conventions. Those frequent functions written at the beginning were not fully agreed with the group, which required additional changes and refactoring. It created some inconveniences and wasted the project time. Overall, I enjoyed the project and the group, the assistance of the team members and I am pleased with the final result of our code.
+
+\subsection*{Quham Adefila:}
+I think our team gelled quite well. We have never met each other in person and have slight time zone differences yet I think we worked very well as a team and quickly became friends. Everyone did their part and we were happy to support each other. I was particularly happy to help my teammates understand anything on the spec that didn’t seem straightforward. No one was left struggling on their section on their own. I was also happy to code sections that required a deeper understanding of the overall code, such as two-pass assemble functions and pipeline function, which allow individual components to work together. I had minimal experience with Git, however my teammates we’re happy to help me with this. I would like to further improve my Git skills for further projects. I also wasn’t too confident with Makefiles either. This wasn’t a problem however because as a team I feel we did well to cover each other's weakness. 
+
+\subsection*{Nicholas Fry:}
+
+I have loved being a part of the team. Everyone has been willing to help, enthusiastic and passionate about the project. It has been especially nice to form friendships, as I have met very few people since the start of the year.  Initially, I was worried about my level of skill compared to that of my teammates, however, everyone has been exceedingly patient and always listened to any ideas put forward. This has helped me develop enormously, both in my code and my ability to work as part of a team. While I am perhaps less confident in my programming, I have sought to put in extra effort to ensure that the work is completed. For future projects, I would like to improve my focus when it comes to an important task. I often found myself halfway through multiple jobs, which is perhaps less efficient than sticking to something until its completion. I also want to improve my logical thinking, so I can write more elegant code and be more involved in the very complex parts of the development process. I think I have learned more in this past month than I ever thought I could, and I am excited at the prospect of engaging in more  projects such as this one.
+
+
 
 \end{document}
