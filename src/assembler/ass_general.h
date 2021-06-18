@@ -51,7 +51,6 @@ void updateOffset(instr *, word32 value);
 tokenset tokenize(char line[]);
 void printTokens(tokenset);
 tokenset checkLsl(tokenset);
-extern char *strtok_r(char *, char *, char **);
 void removeWhitespace(char **);
 
 // Assemble
