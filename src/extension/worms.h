@@ -37,27 +37,28 @@ extern char map[MAP_HEIGHT][MAP_WIDTH];
 extern player player_1, player_2;
 
 // Player turn
+#define POWER_SPEED_MODIFIER 10
 void playerTurn(player, player_input);
 void updateCoord(coordinate, char);
 bool isTankCollision(coordinate);
 void movePlayer(player *player, int movement_no, int direction);
-void swapPlayer(player **current_player);
-void makeMove(player *player);
+void swapPlayer(player **);
 
 // Parabola
 #define PI 3.14159
 #define GRAVITY 9.8
-#define TIME_INTERVAL 0.1
 #define INTERVAL_MULTIPLIER 0.75
 void parabola(player_input, coordinate *);
+double timeInterval(player_input input);
 void printParabola(coordinate points[]);
 bool isCollision(coordinate);
 bool isTankCol(coordinate);
 bool isMapCol(coordinate);
 double getY(double initial_velocity, double angle, double time);
 double getX(double initial_velocity, double angle, double time);
-double toRadians(player_input *);
+double toRadians(double angle);
 bool isTermCoord(coordinate coord);
+double timeOfFlight(player_input);
 
 // Map
 void printMap(void);
@@ -75,8 +76,10 @@ bool aboveMap(coordinate);
 #define P1_X_OFFSET 5
 #define P2_X_OFFSET (MAP_WIDTH - 5)
 #define P_Y_OFFSET (MAP_HEIGHT - 10)
-#define POWER_DIVISION 2
-player_input getPlayerInput(void);
+#define POWER_SCALE 0.5
+void makeMove(player *player);
+player_input getPlayerShot(void);
+bool boolPlayerInput(void);
 bool digitInput(char input[]);
 int getInt(void);
 void printHealth(void);

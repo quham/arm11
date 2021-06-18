@@ -6,9 +6,9 @@
 #include "worms.h"
 
 void parabola(player_input input, coordinate *coords) {
-  double angle = toRadians(&input);
+  double angle = toRadians(input.angle);
   coordinate start_coord = coords[0];
-  double interval = 1 / (input.power * INTERVAL_MULTIPLIER);
+  double interval = timeInterval(input);
 
   coordinate coord = start_coord;
   coord.y--;  // ensure no initial self collision
@@ -23,8 +23,12 @@ void parabola(player_input input, coordinate *coords) {
   coords[i - 1] = TERM_COORD;
 }
 
-double toRadians(player_input *input) {
-  return input->angle * PI / 180;
+double timeInterval(player_input input) {
+  return 1 / (input.power * INTERVAL_MULTIPLIER);
+}
+
+double toRadians(double angle) {
+  return angle * PI / 180;
 }
 
 double getY(double initial_velocity, double angle, double time) {
@@ -55,4 +59,8 @@ bool isTankCol(coordinate coord) {
     player_2.health -= SHOT_DAMAGE;
   }
   return true;
+}
+
+double timeOfFlight(player_input input) {
+  return (2 * input.power * sin(toRadians(input.angle))) / GRAVITY;
 }

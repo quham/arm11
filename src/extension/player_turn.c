@@ -9,16 +9,15 @@
 #include "worms.h"
 
 void playerTurn(player player, player_input input) {
-  coordinate coords[MAP_HEIGHT * MAP_WIDTH];
-  // TODO IMPORTANT: FIND MAX SIZE (flight time / interval)
+  coordinate coords[(int)ceil(timeOfFlight(input) / timeInterval(input))];
   coords[0] = player.curr_coord;
   parabola(input, coords);
 
-  int interval = ceil((double)input.power / 10);  // magic number
+  int frame_speed = ceil((double)input.power / POWER_SPEED_MODIFIER);
   for (int i = 2; !isTermCoord(coords[i]); i++) {
     updateCoord(coords[i], BOMB_CHR);
     updateCoord(coords[i - 1], TRAIL_CHR);
-    if (i % interval == 0) {
+    if (i % frame_speed == 0) {
       printMap();
       nanosleep((struct timespec[]){{0, 10000000}}, NULL);
     }
@@ -78,28 +77,5 @@ void swapPlayer(player **current_player) {
     *current_player = &player_2;
   } else {
     *current_player = &player_1;
-  }
-}
-
-void makeMove(player *player) {
-  char answer[INPUT_SIZE];
-  printf("Do you want to move a tank?(yes/no): ");
-  getLine(answer);
-  if (!strcmp(answer, "yes")) {
-    printf("Enter the direction(l/r): ");
-    getLine(answer);
-    for (; strcmp(answer, "l") && strcmp(answer, "r"); getLine(answer)) {
-      printf("Please try again: ");
-    }
-    printf("Enter desired movement number: ");
-    int move_no = getInt();
-    int direction = !strcmp(answer, "l") ? -1 : 1;
-    movePlayer(player, move_no, direction);
-    printMap();
-    printHealth();
-  } else if (!strcmp(answer, "no")) {
-    return;
-  } else {
-    makeMove(player);
   }
 }

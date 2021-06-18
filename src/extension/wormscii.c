@@ -24,7 +24,7 @@ int main(void) {
     printHealth();
     printf("Player %d's Turn\n", current_player->player_no);
     makeMove(current_player);
-    input = getPlayerInput();
+    input = getPlayerShot();
     input.angle = current_player->player_no == 1 ? input.angle : 180 - input.angle;
     playerTurn(*current_player, input);
     swapPlayer(&current_player);
@@ -34,12 +34,51 @@ int main(void) {
   return EXIT_SUCCESS;
 }
 
-void printHealth(void) {
-  printf("Player 1, current health: %d\n", player_1.health);
-  printf("Player 2, current health: %d\n", player_2.health);
+bool haveWinner(void) {
+  if (player_1.health <= 0) {
+    announceWinner(player_2.player_no);
+    return true;
+  }
+  if (player_2.health <= 0) {
+    announceWinner(player_1.player_no);
+    return true;
+  }
+  return false;
 }
 
-player_input getPlayerInput(void) {
+void printHealth(void) {
+  printf("Player %d, current health: %d\n", player_1.player_no, player_1.health);
+  printf("Player %d, current health: %d\n", player_2.player_no, player_2.health);
+}
+
+void makeMove(player *player) {
+  printf("Move tank");
+  if (boolPlayerInput()) {
+    printf("Enter the direction(l/r): ");
+    char answer[INPUT_SIZE];
+    getLine(answer);
+    for (; strcmp(answer, "l") && strcmp(answer, "r"); getLine(answer)) {
+      printf("Please try again: ");
+    }
+    printf("Enter desired movement number: ");
+    int move_no = getInt();
+    int direction = !strcmp(answer, "l") ? -1 : 1;
+    movePlayer(player, move_no, direction);
+    printMap();
+    printHealth();
+  }
+}
+
+bool boolPlayerInput(void) {
+  char input[INPUT_SIZE];
+  printf(" (yes/no)? ");
+  for (getLine(input); strcmp(input, "yes") != 0 && strcmp(input, "no") != 0; getLine(input)) {
+    printf("Invalid, please enter yes/no: ");
+  }
+  return strcmp(input, "no");
+}
+
+player_input getPlayerShot(void) {
   player_input input;
 
   printf("Enter the %% power: ");
@@ -47,7 +86,7 @@ player_input getPlayerInput(void) {
   for (; power > MAX_POWER || power < MIN_POWER; power = getInt()) {
     printf("Power should be in range %d..%d%%, try again: ", MIN_POWER, MAX_POWER);
   }
-  input.power = power / POWER_DIVISION;
+  input.power = power * POWER_SCALE;
 
   printf("Enter the angle: ");
   input.angle = getInt() % 360;
@@ -92,34 +131,17 @@ bool digitInput(char input[]) {
 // TODO: refactor into constant
 void startAnimation(void) {
   system("clear");
-  printf("%s", WELCOME_TEXT);
-
-  char input[INPUT_SIZE];
-
-  for (getLine(input); strcmp(input, "yes") != 0; getLine(input)) {
-    if (strncmp(input, "no", INPUT_SIZE) == 0) {
-      printf(EXIT_TEXT);
-      exit(EXIT_SUCCESS);
-    }
-    printf("Invalid input, please try again: ");
+  printf(WELCOME_TEXT);
+  printf("Do you want to start a game");
+  if (!boolPlayerInput()) {
+    exitAnimation();
+    exit(EXIT_SUCCESS);
   }
   system("clear");
 }
 
 void exitAnimation(void) {
   printf(EXIT_TEXT);
-}
-
-bool haveWinner(void) {
-  if (player_1.health <= 0) {
-    announceWinner(player_2.player_no);
-    return true;
-  }
-  if (player_2.health <= 0) {
-    announceWinner(player_1.player_no);
-    return true;
-  }
-  return false;
 }
 
 void announceWinner(int player_number) {
