@@ -10,13 +10,12 @@
 
 void playerTurn(player player, player_input input) {
   int coord_size = ceil(timeOfFlight(input) / timeInterval(input)) + FLOATING_POINT_COORDS_OFFSET;
-  // 2 for term coord and initial coord
   coordinate coords[coord_size];
   coords[0] = player.curr_coord;
   parabola(input, coords);  // initialise coords
 
   int frame_speed = ceil((double)input.power / POWER_SPEED_MODIFIER);
-  for (int i = 2; !isTermCoord(coords[i]) && !isTermCoord(coords[1]); i++) {
+  for (int i = 2; !isTermCoord(coords[1]) && !isTermCoord(coords[i]); i++) {
     updateCoord(coords[i], BOMB_CHR);
     updateCoord(coords[i - 1], TRAIL_CHR);
     if (i % frame_speed == 0) {
