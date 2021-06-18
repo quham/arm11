@@ -4,11 +4,9 @@
 #include <string.h>
 
 #include "ass_general.h"
-#define FIVE_BIT_INTEGER 31
-#define HALF_WORD = 16
 
 word32 dataProcessing(tokenset tokens) {
-  if (!strcmp(tokens.opcode, "andeq")) {
+  if (!strncmp(tokens.opcode, "andeq", 5)) {
     return 0;
   }
   bool computes_result = true;
@@ -20,10 +18,12 @@ word32 dataProcessing(tokenset tokens) {
   if (computes_result) {
     rd = regNumber(tokens.operands[0]);
     rn = regNumber(tokens.operands[1]);
-    setOperand(&instruction, &tokens.operands[2]);  // passing last 2 arguments
+    // passing last 2 arguments
+    setOperand(&instruction, &tokens.operands[2]);
   } else {
+    // passing last 2 arguments
     setOperand(&instruction, &tokens.operands[1]);
-    if (!strcmp(tokens.opcode, "mov")) {
+    if (!strncmp(tokens.opcode, "mov", DP_OPCODE_LEN)) {
       rd = regNumber(tokens.operands[0]);
     } else {
       rn = regNumber(tokens.operands[0]);
@@ -91,9 +91,11 @@ void setExpression(instr *instruction, word32 expression) {
       rotation--;
     }
     if (expression < 256) {
-      rotation = (WORD_SIZE - rotation) / 2;   // full rotation should be made
-      updateBits(instruction, 0, expression);  // set Immediate expression
-      updateBits(instruction, 8, rotation);    // set rotate bits
+      // should complete the rotation, also accounts
+      // for rotation multiplier in emulator
+      rotation = (WORD_SIZE - rotation) / ROTATION_MULTIPLIER;
+      updateBits(instruction, 0, expression);
+      updateBits(instruction, 8, rotation);
     } else {
       // rotation cannot be made
       perror("Error: Immediate value does not fit in 8 bits\n");
@@ -102,14 +104,14 @@ void setExpression(instr *instruction, word32 expression) {
   }
 }
 
-byte getShiftTypeInt(const char *str) {
-  if (!strcmp(str, "lsl"))
+byte getShiftTypeInt(char *str) {
+  if (!strncmp(str, "lsl", DP_OPCODE_LEN))
     return 0;
-  if (!strcmp(str, "lsr"))
+  if (!strncmp(str, "lsr", DP_OPCODE_LEN))
     return 1;
-  if (!strcmp(str, "asr"))
+  if (!strncmp(str, "asr", DP_OPCODE_LEN))
     return 2;
-  if (!strcmp(str, "ror"))
+  if (!strncmp(str, "ror", DP_OPCODE_LEN))
     return 3;
   perror("Error: Unsupported shift type\n");
   exit(EXIT_FAILURE);
@@ -117,37 +119,37 @@ byte getShiftTypeInt(const char *str) {
 
 // Returns opcode. Sets S Flag if needed.
 // computes_result shows if 2 or 3 arguments
-byte getOpcode(word32 *instruction, const char *str, bool *computes_result) {
-  if (!strcmp(str, "and"))
-    return 0;
-  if (!strcmp(str, "eor"))
-    return 1;
-  if (!strcmp(str, "sub"))
-    return 2;
-  if (!strcmp(str, "rsb"))
-    return 3;
-  if (!strcmp(str, "add"))
-    return 4;
-  if (!strcmp(str, "tst")) {
+byte getOpcode(word32 *instruction, char *str, bool *computes_result) {
+  if (!strncmp(str, "and", DP_OPCODE_LEN))
+    return 0x0;
+  if (!strncmp(str, "eor", DP_OPCODE_LEN))
+    return 0x1;
+  if (!strncmp(str, "sub", DP_OPCODE_LEN))
+    return 0x2;
+  if (!strncmp(str, "rsb", DP_OPCODE_LEN))
+    return 0x3;
+  if (!strncmp(str, "add", DP_OPCODE_LEN))
+    return 0x4;
+  if (!strncmp(str, "tst", DP_OPCODE_LEN)) {
     *computes_result = false;
     setCondCodeFlag(instruction);
-    return 8;
+    return 0x8;
   }
-  if (!strcmp(str, "teq")) {
+  if (!strncmp(str, "teq", DP_OPCODE_LEN)) {
     *computes_result = false;
     setCondCodeFlag(instruction);
-    return 9;
+    return 0x9;
   }
-  if (!strcmp(str, "cmp")) {
+  if (!strncmp(str, "cmp", DP_OPCODE_LEN)) {
     *computes_result = false;
     setCondCodeFlag(instruction);
-    return 10;
+    return 0xa;
   }
-  if (!strcmp(str, "orr"))
-    return 12;
-  if (!strcmp(str, "mov")) {
+  if (!strncmp(str, "orr", DP_OPCODE_LEN))
+    return 0xc;
+  if (!strncmp(str, "mov", DP_OPCODE_LEN)) {
     *computes_result = false;
-    return 13;
+    return 0xd;
   }
   perror("Error: Unsupported opcode\n");
   exit(EXIT_FAILURE);

@@ -6,7 +6,7 @@
 
 #include "ass_general.h"
 
-word32 singleDataTransfer(tokenset tokens, FILE *binary_file, word32 *binary_lines) {
+word32 singleDataTransfer(tokenset tokens, FILE *bin_file, word32 *bin_lines) {
   instr instruction = SDT_FORMAT;
   char *type = tokens.opcode;
   char *rd = tokens.operands[0];
@@ -14,11 +14,11 @@ word32 singleDataTransfer(tokenset tokens, FILE *binary_file, word32 *binary_lin
   char *expr = tokens.operands[2];
   updateBits(&instruction, 12, regNumber(rd));  // set Rd bits
 
-  if (!strcmp(type, "ldr")) {
+  if (!strncmp(type, "ldr", SDT_OPCODE_LEN)) {
     setBit(&instruction, 20);  // sets Load/Store flag
   }
 
-  updateBaseReg(&instruction, regNumber(strtok(addr, "]")));  // TODO: assert safe
+  updateBaseReg(&instruction, regNumber(strtok(addr, "]")));
 
   if (addr[0] == '=') {  // check constant address
     setUpFlag(&instruction);
@@ -26,18 +26,19 @@ word32 singleDataTransfer(tokenset tokens, FILE *binary_file, word32 *binary_lin
     word32 const_expr = readHex(addr + 1);
     if (const_expr < MOV_CONST) {
       char mov_expr[MOV_CONST_LEN + 2] = {'#', '\0'};
-      safeStrCat(mov_expr, addr + 1);
-      safeStrCpy(addr, mov_expr);
-      safeStrCpy(type, "mov");
+      strcat(mov_expr, addr + 1);
+      safeStrCpy(addr, mov_expr, MOV_CONST_LEN + 2);
+      safeStrCpy(type, "mov", MAX_OPCODE_LEN);
       return dataProcessing(tokens);
-    } else {  // should gen new ldr instr?
+    } else {
       updateBaseReg(&instruction, PC_INDEX);
-      word32 cur_addr = ftell(binary_file);              // TODO: assert safe
-      word32 end_addr = *binary_lines * BYTES_PER_WORD;
-      safeSeek(binary_file, end_addr);
-      fwrite(&const_expr, sizeof(word32), 1, binary_file);  // TODO: unsafe
-      (*binary_lines)++;
-      safeSeek(binary_file, cur_addr);
+      word32 cur_addr = ftell(bin_file);
+      assert(cur_addr != -1);
+      word32 end_addr = *bin_lines * BYTES_PER_WORD;
+      safeSeek(bin_file, end_addr);
+      assert(fwrite(&const_expr, sizeof(word32), 1, bin_file) != -1);
+      (*bin_lines)++;
+      safeSeek(bin_file, cur_addr);
       updateOffset(&instruction, relativeAddr(end_addr, cur_addr));
       return instruction;
     }

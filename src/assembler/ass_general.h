@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "../arm_general.h"
+#include "arm_general.h"
 
 #define MAX_OPERANDS 4
 #define MAX_OPCODE_LEN 6
@@ -17,28 +17,27 @@ typedef struct tokens {
 } tokenset;
 
 // Symbol Table
-#define INITIAL_MAX_TABLE_SIZE 4  // maybe a little big
-typedef struct Pair Pair;
-typedef struct Table Table;
+#define INITIAL_MAX_TABLE_SIZE 4
 
-struct Pair {
+typedef struct Pair {
   char *key;
   word32 value;
-};
+} Pair;
 
-struct Table {
+typedef struct Table {
   size_t *size;
   int *max_size;
   Pair *elements;
-};
+} Table;
 
-Table *makeTable();
+Table *makeTable(void);
 void put(Table *, char *key, word32 value);
 word32 lookup(Table *, char *str);
 void freeTable(Table *);
 
 // Single data transfer
 #define SDT_FORMAT 0xe4000000;
+#define SDT_OPCODE_LEN 3
 #define MOV_CONST 0xff
 #define MOV_CONST_LEN 4
 #define REG_LEN 4
@@ -52,11 +51,9 @@ void updateOffset(instr *, word32 value);
 tokenset tokenize(char line[]);
 void printTokens(tokenset);
 tokenset checkLsl(tokenset);
-extern char *strtok_r(char *, const char *, char **);
 void removeWhitespace(char **);
 
 // Assemble
-#define LINE_LENGTH 511
 void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 num_of_lines);
 
 // Instruction compose
@@ -70,14 +67,19 @@ word32 relativeAddr(word32 target, word32 pc);
 
 // Data processing
 #define DP_FORMAT 0xe0000000
+#define DP_OPCODE_LEN 3
+#define FIVE_BIT_INTEGER 31
+#define HALF_WORD 16
+#define ROTATION_MULTIPLIER 2
 word32 dataProcessing(tokenset);
 void setOperand(instr *, char operands[2][LINE_LENGTH]);
 void setExpression(instr *, word32 expression);
-byte getShiftTypeInt(const char *str);
-byte getOpcode(word32 *instruction, const char *str, bool *computes_result);
+byte getShiftTypeInt(char *str);
+byte getOpcode(word32 *instruction, char *str, bool *computes_result);
 
 // Multiply
 #define MUL_FORMAT 0xe0000090
+#define MULT_OPCODE_LEN 3
 #define ACC 3
 #define MUL_OPERANDS 3
 word32 multiply(tokenset);

@@ -38,6 +38,7 @@ instr branch(tokenset tokens, word32 pc, Table* sym_table) {
       break;
     default:
       cond = 0xe;
+      break;
   }
   updateBits(&instruction, 28, cond);
 

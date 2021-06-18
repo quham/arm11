@@ -8,7 +8,7 @@ word32 multiply(tokenset tokens) {
   word32 instruction = MUL_FORMAT;
   byte regs[MUL_OPERANDS] = {0};
 
-  if (!strcmp(tokens.opcode, "mla")) { // TODO: assert safe?
+  if (!strncmp(tokens.opcode, "mla", MULT_OPCODE_LEN)) {
     updateBits(&instruction, 12, regNumber(tokens.operands[ACC]));  // sets Rn
     setBit(&instruction, 21);                                       // set accumulator
   }

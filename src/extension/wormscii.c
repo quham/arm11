@@ -20,16 +20,13 @@ int main(void) {
   printMap();
   player *current_player = &player_1;
 
-  while (true) {
+  while (!haveWinner()) {
     printHealth();
     printf("Player %d's Turn\n", current_player->player_no);
     makeMove(current_player);
-    input = getPlayerInput();
+    input = getPlayerShot();
     input.angle = current_player->player_no == 1 ? input.angle : 180 - input.angle;
     playerTurn(*current_player, input);
-    if (haveWinner()) {
-        break;
-    }
     swapPlayer(&current_player);
   }
 
@@ -37,12 +34,51 @@ int main(void) {
   return EXIT_SUCCESS;
 }
 
-void printHealth(void) {
-  printf("Player 1, current health: %d\n", player_1.health);
-  printf("Player 2, current health: %d\n", player_2.health);
+bool haveWinner(void) {
+  if (player_1.health <= 0) {
+    announceWinner(player_2.player_no);
+    return true;
+  }
+  if (player_2.health <= 0) {
+    announceWinner(player_1.player_no);
+    return true;
+  }
+  return false;
 }
 
-player_input getPlayerInput(void) {
+void printHealth(void) {
+  printf("Player %d, current health: %d\n", player_1.player_no, player_1.health);
+  printf("Player %d, current health: %d\n", player_2.player_no, player_2.health);
+}
+
+void makeMove(player *player) {
+  printf("Move tank");
+  if (boolPlayerInput()) {
+    printf("Enter the direction(l/r): ");
+    char answer[INPUT_SIZE];
+    getLine(answer);
+    for (; strncmp(answer, "l", 1) && strncmp(answer, "r", 1); getLine(answer)) {
+      printf("Please try again: ");
+    }
+    printf("Enter desired movement number: ");
+    int move_no = getInt();
+    int direction = !strncmp(answer, "l", 1) ? -1 : 1;
+    movePlayer(player, move_no, direction);
+    printMap();
+    printHealth();
+  }
+}
+
+bool boolPlayerInput(void) {
+  char input[INPUT_SIZE];
+  printf(" (yes/no)? ");
+  for (getLine(input); strncmp(input, "yes", 3) && strncmp(input, "no", 2); getLine(input)) {
+    printf("Invalid, please enter yes/no: ");
+  }
+  return strncmp(input, "no", 2);
+}
+
+player_input getPlayerShot(void) {
   player_input input;
 
   printf("Enter the %% power: ");
@@ -50,7 +86,7 @@ player_input getPlayerInput(void) {
   for (; power > MAX_POWER || power < MIN_POWER; power = getInt()) {
     printf("Power should be in range %d..%d%%, try again: ", MIN_POWER, MAX_POWER);
   }
-  input.power = power / POWER_DIVISION;
+  input.power = power * POWER_SCALE;
 
   printf("Enter the angle: ");
   input.angle = getInt() % 360;
@@ -67,10 +103,19 @@ int getInt(void) {
 }
 
 void getLine(char *input) {
-  fflush(stdin);
   assert(fgets(input, INPUT_SIZE, stdin));
+
+  bool is_stdin_clear = false;
   if (input[strlen(input) - 1] == '\n') {
     input[strlen(input) - 1] = '\0';
+    is_stdin_clear = true;
+  }
+
+  if (!is_stdin_clear) {
+    char ch = getchar();
+    while (ch != '\n') {
+      ch = getchar();
+    }
   }
 }
 
@@ -83,20 +128,19 @@ bool digitInput(char input[]) {
   return input[0] != '0';  // input cant have leading 0
 }
 
-void startAnimation(void) {}
+void startAnimation(void) {
+  system("clear");
+  printf(WELCOME_TEXT);
+  printf("Do you want to start a game");
+  if (!boolPlayerInput()) {
+    exitAnimation();
+    exit(EXIT_SUCCESS);
+  }
+  system("clear");
+}
 
-void exitAnimation(void) {}
-
-bool haveWinner(void) {
-    if (player_1.health <= 0) {
-        announceWinner(2);
-        return true;
-    }
-    if (player_2.health <= 0) {
-        announceWinner(1);
-        return true;
-    }
-    return false;
+void exitAnimation(void) {
+  printf(EXIT_TEXT);
 }
 
 void announceWinner(int player_number) {

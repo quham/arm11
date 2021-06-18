@@ -20,7 +20,7 @@ void dataProcessing(instr instruction, State *state) {
       result = rn ^ operand2;
       *rd = result;
       break;
-      case SUB:
+    case SUB:
       result = rn - operand2;
       *rd = result;
       carry_out = checkSub(rn, operand2);

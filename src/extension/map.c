@@ -13,7 +13,7 @@
 #define BOTTOM_HILL_START 0.37
 #define BOTTOM_HILL_END 0.68
 
-void initializeMap() {
+void initializeMap(void) {
   // initializes upper part
   for (int i = 0; i < MAP_HEIGHT * UPPER_SKY; i++) {
     for (int j = 0; j < MAP_WIDTH; j++) {
@@ -46,7 +46,6 @@ void initializeMap() {
       map[i][j] = MAP_CHR;
     }
   }
-  //addTanks();
   addTank(player_1);
   addTank(player_2);
 }
@@ -59,7 +58,7 @@ bool aboveMap(coordinate coord) {
   return coord.y < 0;
 }
 
-void printMap() {
+void printMap(void) {
   system("clear");  // not a good way of clearing screen
   printf(" ");
   for (int i = 0; i < MAP_WIDTH; i++) {
@@ -82,25 +81,24 @@ void printMap() {
 }
 
 void addTank(player player) {
-    const int x = player.curr_coord.x;
-    const int y = player.curr_coord.y;
-    const int player_offset = player.player_no == 1 ? 1 : -1;
-    const char turret = player.player_no == 1 ? '/' : '\\';
-    map[y][x] = turret;
-    map[y][x - player_offset] = '_';
-    map[y + 1][x] = '|';
-    map[y + 1][x - player_offset] = '0' + player.player_no;
-    map[y + 1][x - 2 * player_offset] = '|';
-
+  int x = player.curr_coord.x;
+  int y = player.curr_coord.y;
+  int player_offset = player.player_no == 1 ? 1 : -1;
+  char turret = player.player_no == 1 ? '/' : '\\';
+  map[y][x] = turret;
+  map[y][x - player_offset] = '_';
+  map[y + 1][x] = '|';
+  map[y + 1][x - player_offset] = '0' + player.player_no;
+  map[y + 1][x - 2 * player_offset] = '|';
 }
 
 void removeTank(player player) {
-    const int x = player.curr_coord.x;
-    const int y = player.curr_coord.y;
-    const int player_offset = player.player_no == 1 ? 1 : -1;
-    map[y][x] = ' ';
-    map[y][x - player_offset] = ' ';
-    map[y + 1][x] = ' ';
-    map[y + 1][x - player_offset] = ' ';
-    map[y + 1][x - 2 * player_offset] = ' ';
+  int x = player.curr_coord.x;
+  int y = player.curr_coord.y;
+  int player_offset = player.player_no == 1 ? 1 : -1;
+  map[y][x] = ' ';
+  map[y][x - player_offset] = ' ';
+  map[y + 1][x] = ' ';
+  map[y + 1][x - player_offset] = ' ';
+  map[y + 1][x - 2 * player_offset] = ' ';
 }

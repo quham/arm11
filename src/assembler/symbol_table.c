@@ -6,7 +6,7 @@
 
 #include "ass_general.h"
 
-Table *makeTable() {
+Table *makeTable(void) {
   Table *table = malloc(sizeof(Table));
   table->size = malloc(sizeof(size_t));
   table->max_size = malloc(sizeof(size_t));
@@ -29,7 +29,8 @@ void put(Table *table, char *key, word32 value) {
   Pair pair;
   pair.value = value;
   char *str = calloc(sizeof(char), LINE_LENGTH);
-  pair.key = strcpy(str, key);  // TODO: safe
+  safeStrCpy(str, key, LINE_LENGTH);
+  pair.key = str;
   table->elements[*table->size] = pair;
   (*table->size)++;
 }
@@ -38,7 +39,7 @@ word32 lookup(Table *table, char *str) {
   for (size_t i = 0; i < *table->size; i++) {
     Pair pair = table->elements[i];
     printf("key: %s\n", pair.key);
-    if (!strcmp(pair.key, str)) {
+    if (!strncmp(pair.key, str, LINE_LENGTH)) {
       return pair.value;
     }
   }
