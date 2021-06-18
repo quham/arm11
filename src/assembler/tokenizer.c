@@ -7,13 +7,13 @@
 
 tokenset tokenize(char *line) {
   tokenset tokens = {"\0", {{"\0"}}};
-  safeStrCpy(tokens.opcode, strtok(line, " "));  // TODO: assert safe strtok
+  safeStrCpy(tokens.opcode, strtok(line, " "), MAX_OPCODE_LEN);
 
   char *reg = strtok(NULL, ",");
   for (int op = 0; reg; op++) {
     assert(op < MAX_OPERANDS);
     removeWhitespace(&reg);
-    safeStrCat(tokens.operands[op], reg);
+    strcat(tokens.operands[op], reg);
     reg = strtok(NULL, ",");
   }
   return checkLsl(tokens);
@@ -39,16 +39,15 @@ void printTokens(tokenset tokens) {
 }
 
 tokenset checkLsl(tokenset tokens) {
-  if (strncmp(tokens.opcode, "lsl", DATA_PROC_OPCODE_LEN)) {
+  if (strncmp(tokens.opcode, "lsl", DP_OPCODE_LEN)) {
     return tokens;
   }
   if (strchr(tokens.operands[1], '#')) {
     printf("%s\n", "replacing lsl");
-    // TODO: Safe str copying / assertions
-    safeStrCpy(tokens.opcode, "mov");
-    safeStrCpy(tokens.operands[2], "lsl ");
-    safeStrCat(tokens.operands[2], tokens.operands[1]);
-    safeStrCpy(tokens.operands[1], tokens.operands[0]);
+    safeStrCpy(tokens.opcode, "mov", MAX_OPCODE_LEN);
+    safeStrCpy(tokens.operands[2], "lsl ", MAX_OPCODE_LEN);
+    strcat(tokens.operands[2], tokens.operands[1]);
+    safeStrCpy(tokens.operands[1], tokens.operands[0], MAX_OPCODE_LEN);
   }
   return tokens;
 }

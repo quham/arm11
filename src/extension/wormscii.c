@@ -128,7 +128,6 @@ bool digitInput(char input[]) {
   return input[0] != '0';  // input cant have leading 0
 }
 
-// TODO: refactor into constant
 void startAnimation(void) {
   system("clear");
   printf(WELCOME_TEXT);

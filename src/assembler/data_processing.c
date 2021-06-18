@@ -23,7 +23,7 @@ word32 dataProcessing(tokenset tokens) {
   } else {
     // passing last 2 arguments
     setOperand(&instruction, &tokens.operands[1]);
-    if (!strncmp(tokens.opcode, "mov", DATA_PROC_OPCODE_LEN)) {
+    if (!strncmp(tokens.opcode, "mov", DP_OPCODE_LEN)) {
       rd = regNumber(tokens.operands[0]);
     } else {
       rn = regNumber(tokens.operands[0]);
@@ -104,15 +104,14 @@ void setExpression(instr *instruction, word32 expression) {
   }
 }
 
-// TODO: write symbol table
 byte getShiftTypeInt(char *str) {
-  if (!strncmp(str, "lsl", DATA_PROC_OPCODE_LEN))
+  if (!strncmp(str, "lsl", DP_OPCODE_LEN))
     return 0;
-  if (!strncmp(str, "lsr", DATA_PROC_OPCODE_LEN))
+  if (!strncmp(str, "lsr", DP_OPCODE_LEN))
     return 1;
-  if (!strncmp(str, "asr", DATA_PROC_OPCODE_LEN))
+  if (!strncmp(str, "asr", DP_OPCODE_LEN))
     return 2;
-  if (!strncmp(str, "ror", DATA_PROC_OPCODE_LEN))
+  if (!strncmp(str, "ror", DP_OPCODE_LEN))
     return 3;
   perror("Error: Unsupported shift type\n");
   exit(EXIT_FAILURE);
@@ -121,34 +120,34 @@ byte getShiftTypeInt(char *str) {
 // Returns opcode. Sets S Flag if needed.
 // computes_result shows if 2 or 3 arguments
 byte getOpcode(word32 *instruction, char *str, bool *computes_result) {
-  if (!strncmp(str, "and", DATA_PROC_OPCODE_LEN))
+  if (!strncmp(str, "and", DP_OPCODE_LEN))
     return 0x0;
-  if (!strncmp(str, "eor", DATA_PROC_OPCODE_LEN))
+  if (!strncmp(str, "eor", DP_OPCODE_LEN))
     return 0x1;
-  if (!strncmp(str, "sub", DATA_PROC_OPCODE_LEN))
+  if (!strncmp(str, "sub", DP_OPCODE_LEN))
     return 0x2;
-  if (!strncmp(str, "rsb", DATA_PROC_OPCODE_LEN))
+  if (!strncmp(str, "rsb", DP_OPCODE_LEN))
     return 0x3;
-  if (!strncmp(str, "add", DATA_PROC_OPCODE_LEN))
+  if (!strncmp(str, "add", DP_OPCODE_LEN))
     return 0x4;
-  if (!strncmp(str, "tst", DATA_PROC_OPCODE_LEN)) {
+  if (!strncmp(str, "tst", DP_OPCODE_LEN)) {
     *computes_result = false;
     setCondCodeFlag(instruction);
     return 0x8;
   }
-  if (!strncmp(str, "teq", DATA_PROC_OPCODE_LEN)) {
+  if (!strncmp(str, "teq", DP_OPCODE_LEN)) {
     *computes_result = false;
     setCondCodeFlag(instruction);
     return 0x9;
   }
-  if (!strncmp(str, "cmp", DATA_PROC_OPCODE_LEN)) {
+  if (!strncmp(str, "cmp", DP_OPCODE_LEN)) {
     *computes_result = false;
     setCondCodeFlag(instruction);
     return 0xa;
   }
-  if (!strncmp(str, "orr", DATA_PROC_OPCODE_LEN))
+  if (!strncmp(str, "orr", DP_OPCODE_LEN))
     return 0xc;
-  if (!strncmp(str, "mov", DATA_PROC_OPCODE_LEN)) {
+  if (!strncmp(str, "mov", DP_OPCODE_LEN)) {
     *computes_result = false;
     return 0xd;
   }

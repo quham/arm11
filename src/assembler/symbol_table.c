@@ -29,7 +29,7 @@ void put(Table *table, char *key, word32 value) {
   Pair pair;
   pair.value = value;
   char *str = calloc(sizeof(char), LINE_LENGTH);
-  safeStrCpy(str, key);
+  safeStrCpy(str, key, LINE_LENGTH);
   pair.key = str;
   table->elements[*table->size] = pair;
   (*table->size)++;

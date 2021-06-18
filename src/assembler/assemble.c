@@ -63,13 +63,12 @@ void assemble(FILE *ass_file, FILE *bin_file, Table *sym_table, word32 ass_lines
     tokenset tokens = tokenize(line);
     printTokens(tokens);
     instr binary;
-    // TODO: make opcode symbol table
     switch (tokens.opcode[0]) {
       case 'b':
         binary = branch(tokens, line_num * BYTES_PER_WORD, sym_table);
         break;
       case 'm':
-        if (!strncmp(tokens.opcode, "mov", DATA_PROC_OPCODE_LEN)) {
+        if (!strncmp(tokens.opcode, "mov", DP_OPCODE_LEN)) {
           binary = dataProcessing(tokens);
         } else {
           binary = multiply(tokens);

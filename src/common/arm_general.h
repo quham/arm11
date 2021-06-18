@@ -20,8 +20,7 @@ typedef word32 instr;
 
 void setBit(word32*, int index);
 word32 getBits(word32, int start_index, int end_index);
-void safeStrCpy(char* dest, char* src);
-void safeStrCat(char* dest, char* src);
+void safeStrCpy(char* dest, char* src, int n);
 void safeSeek(FILE*, word32 file_len);
 
 #endif  // ARM_CONSTS

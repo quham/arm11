@@ -68,7 +68,7 @@ word32 relativeAddr(word32 target, word32 pc);
 
 // Data processing
 #define DP_FORMAT 0xe0000000
-#define DATA_PROC_OPCODE_LEN 3
+#define DP_OPCODE_LEN 3
 #define FIVE_BIT_INTEGER 31
 #define HALF_WORD 16
 #define ROTATION_MULTIPLIER 2

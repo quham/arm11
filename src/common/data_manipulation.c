@@ -15,14 +15,11 @@ word32 getBits(word32 word, int start_index, int end_index) {
   return (word >> start_index) & mask;
 }
 
-void safeStrCpy(char* dest, char* src) {  // TODO: use stncpy
-  strcpy(dest, src);
-  assert(dest[strlen(dest)] == '\0');
-}
-
-void safeStrCat(char* dest, char* src) {
-  strcat(dest, src);
-  assert(dest[strlen(dest)] == '\0');
+void safeStrCpy(char* dest, char* src, int n) {
+  strncpy(dest, src, n);
+  if (dest[n - 1] != '\0') {
+    dest[n - 1] = '\0';
+  }
 }
 
 void safeSeek(FILE* file, word32 line) {

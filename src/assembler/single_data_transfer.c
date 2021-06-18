@@ -18,7 +18,7 @@ word32 singleDataTransfer(tokenset tokens, FILE *bin_file, word32 *bin_lines) {
     setBit(&instruction, 20);  // sets Load/Store flag
   }
 
-  updateBaseReg(&instruction, regNumber(strtok(addr, "]")));  // TODO: assert safe
+  updateBaseReg(&instruction, regNumber(strtok(addr, "]")));
 
   if (addr[0] == '=') {  // check constant address
     setUpFlag(&instruction);
@@ -26,16 +26,17 @@ word32 singleDataTransfer(tokenset tokens, FILE *bin_file, word32 *bin_lines) {
     word32 const_expr = readHex(addr + 1);
     if (const_expr < MOV_CONST) {
       char mov_expr[MOV_CONST_LEN + 2] = {'#', '\0'};
-      safeStrCat(mov_expr, addr + 1);
-      safeStrCpy(addr, mov_expr);
-      safeStrCpy(type, "mov");
+      strcat(mov_expr, addr + 1);
+      safeStrCpy(addr, mov_expr, MOV_CONST_LEN + 2);
+      safeStrCpy(type, "mov", MAX_OPCODE_LEN);
       return dataProcessing(tokens);
-    } else {  // should gen new ldr instr?
+    } else {
       updateBaseReg(&instruction, PC_INDEX);
-      word32 cur_addr = ftell(bin_file);  // TODO: assert safe
+      word32 cur_addr = ftell(bin_file);
+      assert(cur_addr != -1);
       word32 end_addr = *bin_lines * BYTES_PER_WORD;
       safeSeek(bin_file, end_addr);
-      fwrite(&const_expr, sizeof(word32), 1, bin_file);  // TODO: unsafe
+      assert(fwrite(&const_expr, sizeof(word32), 1, bin_file) != -1);
       (*bin_lines)++;
       safeSeek(bin_file, cur_addr);
       updateOffset(&instruction, relativeAddr(end_addr, cur_addr));
