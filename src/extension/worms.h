@@ -38,6 +38,7 @@ extern player player_1, player_2;
 
 // Player turn
 #define POWER_SPEED_MODIFIER 10
+#define FLOATING_POINT_COORDS_OFFSET 50
 void playerTurn(player, player_input);
 void updateCoord(coordinate, char);
 bool isTankCollision(coordinate);
