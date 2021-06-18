@@ -1,30 +1,70 @@
-\documentclass[11pt]{article}
-
+\documentclass[]{article}
 \usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{wrapfig}
 
 \begin{document}
 
-\title{ARM Checkpoint... }
-\author{TODO}
+\title{ARM Checkpoint}
+\author{qa120 - nf20 - ojm20 - av1620}
 
 \maketitle
 
-\section{Group Organisation}
+\section*{Division of Labour}
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-culpa qui officia deserunt mollit anim id est laborum.
 
-\section{Implementation Strategies}
+The morning of our first day was spent making design decisions. The most notable of these was to decompose the specification to produce independent sub-problems (each instruction, pipeline, file-loader, etc). The aim was to allow each person to work simultaneously, without causing conflicts when merging to the master branch. A natural choice then, was to each write one of the four instructions, assigning the remaining tasks to those with a more simple instruction. The same day, we began to program a draft for the main emulate function. We did this as a team, which gave us a deeper understanding of the problem and ensured we were all clear on the required task format. This allowed us to write the individual parts so that they worked together within the larger code structure.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-culpa qui officia deserunt mollit anim id est laborum.
+\vspace{3mm}
+
+To facilitate group discussion we made a Discord server, this turned out to be an excellent choice. Its features have allowed us to discuss syntax-highlighted code, pin ``todo" lists, collaborate on video calls and more. These made the design process much easier, especially considering the challenges imposed by the COVID-19 pandemic.
+
+
+\section*{Coordination and Development}
+Before the release of the specification, we made a Gantt chart to keep to deadlines. For better or worse, this was completely forgotten, since we are far ahead of where we initially aimed to be. Despite the lack of in-person interaction, we have held regular virtual meetings, especially to make any project-wide changes. These have ensured that the whole team is clear on how to proceed, improving our coordination massively. However, there are many areas that we could still further improve on.
+
+\vspace{3mm}
+
+For example, we originally overlooked communicating our preferred code style, however shortly after beginning to review each other's code, we noticed inconsistencies (such as with naming conventions). As a result, we have now determined a set of style rules and a formatting tool that we will use throughout later tasks.
+
+\vspace{3mm}
+
+ Although we tested each function independently with print statements, we did not always anticipate the issues caused by interactions of these functions with other parts of the code. This led to issues where compulsive bug fixing caused some awkward merges. Our intention moving forward is to have fewer people making the final fixes to the assembler while the others move onto the extension. This will allow us to be more efficient by avoiding overlapping debugging efforts. We have also made good use of GitLab's ``Merge Request" feature to review all significant code, however, we could still improve our handling of version control tools. We are making efforts to do this by deleting unused git branches and listing changes more specifically in git commit messages.
+
+\vspace{3mm}
+
+Ultimately, our continuous improvements in these areas should enable us to more accurately estimate the time taken for a particular workload; placing us in a much better position to plan and adapt to later tasks.
+
+\newpage
+\section*{Emulator Structure}
+
+We aimed for an intuitive file structure. Our main function in emulate.c reads the binary file into a byte (uint8\textunderscore t) addressable memory array. Memory is contained in ``State", a struct which also stores our word32 (uint32\textunderscore t) array representation of the registers. It took us a long time to settle on the exact type for each array, but our final decision made it easier to be consistent over the rest of the emulator. The type and function definitions are done in a single header file, em\textunderscore general. We made this choice because most functions that were used in at least two files, were used in all of them. The disadvantage of this is that all files must be recompiled when changing this header. Since this is a small project, this was not an issue and our choice was convenient when expanding the emulator. We worked hard to figure out the correct endianness to use and display. Originally our design was outputting memory in a little-endian format, contrary to the tests. To solve this, we changed our implementation so it fetches from memory into a big-endian word.
+
+\vspace{5mm}
+
+\begin{wrapfigure}{L}{0.38\textwidth}
+\centering
+    \centering
+    \includegraphics[height=55mm, width=55mm,scale=0.8]{Emulator (1).png}
+    \caption{\label{fig1 :}Emulator Structure}
+    
+\end{wrapfigure}
+
+After storing to memory, State is passed to a function ``pipeline()" defined in pipeline.c, which fetches, decodes and calls the associated functions, as per the specification. We dedicated a .c file to each instruction, with some additional ones for instruction decomposition and condition checks to reduce duplication across the instructions. Having all instructions modify a ``State" argument, allowed pipeline to rely on the consistent format of instructions so that it could be programmed independently at a higher level of abstraction.
+
+\vspace{3mm}
+
+Overall our emulator structure is clean, easy to use and simple to navigate. As inexperienced C programmers, we feel that these attributes are the most important for us at the moment. Moving forward, we will continue to explore and experiment with different compositions. An unfortunate drawback to our structure is that it only left us with some bit manipulation functions that we can reuse in the assembler.\newline\newline
+\section*{Future Implementation Strategies}
+
+As we move on to the assembler, a crucial design decision concerns the creation of a ``tokenset" data structure. The intention is to have a consistent format of tokenised instruction. This will allow us to decompose the remainder of the assembler into independent sub-problems, involving the manipulation of ``tokensets". Another important aspect we've considered is the implementation of the map, which could be two arrays or a linked list. We are currently considering the benefits and drawbacks of both.
+
+\vspace{3mm}
+
+Our current file structure complicates sharing code between the emulator and assembler, meaning we may be faced with the issue of restructuring the project. This could be rather challenging for us in terms of Makefiles and include directives, but as we are already working to improve our knowledge of these, it would be the perfect way to practice for future implementations. 
+
+\vspace{3mm}
+
+The extension to our project poses further issues, as we have yet to settle on a final goal. Our initial thoughts are steered towards evolving ASCII art, although we think that the execution of something like this is likely to be challenging. We could potentially mitigate the number of issues by using a more complete emulator such as QEMU. To accomplish this in time, we are working to finish the assembler within the next few days. This will give us just under two weeks to properly plan and write the extension.
 
 \end{document}
