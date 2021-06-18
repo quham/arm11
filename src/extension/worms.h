@@ -47,7 +47,7 @@ void swapPlayer(player **);
 // Parabola
 #define PI 3.14159
 #define GRAVITY 9.8
-#define INTERVAL_MULTIPLIER 0.75
+#define INTERVAL_MULTIPLIER 0.7
 void parabola(player_input, coordinate *);
 double timeInterval(player_input input);
 void printParabola(coordinate points[]);
