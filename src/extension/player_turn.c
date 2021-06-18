@@ -15,12 +15,8 @@ void playerTurn(player player, player_input input) {
   coords[0] = player.curr_coord;
   parabola(input, coords);  // initialise coords
 
-  if (isTermCoord(coords[1])) {
-    return;
-  }
-
   int frame_speed = ceil((double)input.power / POWER_SPEED_MODIFIER);
-  for (int i = 2; !isTermCoord(coords[i]); i++) {
+  for (int i = 2; !isTermCoord(coords[i]) && !isTermCoord(coords[1]); i++) {
     updateCoord(coords[i], BOMB_CHR);
     updateCoord(coords[i - 1], TRAIL_CHR);
     if (i % frame_speed == 0) {
