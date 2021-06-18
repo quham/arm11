@@ -20,7 +20,6 @@ void parabola(player_input input, coordinate *coords) {
     coord.x = start_coord.x + getX(input.power, angle, time);
     coords[i] = coord;
   }
-  printf("coords: %d\n", i);
   coords[i - 1] = TERM_COORD;
 }
 

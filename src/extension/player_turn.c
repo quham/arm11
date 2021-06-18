@@ -9,11 +9,15 @@
 #include "worms.h"
 
 void playerTurn(player player, player_input input) {
-  int coord_size = ceil(timeOfFlight(input) / timeInterval(input)) + 2;
+  int coord_size = ceil(timeOfFlight(input) / timeInterval(input)) + 3;
   // 2 for term coord and initial coord
   coordinate coords[coord_size];
   coords[0] = player.curr_coord;
   parabola(input, coords);  // initialise coords
+
+  if (isTermCoord(coords[1])) {
+    return;
+  }
 
   int frame_speed = ceil((double)input.power / POWER_SPEED_MODIFIER);
   for (int i = 2; !isTermCoord(coords[i]); i++) {
