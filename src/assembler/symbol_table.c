@@ -39,7 +39,7 @@ word32 lookup(Table *table, char *str) {
   for (size_t i = 0; i < *table->size; i++) {
     Pair pair = table->elements[i];
     printf("key: %s\n", pair.key);
-    if (!strcmp(pair.key, str)) {
+    if (!strncmp(pair.key, str, LINE_LENGTH)) {
       return pair.value;
     }
   }

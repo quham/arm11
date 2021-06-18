@@ -39,7 +39,7 @@ void printTokens(tokenset tokens) {
 }
 
 tokenset checkLsl(tokenset tokens) {
-  if (strncmp(tokens.opcode, "lsl", 3)) {
+  if (strncmp(tokens.opcode, "lsl", DATA_PROC_OPCODE_LEN)) {
     return tokens;
   }
   if (strchr(tokens.operands[1], '#')) {

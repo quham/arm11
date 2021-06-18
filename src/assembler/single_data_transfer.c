@@ -14,7 +14,7 @@ word32 singleDataTransfer(tokenset tokens, FILE *bin_file, word32 *bin_lines) {
   char *expr = tokens.operands[2];
   updateBits(&instruction, 12, regNumber(rd));  // set Rd bits
 
-  if (!strcmp(type, "ldr")) {
+  if (!strncmp(type, "ldr", SDT_OPCODE_LEN)) {
     setBit(&instruction, 20);  // sets Load/Store flag
   }
 

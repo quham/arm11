@@ -69,7 +69,7 @@ void assemble(FILE *ass_file, FILE *bin_file, Table *sym_table, word32 ass_lines
         binary = branch(tokens, line_num * BYTES_PER_WORD, sym_table);
         break;
       case 'm':
-        if (!strcmp(tokens.opcode, "mov")) {
+        if (!strncmp(tokens.opcode, "mov", DATA_PROC_OPCODE_LEN)) {
           binary = dataProcessing(tokens);
         } else {
           binary = multiply(tokens);
@@ -79,7 +79,7 @@ void assemble(FILE *ass_file, FILE *bin_file, Table *sym_table, word32 ass_lines
         binary = singleDataTransfer(tokens, bin_file, &bin_lines);
         break;
       case 's':
-        if (!strcmp(tokens.opcode, "str")) {
+        if (!strncmp(tokens.opcode, "str", SDT_OPCODE_LEN)) {
           binary = singleDataTransfer(tokens, bin_file, &bin_lines);
         } else {
           binary = dataProcessing(tokens);

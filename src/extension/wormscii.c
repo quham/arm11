@@ -57,12 +57,12 @@ void makeMove(player *player) {
     printf("Enter the direction(l/r): ");
     char answer[INPUT_SIZE];
     getLine(answer);
-    for (; strcmp(answer, "l") && strcmp(answer, "r"); getLine(answer)) {
+    for (; strncmp(answer, "l", 1) && strncmp(answer, "r", 1); getLine(answer)) {
       printf("Please try again: ");
     }
     printf("Enter desired movement number: ");
     int move_no = getInt();
-    int direction = !strcmp(answer, "l") ? -1 : 1;
+    int direction = !strncmp(answer, "l", 1) ? -1 : 1;
     movePlayer(player, move_no, direction);
     printMap();
     printHealth();
@@ -72,10 +72,10 @@ void makeMove(player *player) {
 bool boolPlayerInput(void) {
   char input[INPUT_SIZE];
   printf(" (yes/no)? ");
-  for (getLine(input); strcmp(input, "yes") != 0 && strcmp(input, "no") != 0; getLine(input)) {
+  for (getLine(input); strncmp(input, "yes", 3) && strncmp(input, "no", 2); getLine(input)) {
     printf("Invalid, please enter yes/no: ");
   }
-  return strcmp(input, "no");
+  return strncmp(input, "no", 2);
 }
 
 player_input getPlayerShot(void) {
