@@ -9,7 +9,8 @@
 #include "worms.h"
 
 void playerTurn(player player, player_input input) {
-  int coord_size = ceil(timeOfFlight(input) / timeInterval(input)) + FLOATING_POINT_COORDS_OFFSET;
+  int coord_size = ceil(timeOfFlight(input) / timeInterval(input)) + 2;
+  // + 2 for TERM_COORD and starting coord
   coordinate coords[coord_size];
   coords[0] = player.curr_coord;
   parabola(input, coords);  // initialise coords
