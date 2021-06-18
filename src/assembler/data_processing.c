@@ -4,9 +4,6 @@
 #include <string.h>
 
 #include "ass_general.h"
-#define FIVE_BIT_INTEGER 31
-#define HALF_WORD 16
-#define ROTATION_MULTIPLIER 2
 
 word32 dataProcessing(tokenset tokens) {
   if (!strncmp(tokens.opcode, "andeq", 5)) {

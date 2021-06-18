@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "../arm_general.h"
+#include "arm_general.h"
 
 #define MEMORY_SIZE 65536
 #define MEMORY_WORD_SIZE 16384

@@ -1,8 +1,6 @@
 #ifndef WORMSCII_H
 #define WORMSCII_H
 
-#include <stdbool.h>
-
 // Game Settings
 #define SHOT_DAMAGE 50
 
@@ -85,4 +83,37 @@ void exitAnimation(void);
 void getLine(char *input);
 void announceWinner(int player_number);
 bool haveWinner(void);
-#endif
+
+// Graphics
+
+#define EXIT_TEXT \
+  ("\n\n\n\n\n\
+       @@@@@@   @@@@@@   @@@@@@  @@@@@@   @       @   @@@@@@  @       @      \n\
+       @        @   ~@   @    @  @        @   @   @   @   ~   @       @      \n\
+       @@@      @@@@@@   @@@@@@  @@@@@    @  @ @  @   @@@@@   @       @      \n\
+       @        @    @   @  @    @   ~    @ @   @ @   @       @       @      \n\
+       @        @    @   @   @@  @@@@@@   @      ~@   @@@@@@  @@@@@@  @@@@@@ \n\
+  \n\n\n\n\n")
+
+#define WELCOME_TEXT \
+  ("\n\n\n\n\n\
+       @       @   @@@@@@   @        @@@@@@   @@@@@@   @       @   @@@@@@ \n\
+       @   @   @   @        @        @        @    @   @ @   @ @   @      \n\
+       @  @ @  @   @@@@@    @        @        @    @   @  @ @  @   @@@@@  \n\
+       @ @   @ @   @        @   ~    @        @    @   @   @   @   @  ~   \n\
+       @       @   @@@@@@   @@@@@@   @@@@@@   @@@@@@   @       @   @@@@@@ \n\
+                                                                          \n\
+                                @@@@@@@   @@@@@@                          \n\
+                                   @      @    @      `@`                 \n\
+                                   @      @    @       `  .      worm inside         \n\
+                    !              @      @ ~  @           .    /          \n\
+                    _/             @      @@@@@@            \\_           \n\
+                   |~|        ~                             |~|           \n\
+       @       @   @@@@@@   @@@@@@   @       @   @@@@@@   @@@@@@   @    @ \n\
+       @   @   @   @    @   @    @   @ @   @ @   @        @        @    @ \n\
+       @  @ @  @   @    @   @@@@@@   @  @ @  @    @@@@    @        @    @ \n\
+       @ @   @ @   @ ~  @   @  @     @   @   @        @   @ ~      @    @ \n\
+       @       @   @@@@@@   @   @@   @       @   @@@@@@   @@@@@@   @    @ \n\
+  \n\n\n\n\n")
+
+#endif  // WORM_CONSTS

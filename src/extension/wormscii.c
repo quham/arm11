@@ -92,32 +92,13 @@ bool digitInput(char input[]) {
 // TODO: refactor into constant
 void startAnimation(void) {
   system("clear");
-  printf("\n\n\n\n\n");
-  printf("     @       @   @@@@@@   @        @@@@@@   @@@@@@   @       @   @@@@@@ \n");
-  printf("     @   @   @   @        @        @        @    @   @ @   @ @   @      \n");
-  printf("     @  @ @  @   @@@@@    @        @        @    @   @  @ @  @   @@@@@  \n");
-  printf("     @ @   @ @   @        @   ~    @        @    @   @   @   @   @  ~   \n");
-  printf("     @       @   @@@@@@   @@@@@@   @@@@@@   @@@@@@   @       @   @@@@@@ \n");
-  printf("                                                                        \n");
-  printf("                              @@@@@@@   @@@@@@                          \n");
-  printf("                                 @      @    @      `@`                 \n");
-  printf("                                 @      @    @       `  .      worm inside         \n");
-  printf("                  !              @      @ ~  @           .    /          \n");
-  printf("                  _/             @      @@@@@@            \\_           \n");
-  printf("                 |~|        ~                             |~|           \n");
-  printf("     @       @   @@@@@@   @@@@@@   @       @   @@@@@@   @@@@@@   @    @ \n");
-  printf("     @   @   @   @    @   @    @   @ @   @ @   @        @        @    @ \n");
-  printf("     @  @ @  @   @    @   @@@@@@   @  @ @  @    @@@@    @        @    @ \n");
-  printf("     @ @   @ @   @ ~  @   @  @     @   @   @        @   @ ~      @    @ \n");
-  printf("     @       @   @@@@@@   @   @@   @       @   @@@@@@   @@@@@@   @    @ \n");
-  printf("\n\n\n\n\n");
-  printf("Do you want to start a game?(yes/no) ");
+  printf("%s", WELCOME_TEXT);
 
   char input[INPUT_SIZE];
 
   for (getLine(input); strcmp(input, "yes") != 0; getLine(input)) {
     if (strncmp(input, "no", INPUT_SIZE) == 0) {
-      printf("Okay, bye!\n");
+      printf(EXIT_TEXT);
       exit(EXIT_SUCCESS);
     }
     printf("Invalid input, please try again: ");
@@ -126,13 +107,7 @@ void startAnimation(void) {
 }
 
 void exitAnimation(void) {
-  printf("\n\n\n\n\n");
-  printf("     @@@@@@   @@@@@@   @@@@@@  @@@@@@   @       @   @@@@@@  @       @      \n");
-  printf("     @        @   ~@   @    @  @        @   @   @   @   ~   @       @      \n");
-  printf("     @@@      @@@@@@   @@@@@@  @@@@@    @  @ @  @   @@@@@   @       @      \n");
-  printf("     @        @    @   @  @    @   ~    @ @   @ @   @       @       @      \n");
-  printf("     @        @    @   @   @@  @@@@@@   @      ~@   @@@@@@  @@@@@@  @@@@@@ \n");
-  printf("\n\n\n\n\n");
+  printf(EXIT_TEXT);
 }
 
 bool haveWinner(void) {

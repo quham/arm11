@@ -13,6 +13,7 @@ all: wormscii
 wormscii: $(WORMSCII_OBJ)
 				$(CC) $(CFLAGS)	$(WORMSCII_OBJ) -o wormscii $(LIBS)
 
+wormscii.o: worms.h
 
 clean:
 	rm -f $(wildcard *.o)

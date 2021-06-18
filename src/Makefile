@@ -1,8 +1,8 @@
 CC      = gcc
-CFLAGS  = -Wall -g -D_POSIX_SOURCE -DEFAULT_SOURCE -std=c99 -Werror -pedantic
+CFLAGS  = -Icommon -Wall -g -D_POSIX_SOURCE -DEFAULT_SOURCE -std=c99 -Werror -pedantic
 
-ASSEMBLER_OBJ := $(patsubst %.c, %.o, $(shell find assembler -type f -name '*.c')) data_manipulation.o
-EMULATOR_OBJ := $(patsubst %.c, %.o, $(shell find emulator -type f -name '*.c')) data_manipulation.o
+ASSEMBLER_OBJ := $(patsubst %.c, %.o, $(shell find assembler -type f -name '*.c')) common/data_manipulation.o
+EMULATOR_OBJ := $(patsubst %.c, %.o, $(shell find emulator -type f -name '*.c')) common/data_manipulation.o
 
 .SUFFIXES: .c .o
 
@@ -16,9 +16,9 @@ assemble: $(ASSEMBLER_OBJ)
 emulate: $(EMULATOR_OBJ)
 				$(CC) $(CFLAGS) $(EMULATOR_OBJ) -o emulate
 
-assembler/assemble.o: assembler/ass_general.h arm_general.h
+assembler/assemble.o: assembler/ass_general.h common/arm_general.h
 
-emulator/emulate.o: emulator/em_general.h arm_general.h
+emulator/emulate.o: emulator/em_general.h common/arm_general.h
 
 clean:
 	rm -f $(wildcard *.o)

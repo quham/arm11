@@ -10,9 +10,12 @@ void parabola(player_input input, coordinate *coords) {
   coordinate start_coord = coords[0];
   double interval = 1 / (input.power * INTERVAL_MULTIPLIER);
 
-  coordinate coord = coords[1];
+  coordinate coord = start_coord;
+  coord.y--;  // ensure no initial self collision
+
   int i = 1;
-  for (double time = interval; !isCollision(coord); time += interval, i++) {
+  for (; !isCollision(coord); i++) {
+    double time = interval * i;
     coord.y = start_coord.y - getY(input.power, angle, time);
     coord.x = start_coord.x + getX(input.power, angle, time);
     coords[i] = coord;

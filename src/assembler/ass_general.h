@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "../arm_general.h"
+#include "arm_general.h"
 
 #define MAX_OPERANDS 4
 #define MAX_OPCODE_LEN 6
@@ -54,7 +54,6 @@ extern char *strtok_r(char *, char *, char **);
 void removeWhitespace(char **);
 
 // Assemble
-#define LINE_LENGTH 511
 void assemble(FILE *assembly_file, FILE *binary_file, Table *sym_table, word32 num_of_lines);
 
 // Instruction compose
@@ -68,6 +67,9 @@ word32 relativeAddr(word32 target, word32 pc);
 
 // Data processing
 #define DP_FORMAT 0xe0000000
+#define FIVE_BIT_INTEGER 31
+#define HALF_WORD 16
+#define ROTATION_MULTIPLIER 2
 word32 dataProcessing(tokenset);
 void setOperand(instr *, char operands[2][LINE_LENGTH]);
 void setExpression(instr *, word32 expression);
