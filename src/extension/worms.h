@@ -1,5 +1,7 @@
+#include <stdbool.h>
+
 #ifndef WORMSCII_H
-#define WORMSCII_H
+#define WORMSCII
 
 // Game Settings
 #define SHOT_DAMAGE 50
@@ -92,8 +94,8 @@ bool haveWinner(void);
        @        @   ~@   @    @  @        @   @   @   @   ~   @       @      \n\
        @@@      @@@@@@   @@@@@@  @@@@@    @  @ @  @   @@@@@   @       @      \n\
        @        @    @   @  @    @   ~    @ @   @ @   @       @       @      \n\
-       @        @    @   @   @@  @@@@@@   @      ~@   @@@@@@  @@@@@@  @@@@@@ \n\
-  \n\n\n\n\n")
+       @        @    @   @   @@  @@@@@@   @      ~@   @@@@@@  @@@@@@  @@@@@@ \n\n\n\
+                    THANK YOU FOR PLAYING, SEE YOU AGAIN SOON!\n\n\n\n\n")
 
 #define WELCOME_TEXT \
   ("\n\n\n\n\n\
@@ -113,7 +115,7 @@ bool haveWinner(void);
        @   @   @   @    @   @    @   @ @   @ @   @        @        @    @ \n\
        @  @ @  @   @    @   @@@@@@   @  @ @  @    @@@@    @        @    @ \n\
        @ @   @ @   @ ~  @   @  @     @   @   @        @   @ ~      @    @ \n\
-       @       @   @@@@@@   @   @@   @       @   @@@@@@   @@@@@@   @    @ \n\
-  \n\n\n\n\n")
+       @       @   @@@@@@   @   @@   @       @   @@@@@@   @@@@@@   @    @ \n\n\n\
+                     Please expand your terminal accordingly\n\n\n\n\n")
 
 #endif  // WORM_CONSTS

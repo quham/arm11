@@ -21,8 +21,8 @@ assembler/assemble.o: assembler/ass_general.h common/arm_general.h
 emulator/emulate.o: emulator/em_general.h common/arm_general.h
 
 clean:
-	rm -f $(wildcard *.o)
 	rm -f $(wildcard assembler/*.o)
 	rm -f $(wildcard emulator/*.o)
+	rm -f $(wildcard common/*.o)
 	rm -f assemble
 	rm -f emulate

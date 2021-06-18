@@ -46,7 +46,6 @@ void initializeMap(void) {
       map[i][j] = MAP_CHR;
     }
   }
-  // addTanks();
   addTank(player_1);
   addTank(player_2);
 }
